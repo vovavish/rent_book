@@ -1,0 +1,23 @@
+.availability_status {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.active {
+  background-color: #e6f7ee;
+  color: #10b981;
+}
+
+.rented {
+  background-color: #fff7ed;
+  color: #f97316;
+}
+
+.closed {
+  background-color: #fee2e2;
+  color: #ef4444;
+}

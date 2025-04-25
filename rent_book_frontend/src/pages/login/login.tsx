@@ -1,0 +1,69 @@
+import { SyntheticEvent, useState } from "react";
+import { useStore } from "../../hooks/useStore";
+
+import styles from "./login.module.css";
+import { Link } from "react-router-dom";
+
+export const LoginPage = () => {
+  const { authStore } = useStore();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+
+    authStore.signIn(email, password);
+  }
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.formWrapper}>
+        <h2 className={styles.title}>Вход</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          
+          <div className={styles.formField}>
+            <label htmlFor="email" className={styles.label}>
+              Почта
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={styles.input}
+              placeholder="Введите почту"
+              required
+            />
+          </div>
+
+          <div className={styles.formField}>
+            <label htmlFor="password" className={styles.label}>
+              Пароль
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={styles.input}
+              placeholder="Введите пароль"
+              required
+            />
+          </div>
+
+          <button type="submit" className={styles.button}>
+            Войти
+          </button>
+        </form>
+
+        <p className={styles.footerText}>
+          Вы здесь впервые?{" "}
+          <Link to="/register" className={styles.link}>
+            Зарегестрироваться
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}

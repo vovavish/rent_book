@@ -1,0 +1,255 @@
+.header {
+  min-height: 60px;
+  padding: 1rem 0;
+  font-family: 'Inter', sans-serif;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0;
+  }
+
+  .navList {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    @media (max-width: 1024px) {
+      justify-content: space-around;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+
+  .navLink {
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+    color: #333;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #9b59b6;
+    }
+
+    p {
+      margin-top: 0.25rem;
+      font-size: 0.875rem;
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      min-width: auto;
+      padding: 0 0.5rem;
+    }
+  }
+
+  .icon {
+    width: 24px;
+    height: 24px;
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .titleContainer {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+    padding: 0 1rem;
+
+    @media (max-width: 768px) {
+      margin: 0.5rem 0;
+    }
+  }
+
+  .hr {
+    flex: 1;
+    height: 1px;
+    background-color: #ddd;
+    border: none;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 10px;
+    border: 1px solid #333;
+    padding: 0.5rem 1rem;
+    margin: 0 1rem;
+    white-space: nowrap;
+
+    @media (max-width: 768px) {
+      font-size: 1.25rem;
+      padding: 0.25rem 0.5rem;
+      margin: 0 0.5rem;
+    }
+  }
+
+  .navAdditionalList {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 2rem;
+    padding: 0.5rem 0;
+    flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+      gap: 1rem;
+    }
+  }
+
+  .searchContainer {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  .searchLinkJanres {
+    display: flex;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: white;
+    background-color: rgb(173, 193, 120);
+    padding: 0.5rem 1rem;
+    gap: 0.5rem;
+    align-items: center;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgb(157, 175, 106);
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+
+  .searchLinkJanresImage {
+    width: 24px;
+    height: 24px;
+
+    @media (max-width: 768px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .search {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 680px;
+    @media (min-width: 768px) {
+      flex-direction: row;
+    }
+  }
+
+  .searchInputContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    gap: 0.5rem;
+
+    input {
+      flex: 1;
+      border-radius: 10px;
+      background-color: #f0f0f0;
+      padding: 0.5rem 1rem 0.5rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 1px solid #ddd;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #9b59b6;
+      }
+
+      @media (max-width: 768px) {
+        padding: 0.4rem 0.8rem 0.4rem 2rem;
+        font-size: 0.875rem;
+      }
+    }
+  }
+
+  .rentOutBook {
+    color: white;
+    background-color: rgba(174, 125, 172, 1);
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #7d3c98;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+      padding: 0.4rem 0.8rem;
+    }
+  }
+
+  // Добавляем медиа-запрос для очень маленьких экранов
+  @media (max-width: 375px) {
+    .navLink {
+      min-width: auto;
+      padding: 0 0.25rem;
+    }
+
+    .title {
+      font-size: 1rem;
+      padding: 0.25rem;
+    }
+
+    .searchInputContainer {
+      input {
+        padding: 0.3rem 0.6rem 0.3rem 1.8rem;
+      }
+
+      svg {
+        left: 0.5rem;
+        width: 0.8rem;
+        height: 0.8rem;
+      }
+    }
+  }
+}

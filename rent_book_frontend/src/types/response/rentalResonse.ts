@@ -1,0 +1,44 @@
+export interface CreateRentalDto {
+  bookId: number;
+  rentStartDate: string; // ISO 8601 формат даты, например "2025-04-02"
+  rentEndDate: string;   // ISO 8601 формат даты, например "2025-04-02"
+}
+
+export interface RentalResponse {
+  id: number;
+  bookId: number;
+  renterId: number;
+  ownerId: number;
+  status: RentalStatus;
+  rentStartDate: string | null;
+  rentEndDate: string | null;
+  createdAt: string;
+  updatedAt: string;
+  price: number;
+  book: {
+    id: number;
+    title: string;
+    coverImagesUrls: string[];
+    author: string;
+  };
+  renter: {
+    id: number;
+    name: string;
+  };
+  owner: {
+    id: number;
+    name: string;
+  };
+}
+
+export enum RentalStatus {
+  PENDING = 'PENDING',
+  APPROVED_BY_OWNER = 'APPROVED_BY_OWNER',
+  CONFIRMED = 'CONFIRMED',
+  GIVEN_TO_READER = 'GIVEN_TO_READER',
+  CANCELLED = 'CANCELLED',
+  ACTIVE = 'ACTIVE',
+  RETURN_APPROVAL = 'RETURN_APPROVAL',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED'
+}

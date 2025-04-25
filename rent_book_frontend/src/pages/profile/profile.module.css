@@ -1,0 +1,374 @@
+/* profile.module.css */
+
+:root {
+  --primary-color: #4a6bff;
+  --primary-hover: #3a5bef;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --warning-color: #fd7e14;
+  --light-color: #f8f9fa;
+  --dark-color: #343a40;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --text-color: #333;
+  --text-light: #6c757d;
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+/* Base styles */
+.container {
+  color: var(--text-color);
+}
+
+/* Header styles */
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin: 0;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Card styles */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px var(--shadow-color);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--dark-color);
+  padding-right: 20px;
+}
+
+/* Button styles */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+  font-size: 0.9rem;
+}
+
+.editButton {
+  composes: button;
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.editButton:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.addButton {
+  composes: button;
+  background-color: var(--success-color);
+  color: white;
+}
+
+.addButton:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.saveButton {
+  composes: button;
+  background-color: var(--success-color);
+  color: white;
+}
+
+.saveButton:hover {
+  background-color: #218838;
+  transform: translateY(-1px);
+}
+
+.cancelButton {
+  composes: button;
+  background-color: var(--light-color);
+  color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+}
+
+.cancelButton:hover {
+  background-color: #e2e6ea;
+  transform: translateY(-1px);
+}
+
+.removeButton {
+  composes: button;
+  background: none;
+  color: var(--danger-color);
+  padding: 0.25rem;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+
+.removeButton:hover {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.addItemButton {
+  composes: button;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.625rem 1rem;
+  margin-left: 0.5rem;
+}
+
+.addItemButton:hover {
+  background-color: var(--primary-hover);
+}
+
+.retryButton {
+  composes: button;
+  background-color: var(--primary-color);
+  color: white;
+  margin-top: 1rem;
+}
+
+.retryButton:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Icon styles */
+.editIcon, .addIcon, .removeIcon, .itemIcon, .emptyIcon {
+  width: 20px;
+  height: 20px;
+  margin-right: 0.5rem;
+}
+
+/* Form styles */
+.editForm {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.25rem;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--dark-color);
+}
+
+.formInput {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+.formInput:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+  outline: none;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Info display styles */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoLabel {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+
+.infoValue {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.infoContainer {
+  padding: 1.5rem;
+}
+
+/* List styles */
+.listContainer {
+  padding: 0 1.5rem;
+}
+
+.itemsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--light-color);
+  border-radius: var(--radius);
+  margin-bottom: 0.75rem;
+  transition: var(--transition);
+}
+
+.listItem:hover {
+  background-color: #e9ecef;
+}
+
+.itemText {
+  flex-grow: 1;
+  margin: 0 1rem;
+}
+
+/* Add item form */
+.addItemForm {
+  display: flex;
+  margin-top: 1rem;
+}
+
+/* Empty state */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-light);
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+/* Loading state */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(74, 107, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error states */
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.errorIcon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.errorMessage {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background-color: #f8d7da;
+  color: var(--danger-color);
+  border-radius: var(--radius);
+}
+
+.errorMessage svg {
+  margin-right: 0.5rem;
+}
