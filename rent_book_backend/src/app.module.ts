@@ -7,9 +7,17 @@ import { RolesGuard } from './roles/roles.guard';
 import { RentBookModule } from './rent_book/rent_book.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './user/user.module';
+import { SupportRequestModule } from './support-request/support-request.module';
 
 @Module({
-  imports: [AuthModule, PrismaModule, RentBookModule, UserModule,ScheduleModule.forRoot()],
+  imports: [
+    AuthModule,
+    PrismaModule,
+    RentBookModule,
+    UserModule,
+    ScheduleModule.forRoot(),
+    SupportRequestModule,
+  ],
   controllers: [],
   providers: [
     {
@@ -19,7 +27,7 @@ import { UserModule } from './user/user.module';
     {
       provide: APP_GUARD,
       useClass: RolesGuard,
-    }
+    },
   ],
 })
 export class AppModule {}

@@ -24,19 +24,22 @@ api.interceptors.response.use(
 
     if (error.response.status === 401) {
       try {
-        const response = await axios.post<AuthResponse>(`http://localhost:3000/auth/refresh`, null, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`
-          }
-        });
+        const response = await axios.post<AuthResponse>(
+          `http://localhost:3000/auth/refresh`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('refreshToken')}`,
+            },
+          },
+        );
         localStorage.setItem('accessToken', response.data.access_token);
         localStorage.setItem('refreshToken', response.data.refresh_token);
         return api.request(originalRequest);
       } catch (e) {
         console.log('not authorized');
       }
-      
     }
     throw error;
-  }
+  },
 );

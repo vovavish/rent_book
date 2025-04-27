@@ -371,12 +371,16 @@ export class RentBookService {
           select: {
             id: true,
             name: true,
+            lastname: true,
+            surname: true,
           },
         },
         owner: {
           select: {
             id: true,
             name: true,
+            lastname: true,
+            surname: true,
           },
         },
       },
@@ -403,12 +407,16 @@ export class RentBookService {
           select: {
             id: true,
             name: true,
+            lastname: true,
+            surname: true,
           },
         },
         owner: {
           select: {
             id: true,
             name: true,
+            lastname: true,
+            surname: true,
           },
         },
       },

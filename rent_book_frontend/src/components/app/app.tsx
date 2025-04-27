@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { HomePage } from '../../pages/home'; // Главная страница со списком книг
 import { RentBookPage } from '../../pages/rent-book'; // Страница конкретной книги
@@ -21,6 +21,10 @@ import { ProtectedRoute } from '../protected-route';
 
 import styles from './app.module.scss';
 import { MyFavoritesPage } from '../../pages/my-favorites';
+import { DashboardSupport } from '../../pages/dashboard-support/dashboard-support';
+import { ArchiveTickets, MyTickets, NewTicket } from '../../pages/user-support';
+import { DashboardAdmin } from '../../pages/dashboard-admin/dashboard-admin';
+import { AdminRequestsClosed, AdminRequestsInProgress, AdminRequestsNew } from '../../pages/admin';
 
 export const App = () => {
   const { authStore, userProfileStore } = useStore();
@@ -38,7 +42,6 @@ export const App = () => {
       <Header />
 
       <main className={styles.mainContent}>
-
         <Routes>
           <Route index element={<HomePage />} />
 
@@ -53,6 +56,28 @@ export const App = () => {
               <Route path="rent_in_out" element={<MyRentalsInOutPage />} />
               <Route path="my_rents" element={<MyRentalsPage />} />
               <Route path="favorites" element={<MyFavoritesPage />} />
+            </Route>
+
+            <Route path="support" element={<DashboardSupport />}>
+              <Route index element={<Navigate replace to="new" />} />
+              <Route path="new" element={<NewTicket />} />
+              <Route path="my-tickets" element={<MyTickets />} />
+              <Route path="archive" element={<ArchiveTickets />} />
+            </Route>
+          </Route>
+
+          <Route path="admin" element={<ProtectedRoute requiredRole="ADMIN" />}>
+            <Route index element={<Navigate replace to="dashboard" />} />
+            <Route path="dashboard" element={<DashboardAdmin />}>
+              <Route index element={<Navigate replace to="requests/new" />} />
+
+              <Route path="complaints" element={<div>Жалобы</div>} />
+
+              <Route path="requests">
+                <Route path="new" element={<AdminRequestsNew />} />
+                <Route path="in-progress" element={<AdminRequestsInProgress />} />
+                <Route path="closed" element={<AdminRequestsClosed />} />
+              </Route>
             </Route>
           </Route>
 

@@ -24,10 +24,14 @@ export interface RentalResponse {
   renter: {
     id: number;
     name: string;
+    lastname: string;
+    surname?: string;
   };
   owner: {
     id: number;
     name: string;
+    lastname: string;
+    surname?: string;
   };
 }
 
@@ -36,7 +40,7 @@ export enum RentalStatus {
   APPROVED_BY_OWNER = 'APPROVED_BY_OWNER',
   CONFIRMED = 'CONFIRMED',
   GIVEN_TO_READER = 'GIVEN_TO_READER',
-  CANCELLED = 'CANCELLED',
+  CANCELED = 'CANCELED',
   ACTIVE = 'ACTIVE',
   RETURN_APPROVAL = 'RETURN_APPROVAL',
   COMPLETED = 'COMPLETED',

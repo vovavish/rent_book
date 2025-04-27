@@ -2,6 +2,7 @@ import { observer } from "mobx-react-lite";
 import { useStore } from "../../hooks/useStore";
 import { useEffect, useState } from "react";
 import styles from "./profile.module.css";
+import { DashboardTitle } from "../../components/ui/dashboard-title";
 
 export const MyProfilePage = observer(() => {
   const { userProfileStore } = useStore();
@@ -93,7 +94,7 @@ export const MyProfilePage = observer(() => {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>Мой профиль</h1>
+        <DashboardTitle>Мой профиль</DashboardTitle>
         <div className={styles.avatar}>
           {name[0]}{lastname[0]}
         </div>

@@ -38,7 +38,7 @@ model User {
   ownedRentals Rental[] @relation("Owner")  // Аренды, где пользователь является владельцем
 
   favoriteBooks Book[] @relation("FavoriteBooks")
-
+  supportRequests SupportRequest[] @relation
   @@map("users")
 }
 
@@ -143,4 +143,24 @@ model Rental {
   rentEndDate     DateTime?   // Дата окончания аренды
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+}
+
+enum SupportRequestStatus {
+  REGISTERED
+  IN_PROGRESS
+  CLOSED
+}
+
+model SupportRequest {
+  id        Int                   @id @default(autoincrement())
+  title     String                // Заголовок обращения
+  content   String                // Текст обращения
+  user      User                  @relation(fields: [userId], references: [id])
+  userId    Int                   @map("user_id")
+  status    SupportRequestStatus  @default(REGISTERED) // Статус обращения
+  adminResponse String?
+  createdAt DateTime              @default(now()) // Дата создания
+  updatedAt DateTime              @updatedAt // Дата обновления
+
+  @@map("support_requests")
 }

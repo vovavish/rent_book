@@ -6,6 +6,7 @@ import { observer } from "mobx-react-lite";
 
 import styles from './my-favorites.module.scss';
 import { FavoriteBookList } from "../../components/book/favorite-book/favorite-bool-list";
+import { DashboardTitle } from "../../components/ui/dashboard-title";
 
 export const MyFavoritesPage = observer(() => {
   const { rentBookStore } = useStore();
@@ -21,7 +22,7 @@ export const MyFavoritesPage = observer(() => {
 
   return (
     <div className={styles['favorites-page']}>
-      <h1>Избранное</h1>
+      <DashboardTitle>Избранное</DashboardTitle>
 
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
 

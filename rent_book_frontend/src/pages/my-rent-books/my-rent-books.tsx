@@ -3,8 +3,8 @@ import { useStore } from '../../hooks/useStore';
 import { useEffect, useState, useRef } from 'react';
 import { CreateBookDto, Condition, Format, BookStatus } from '../../types/response/bookResponse';
 import './my-rent-books.css';
-import { DashboardImageSlider } from '../../components/dashboard-image-slider';
 import { MyRentBookList } from '../../components/book/my-rent-books/my-rent-book-list';
+import { DashboardTitle } from '../../components/ui/dashboard-title';
 
 export const MyRentBooksPage = observer(() => {
   const { rentBookStore, userProfileStore } = useStore();
@@ -20,7 +20,6 @@ export const MyRentBooksPage = observer(() => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [selectedCard, setSelectedCard] = useState<string>('');
-  const [currentImageIndex, setCurrentImageIndex] = useState<Record<number, number>>({});
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
 
   useEffect(() => {
@@ -53,7 +52,6 @@ export const MyRentBooksPage = observer(() => {
   };
 
   const nextStep = () => {
-    // Проверка перед переходом на следующий шаг
     if (currentStep === 1) {
       const profile = userProfileStore.profile;
       if (
@@ -429,7 +427,7 @@ export const MyRentBooksPage = observer(() => {
   return (
     <div className="my-rent-books">
       <div className="header">
-        <h1>Мои объявления</h1>
+        <DashboardTitle>Мои объявления</DashboardTitle>
         <button onClick={() => setIsModalOpen(true)} className='header__add-button'>+ разместить объявление</button>
       </div>
 

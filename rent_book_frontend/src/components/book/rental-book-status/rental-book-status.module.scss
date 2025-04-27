@@ -1,0 +1,54 @@
+.rental_status {
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+// Цвета можно выбрать аналогично твоему стилю
+.pending {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.approved_by_owner {
+  background-color: #ecfccb;
+  color: #65a30d;
+}
+
+.confirmed {
+  background-color: #ede9fe;
+  color: #8b5cf6;
+}
+
+.given_to_reader {
+  background-color: #fef9c3;
+  color: #ca8a04;
+}
+
+.canceled {
+  background-color: #ffe4e6;
+  color: #e11d48;
+}
+
+.active {
+  background-color: #e6f7ee;
+  color: #10b981;
+}
+
+.return_approval {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.completed {
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.rejected {
+  background-color: #fee2e2;
+  color: #ef4444;
+}

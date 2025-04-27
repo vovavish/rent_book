@@ -5,16 +5,19 @@ import { BookResponse } from '../../types/response/bookResponse';
 import styles from './book-home-slider.module.scss';
 
 interface Props {
-  book: BookResponse;
+  book:
+    | BookResponse
+    | {
+        id: number;
+        title: string;
+        coverImagesUrls: string[];
+        author: string;
+      };
   currentImageIndex: number;
   setCurrentImageIndices: React.Dispatch<React.SetStateAction<Record<number, number>>>;
 }
 
-export const BookImageSlider: FC<Props> = ({
-  book,
-  currentImageIndex,
-  setCurrentImageIndices,
-}) => {
+export const BookImageSlider: FC<Props> = ({ book, currentImageIndex, setCurrentImageIndices }) => {
   const hasMultipleImages = book.coverImagesUrls?.length > 1;
 
   const nextImage = () => {
@@ -58,9 +61,7 @@ export const BookImageSlider: FC<Props> = ({
                 <span
                   key={index}
                   className={`${styles.dot} ${currentImageIndex === index ? styles.active : ''}`}
-                  onClick={() =>
-                    setCurrentImageIndices((prev) => ({ ...prev, [book.id]: index }))
-                  }
+                  onClick={() => setCurrentImageIndices((prev) => ({ ...prev, [book.id]: index }))}
                 />
               ))}
             </div>

@@ -12,7 +12,8 @@ export const Header = observer(() => {
   const { authStore } = useStore();
   const location = useLocation();
   const isBooksPage = location.pathname.startsWith('/dashboard');
-  console.log(isBooksPage);
+  const isSupportPage = location.pathname.startsWith('/support');
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   return (
     <header className={styles.header}>
@@ -34,9 +35,9 @@ export const Header = observer(() => {
             </a>
           </li>
           <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
+            <Link to="/support/new" className={styles.navLink}>
               Поддержка
-            </a>
+            </Link>
           </li>
           <li className={styles.navListItem}>
             <Link to="/dashboard/favorites" className={styles.navLink}>
@@ -77,7 +78,7 @@ export const Header = observer(() => {
           </li>
         </ul>
       </nav>
-      {!isBooksPage && <div className={styles.searchContainer}>
+      {!isBooksPage && !isSupportPage && !isAdminPage && <div className={styles.searchContainer}>
         <a href="/" className={styles.searchLinkJanres}>
           <img src={AllJanres} alt="AllJanres" className={styles.searchLinkJanresImage} />
           Все жанры
