@@ -2,7 +2,7 @@ import { SyntheticEvent, useState } from "react";
 import { useStore } from "../../hooks/useStore";
 import { Link } from "react-router-dom";
 
-import styles from "./register.module.css";
+import styles from "./register.module.scss";
 
 export const RegisterPage = () => {
   const { authStore } = useStore();
@@ -15,94 +15,81 @@ export const RegisterPage = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-
     authStore.signUp(email, name, lastname, surname, password);
-  }
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
         <h2 className={styles.title}>Регистрация</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit}>
           <div className={styles.formField}>
-          <div className={styles.formField}>
-            <label htmlFor="name" className={styles.label}>
-              Имя
-            </label>
+            <label htmlFor="name">Имя</label>
             <input
               id="name"
-              type="name"
+              type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className={styles.input}
               placeholder="Введите имя"
               required
             />
           </div>
+
           <div className={styles.formField}>
-            <label htmlFor="lastname" className={styles.label}>
-              Фамилия
-            </label>
+            <label htmlFor="lastname">Фамилия</label>
             <input
               id="lastname"
-              type="lastname"
+              type="text"
               value={lastname}
               onChange={(e) => setLastname(e.target.value)}
-              className={styles.input}
-              placeholder="Введите почту"
+              placeholder="Введите фамилию"
               required
             />
           </div>
+
           <div className={styles.formField}>
-            <label htmlFor="surname" className={styles.label}>
-              Отчество
-            </label>
+            <label htmlFor="surname">Отчество</label>
             <input
               id="surname"
-              type="surname"
+              type="text"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
-              className={styles.input}
               placeholder="Введите отчество"
               required
             />
           </div>
-            <label htmlFor="email" className={styles.label}>
-              Почта
-            </label>
+
+          <div className={styles.formField}>
+            <label htmlFor="email">Почта</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className={styles.input}
               placeholder="Введите почту"
               required
             />
           </div>
 
           <div className={styles.formField}>
-            <label htmlFor="password" className={styles.label}>
-              Пароль
-            </label>
+            <label htmlFor="password">Пароль</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={styles.input}
               placeholder="Введите пароль"
               required
             />
           </div>
 
           <button type="submit" className={styles.button}>
-            Зарегестрироваться
+            Зарегистрироваться
           </button>
         </form>
 
         <p className={styles.footerText}>
-          Вы уже зарегестрированы?{" "}
+          Уже зарегистрированы?
           <Link to="/login" className={styles.link}>
             Войти
           </Link>
@@ -110,4 +97,4 @@ export const RegisterPage = () => {
       </div>
     </div>
   );
-}
+};

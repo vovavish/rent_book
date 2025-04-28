@@ -1,3 +1,5 @@
+import { Condition } from "./bookResponse";
+
 export interface CreateRentalDto {
   bookId: number;
   rentStartDate: string; // ISO 8601 формат даты, например "2025-04-02"
@@ -15,6 +17,35 @@ export interface RentalResponse {
   createdAt: string;
   updatedAt: string;
   price: number;
+  pricePerDay: number; // Добавлено
+  deposit: number | null; // Добавлено
+  ownerRating: number | null; // Добавлено
+  renterRating: number | null; // Добавлено
+  bookRating: number | null; // Добавлено
+  reviewContent: string | null;
+  //кэш владельца
+  ownerName: string;
+  ownerLastname: string;
+  ownerSurname?: string;
+  ownerPhones: string[];
+  ownerCardNumber: string;
+  
+  //кэш арендатора
+  renterName: string;
+  renterLastname: string;
+  renterSurname?: string;
+  renterPhones: string[];
+
+  //Кэш книги
+  bookTitle: string;
+  bookAuthor: string;
+  bookCoverImages: string[];
+  bookCondition: Condition;
+  bookLanguage: string;
+  bookCategory: string;
+  bookDescription: string;
+  bookPublishedYear: number;
+
   book: {
     id: number;
     title: string;

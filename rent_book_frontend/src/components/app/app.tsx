@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { HomePage } from '../../pages/home'; // Главная страница со списком книг
 import { RentBookPage } from '../../pages/rent-book'; // Страница конкретной книги
@@ -28,6 +28,9 @@ import { AdminRequestsClosed, AdminRequestsInProgress, AdminRequestsNew } from '
 
 export const App = () => {
   const { authStore, userProfileStore } = useStore();
+  const location = useLocation();
+  const isAuthPage = location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
+
   useEffect(() => {
     const initUser = async () => {
       await authStore.checkAuth();
@@ -39,7 +42,7 @@ export const App = () => {
 
   return (
     <div className={styles.layout}>
-      <Header />
+      {!isAuthPage && <Header />}
 
       <main className={styles.mainContent}>
         <Routes>
@@ -91,7 +94,7 @@ export const App = () => {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-      <Footer />
+      {!isAuthPage && <Footer />}
     </div>
   );
 };

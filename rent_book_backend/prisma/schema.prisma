@@ -20,25 +20,30 @@ model User {
   updatedAt DateTime @updatedAt
 
   name     String
-  lastname     String
-  surname     String?
+  lastname String
+  surname  String?
   email    String  @unique
 
   passwordHash     String
   refreshTokenHash String?
 
-  phoneNumbers    String[] @default([]) @map("phone_numbers")
+  phoneNumbers String[] @default([]) @map("phone_numbers")
 
-  cardNumbers     String[] @default([]) @map("card_numbers")
+  cardNumbers String[] @default([]) @map("card_numbers")
 
   roles Role[] @default([USER])
 
-  booksOwned  Book[]   @relation("Owner")    // Книги, которые пользователь сдает в аренду
-  rentals     Rental[] @relation("Renter")  // Аренды, где пользователь является арендатором
-  ownedRentals Rental[] @relation("Owner")  // Аренды, где пользователь является владельцем
+  booksOwned   Book[]   @relation("Owner") // Книги, которые пользователь сдает в аренду
+  rentals      Rental[] @relation("Renter") // Аренды, где пользователь является арендатором
+  ownedRentals Rental[] @relation("Owner") // Аренды, где пользователь является владельцем
 
-  favoriteBooks Book[] @relation("FavoriteBooks")
+  favoriteBooks   Book[]           @relation("FavoriteBooks")
   supportRequests SupportRequest[] @relation
+
+  ownerRating  Float    @default(0)
+  readerRating Float    @default(0)
+  reviews      Review[] @relation // Добавляем связь с отзывами
+
   @@map("users")
 }
 
@@ -67,82 +72,116 @@ enum Format {
 }
 
 model Book {
-  id              Int        @id @default(autoincrement()) // Уникальный идентификатор книги (PK)
-  title           String     // Название книги
-  user            User       @relation("Owner", fields: [userId], references: [id]) // Владелец книги
-  userId          Int        @map("user_id")
+  id              Int       @id @default(autoincrement()) // Уникальный идентификатор книги (PK)
+  title           String // Название книги
+  user            User      @relation("Owner", fields: [userId], references: [id]) // Владелец книги
+  userId          Int       @map("user_id")
   condition       Condition // Состояние книги (new, good, worn, damaged)
-  publishedYear   Int       // Год публикации
+  publishedYear   Int // Год публикации
   isbn            String    @unique // ISBN, уникальный, но опциональный
-  language        String    // Язык книги (English, Russian и т.д.)
-  category        String    // Категория или жанр
-  description     String    // Краткое описание или аннотация
-  coverImagesUrls   String[]    @map("cover_images_urls") // Ссылка на обложку
+  language        String // Язык книги (English, Russian и т.д.)
+  category        String // Категория или жанр
+  description     String // Краткое описание или аннотация
+  coverImagesUrls String[]  @map("cover_images_urls") // Ссылка на обложку
 
   // Связь с авторами через промежуточную таблицу
-  author         String // Связь с таблицей Book_Authors
+  author String // Связь с таблицей Book_Authors
 
   // Дополнительные параметры книги
-  publisher       String?    // Издательство
-  series          String?    // Серия
-  edition         String?    // Издание (первое, второе и т.д.)
-  pages           Int?       // Количество страниц
-  dimensions      String?    // Размеры книги (например, "15x20x3 см")
-  format          Format?    // Тип обложки/формата (hardcover, paperback, ebook)
-  printRun        Int?       @map("print_run") // Тираж
-  weight          Int?       // Вес в граммах
-  ageRestriction  String?    @map("age_restriction") // Возрастные ограничения
+  publisher      String? // Издательство
+  series         String? // Серия
+  edition        String? // Издание (первое, второе и т.д.)
+  pages          Int? // Количество страниц
+  dimensions     String? // Размеры книги (например, "15x20x3 см")
+  format         Format? // Тип обложки/формата (hardcover, paperback, ebook)
+  printRun       Int?    @map("print_run") // Тираж
+  weight         Int? // Вес в граммах
+  ageRestriction String? @map("age_restriction") // Возрастные ограничения
 
   // Параметры для функциональности
-  price           Float     // Цена книги (для оценки или аренды)
-  deposit         Float? @default(0)
-  minDaysToRent   Int    @default(0) @map("min_days_to_rent")
-  cardNumber      String @default("") @map("card_number")
+  price              Float // Цена книги (для оценки или аренды)
+  deposit            Float?     @default(0)
+  minDaysToRent      Int        @default(0) @map("min_days_to_rent")
+  cardNumber         String     @default("") @map("card_number")
   availabilityStatus BookStatus @default(ACTIVE) // Статус доступности (active, rented, closed)
-  tags            String[]   // Метки или ключевые слова
+  tags               String[] // Метки или ключевые слова
 
-  rentals         Rental[]   // Связь с арендой
+  rentals Rental[] // Связь с арендой
 
   // История использования
-  addedDate       DateTime   @default(now()) @map("added_date") // Дата добавления
-  lastRentedDate  DateTime?  @map("last_rented_date") // Дата последней аренды
-  rentalCount     Int        @default(0) @map("rental_count") // Количество аренд
-  rating          Float?     // Средняя оценка книги
-  timesReported   Int        @default(0) @map("times_reported") // Количество жалоб
+  addedDate      DateTime  @default(now()) @map("added_date") // Дата добавления
+  lastRentedDate DateTime? @map("last_rented_date") // Дата последней аренды
+  rentalCount    Int       @default(0) @map("rental_count") // Количество аренд
+  rating         Float? // Средняя оценка книги
+  timesReported  Int       @default(0) @map("times_reported") // Количество жалоб
 
   favoritedBy User[] @relation("FavoriteBooks")
+
+  bookRating Float    @default(0)
   // Автоматические поля Prisma
-  updatedAt       DateTime   @updatedAt // Дата последнего обновления
+  reviews    Review[] @relation // Добавляем связь с отзывами
+  updatedAt  DateTime @updatedAt // Дата последнего обновления
 }
 
 enum RentalStatus {
-  PENDING          // Запрос аренды отправлен. У Владельца появляется кнопки "Подтвердить" или "Отклонить"
+  PENDING // Запрос аренды отправлен. У Владельца появляется кнопки "Подтвердить" или "Отклонить"
   APPROVED_BY_OWNER // Владелец принял запрос (нажал ПОДТВЕРДИТЬ). у Читателя появляется кнопка "ОПЛАТИТЬ" 
-  CONFIRMED        // Читатель оплатил аренду (нажал ОПЛАТИТЬ). У Владельца появляется кнопка "Подтвердить передачу". 
-  GIVEN_TO_READER  // Владелец подтвердил передачу. У Читателя появляется кнопку "Подтвердить получение"
-  CANCELED         // Читатель получил книгу, но захотел отказаться
-  ACTIVE           // Читатель получил книгу (Нажал кнопку ПОДТВЕРДИТЬ ПОЛУЧЕНИЕ), аренда переходит в active
-  RETURN_APPROVAL  // ВРЕМЯ АРЕНДЫ ЗАКОНЧИЛОСЬ. (Появляется кнопка у Владельца "Подтвердить возврат")
-  COMPLETED        // Владелец подтвердил возврат (Нажал на ПОДТВЕРДИТЬ ВОЗВРАТ)
-  REJECTED         // Владелец отклонил запрос (нажал ОТКЛОНИТЬ)
+  CONFIRMED // Читатель оплатил аренду (нажал ОПЛАТИТЬ). У Владельца появляется кнопка "Подтвердить передачу". 
+  GIVEN_TO_READER // Владелец подтвердил передачу. У Читателя появляется кнопку "Подтвердить получение"
+  CANCELED // Читатель получил книгу, но захотел отказаться
+  ACTIVE // Читатель получил книгу (Нажал кнопку ПОДТВЕРДИТЬ ПОЛУЧЕНИЕ), аренда переходит в active
+  RETURN_APPROVAL // ВРЕМЯ АРЕНДЫ ЗАКОНЧИЛОСЬ. (Появляется кнопка у Владельца "Подтвердить возврат")
+  COMPLETED // Владелец подтвердил возврат (Нажал на ПОДТВЕРДИТЬ ВОЗВРАТ)
+  REJECTED // Владелец отклонил запрос (нажал ОТКЛОНИТЬ)
 }
 
 model Rental {
-  id              Int         @id @default(autoincrement())
-  book            Book        @relation(fields: [bookId], references: [id])
-  bookId          Int         @map("book_id")
-  renter          User        @relation("Renter", fields: [renterId], references: [id])
-  renterId        Int         @map("renter_id")
-  owner           User        @relation("Owner", fields: [ownerId], references: [id])
-  ownerId         Int         @map("owner_id")
-  
-  price           Float       @default(0)
+  id       Int  @id @default(autoincrement())
+  book     Book @relation(fields: [bookId], references: [id])
+  bookId   Int  @map("book_id")
+  renter   User @relation("Renter", fields: [renterId], references: [id])
+  renterId Int  @map("renter_id")
+  owner    User @relation("Owner", fields: [ownerId], references: [id])
+  ownerId  Int  @map("owner_id")
 
-  status          RentalStatus @default(PENDING)
-  rentStartDate   DateTime?   // Дата начала аренды
-  rentEndDate     DateTime?   // Дата окончания аренды
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  // Кэш данных владельца
+  ownerName       String
+  ownerLastname   String
+  ownerSurname    String?
+  ownerPhones     String[]
+  ownerCardNumber String
+
+  // Кэш данных читателя
+  renterName     String
+  renterLastname String
+  renterSurname  String?
+  renterPhones   String[]
+
+  // Кэш данных книги
+  bookTitle         String
+  bookAuthor        String
+  bookCoverImages   String[]
+  bookCondition     Condition
+  bookLanguage      String
+  bookCategory      String
+  bookDescription   String
+  bookPublishedYear Int
+
+  pricePerDay Float
+  deposit     Float?
+  price       Float  @default(0)
+
+  // Оценки
+  ownerRating  Int?
+  renterRating Int?
+  bookRating   Int?
+  reviewContent String?
+
+  status        RentalStatus @default(PENDING)
+  rentStartDate DateTime? // Дата начала аренды
+  rentEndDate   DateTime? // Дата окончания аренды
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 enum SupportRequestStatus {
@@ -152,15 +191,29 @@ enum SupportRequestStatus {
 }
 
 model SupportRequest {
-  id        Int                   @id @default(autoincrement())
-  title     String                // Заголовок обращения
-  content   String                // Текст обращения
-  user      User                  @relation(fields: [userId], references: [id])
-  userId    Int                   @map("user_id")
-  status    SupportRequestStatus  @default(REGISTERED) // Статус обращения
+  id            Int                  @id @default(autoincrement())
+  title         String // Заголовок обращения
+  content       String // Текст обращения
+  user          User                 @relation(fields: [userId], references: [id])
+  userId        Int                  @map("user_id")
+  status        SupportRequestStatus @default(REGISTERED) // Статус обращения
   adminResponse String?
-  createdAt DateTime              @default(now()) // Дата создания
-  updatedAt DateTime              @updatedAt // Дата обновления
+  createdAt     DateTime             @default(now()) // Дата создания
+  updatedAt     DateTime             @updatedAt // Дата обновления
 
   @@map("support_requests")
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  book      Book     @relation(fields: [bookId], references: [id])
+  bookId    Int      @map("book_id")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  content   String? // Текст отзыва
+  rating    Int? // Оценка (например, от 1 до 5)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
 }

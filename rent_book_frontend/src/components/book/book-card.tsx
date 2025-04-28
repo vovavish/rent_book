@@ -1,9 +1,9 @@
-// components/book/BookCard.tsx
 import { FC } from 'react';
 import { BookResponse } from '../../types/response/bookResponse';
 import { Link } from 'react-router-dom';
 import { BookImageSlider } from './book-home-slider';
 import { FavoriteButton } from './favorite-button';
+import { Star } from 'lucide-react'; // <-- добавили импорт
 
 import styles from './book-card.module.scss';
 
@@ -29,13 +29,21 @@ export const BookCard: FC<BookCardProps> = ({
       <div className={styles['book-info']}>
         <div className={styles['book-header']}>
           <h3>Книга</h3>
-          <FavoriteButton bookId={book.id} />  
+          <FavoriteButton bookId={book.id} />
         </div>
         <p className={styles['book-author']}>{book.author}</p>
         <p className={styles['book-title']}>"{book.title}"</p>
+
+        {/* Красивая цена */}
         <div className={styles['book-price-wrapper']}>
           <div className={styles['book-price']}>{book.price}</div>
           <p>руб/день</p>
+        </div>
+
+        {/* Красивая отрисовка рейтинга */}
+        <div className={styles['book-rating']}>
+          <Star size={16} color="#FFD700" fill="#FFD700" />
+          <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
         </div>
 
         <Link to={`/rent_book/${book.id}`} className={styles['rent-link']}>

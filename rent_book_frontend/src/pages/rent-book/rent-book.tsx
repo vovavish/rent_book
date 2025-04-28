@@ -3,6 +3,7 @@ import { useStore } from '../../hooks/useStore';
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styles from './rent-book.module.scss';
+import { Star } from 'lucide-react';
 
 export const RentBookPage = observer(() => {
   const { rentBookStore, authStore } = useStore();
@@ -12,6 +13,7 @@ export const RentBookPage = observer(() => {
   useEffect(() => {
     if (bookId) {
       rentBookStore.fetchToRentalBookById(Number(bookId));
+      rentBookStore.fetchBookReviewsById(Number(bookId));
     }
   }, [bookId]);
 
@@ -83,6 +85,45 @@ export const RentBookPage = observer(() => {
             )}
             {authStore.isAuth && book.user.id === authStore.user?.id && <p>Это ваша книга</p>}
           </div>
+          {book && (
+            <div className={styles['book-reviews']}>
+              <h2>Отзывы о книге</h2>
+
+              {/* Средний рейтинг */}
+              <div className={styles['average-rating']}>
+                <Star size={24} color="#FFD700" fill="#FFD700" />
+                <span className={styles['rating-value']}>
+                  {book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}
+                </span>
+              </div>
+
+              {/* Список отзывов */}
+              {rentBookStore.currentBookReviews.length > 0 ? (
+                <ul className={styles['reviews-list']}>
+                  {rentBookStore.currentBookReviews.map((review) => (
+                    <li key={review.id} className={styles['review-item']}>
+                      <div className={styles['review-header']}>
+                        <span className={styles['review-author']}>
+                          {review.user.name} {review.user.lastname}
+                        </span>
+                        {review.rating !== null && (
+                          <div className={styles['review-rating']}>
+                            <Star size={16} color="#FFD700" fill="#FFD700" />
+                            <span>{review.rating.toFixed(1)}</span>
+                          </div>
+                        )}
+                      </div>
+                      {review.content && (
+                        <p className={styles['review-content']}>{review.content}</p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Отзывов пока нет</p>
+              )}
+            </div>
+          )}
         </div>
       ) : (
         !rentBookStore.isLoading && <p>Книга не найдена</p>

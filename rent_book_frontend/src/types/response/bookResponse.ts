@@ -75,4 +75,21 @@ export interface BookResponse {
   createdAt: string;
   updatedAt: string;
   coverImagesUrls: string[];
+  bookRating: number | null;
+}
+
+export interface BookReview {
+  id: number;
+  bookId: number;
+  userId: number;
+  content: string | null;
+  rating: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+  user: {
+    id: number;
+    name: string;
+    lastname: string;
+    surname: string | null;
+  };
 }

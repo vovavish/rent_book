@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, ParseIntPipe, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  ParseIntPipe,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { RentBookService } from './rent_book.service';
 import { CreateBookDto } from './dto/create_book.dto';
 import { UpdateBookDto } from './dto/update_book.dto';
@@ -6,6 +18,7 @@ import { CreateRentalDto } from './dto/create_rental.dto';
 import { GetCurrentUserId, Public } from 'src/common/decorators';
 import { AtGuard } from 'src/common/guards';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { RateOwnerAndBookDto } from './dto/rate_owner_and_book_dto';
 
 @Controller('rent_books')
 export class RentBookController {
@@ -50,9 +63,7 @@ export class RentBookController {
 
   @Public()
   @Get('getToRental/:bookId')
-  async getToRentalBookById(
-    @Param('bookId', ParseIntPipe) bookId: number,
-  ) {
+  async getToRentalBookById(@Param('bookId', ParseIntPipe) bookId: number) {
     return this.bookService.getToRentalBookById(bookId);
   }
 
@@ -109,67 +120,100 @@ export class RentBookController {
 
   @UseGuards(AtGuard)
   @Post('approve_rental/:rentalId')
-  async approveRental(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async approveRental(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.approveRental(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('reject_rental/:rentalId')
-  async rejectRental(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async rejectRental(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.rejectRental(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('reject_rental_from_approval/:rentalId')
-  async rejectRentalFromApproval(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async rejectRentalFromApproval(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.rejectRentalFromApproval(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('reject_rental_from_pending/:rentalId')
-  async rejectRentalFromPending(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async rejectRentalFromPending(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.rejectRentalFromPending(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('reject_rental_from_approved_by_owner/:rentalId')
-  async rejectRentalFromApprovedByOwner(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async rejectRentalFromApprovedByOwner(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.rejectRentalFromApprovedByOwner(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('confirm_payment/:rentalId')
-  async confirmPayment(@GetCurrentUserId() renterId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async confirmPayment(
+    @GetCurrentUserId() renterId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.confirmPayment(renterId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('cancel_owner_rental/:rentalId')
-  async canvelOwnerRental(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async canvelOwnerRental(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.cancelOwnerRental(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('cancel_reader_rental/:rentalId')
-  async cancelReaderRental(@GetCurrentUserId() renterId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async cancelReaderRental(
+    @GetCurrentUserId() renterId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.cancelReaderRental(renterId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('confirm_giving/:rentalId')
-  async confirmGivingBook(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async confirmGivingBook(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.confirmGivingBook(ownerId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('confirm_receiving/:rentalId')
-  async confirmReceivingBook(@GetCurrentUserId() renterId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async confirmReceivingBook(
+    @GetCurrentUserId() renterId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.confirmReceivingBook(renterId, rentalId);
   }
 
   @UseGuards(AtGuard)
   @Post('approve_return/:rentalId')
-  async approveReturn(@GetCurrentUserId() ownerId: number, @Param('rentalId', ParseIntPipe) rentalId: number) {
+  async approveReturn(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+  ) {
     return this.bookService.approveReturn(ownerId, rentalId);
   }
 
@@ -202,11 +246,42 @@ export class RentBookController {
 
   @UseGuards(AtGuard)
   @Delete('favorites/:bookId')
-
   async removeFromFavorites(
     @GetCurrentUserId() userId: number,
     @Param('bookId', ParseIntPipe) bookId: number,
   ) {
     return this.bookService.removeFromFavorites(userId, bookId);
+  }
+
+  @UseGuards(AtGuard)
+  @Post('rate_renter/:rentalId')
+  async rateRenter(
+    @GetCurrentUserId() ownerId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+    @Body('rating') rating: number,
+  ) {
+    return this.bookService.rateRenter(ownerId, rentalId, rating);
+  }
+
+  @UseGuards(AtGuard)
+  @Post('rate_owner_and_book/:rentalId')
+  async rateOwnerAndBook(
+    @GetCurrentUserId() renterId: number,
+    @Param('rentalId', ParseIntPipe) rentalId: number,
+    @Body() rateDto: RateOwnerAndBookDto,
+  ) {
+    return this.bookService.rateOwnerAndBook(
+      renterId,
+      rentalId,
+      rateDto.ownerRating,
+      rateDto.bookRating,
+      rateDto.reviewContent,
+    );
+  }
+
+  @Public()
+  @Get('reviews/:bookId')
+  async getBookReviews(@Param('bookId', ParseIntPipe) bookId: number) {
+    return this.bookService.getBookReviews(bookId);
   }
 }

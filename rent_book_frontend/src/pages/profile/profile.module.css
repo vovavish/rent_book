@@ -54,6 +54,23 @@
   box-shadow: 0 4px 8px var(--shadow-color);
 }
 
+.avatarContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ratings {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  color: #555;
+}
+
+.ratingItem {
+  line-height: 1.2;
+}
+
 /* Card styles */
 .card {
   background-color: var(--card-bg);
@@ -62,6 +79,10 @@
   margin-bottom: 1.5rem;
   overflow: hidden;
   transition: var(--transition);
+}
+
+.card:last-child {
+  margin-bottom: 0;
 }
 
 .card:hover {

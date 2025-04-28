@@ -8,6 +8,8 @@ export interface UserProfileResponse {
   phoneNumbers: string[];
   cardNumbers: string[];
   roles: string[];
+  ownerRating: number;
+  readerRating: number;
   createdAt: Date,
   updatedAt: Date,
 }

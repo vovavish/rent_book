@@ -166,3 +166,49 @@
     margin: 2rem 0;
   }
 }
+
+.book-reviews {
+  margin-top: 2rem;
+}
+
+.average-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.reviews-list {
+  list-style: none;
+  padding: 0;
+}
+
+.review-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.review-author {
+  font-weight: bold;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.review-content {
+  margin-top: 0.5rem;
+}

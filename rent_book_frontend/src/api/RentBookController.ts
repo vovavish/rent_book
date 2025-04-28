@@ -1,5 +1,5 @@
 import { api } from './index';
-import { BookResponse, CreateBookDto, UpdateBookDto } from '../types/response/bookResponse';
+import { BookResponse, BookReview, CreateBookDto, UpdateBookDto } from '../types/response/bookResponse';
 import { RentalResponse, CreateRentalDto } from '../types/response/rentalResonse';
 
 export default class ApiRentBookController {
@@ -134,5 +134,20 @@ export default class ApiRentBookController {
   static async removeFromFavorites(bookId: number): Promise<void> {
     return api.delete(`/rent_books/favorites/${bookId}`)
       .then(() => undefined);
+  }
+
+  static async rateRenter(rentalId: number, rating: number): Promise<RentalResponse> {
+    return api.post<RentalResponse>(`/rent_books/rate_renter/${rentalId}`, { rating })
+      .then(res => res.data);
+  }
+  
+  static async rateOwnerAndBook(rentalId: number, ownerRating: number, bookRating: number, reviewContent: string): Promise<RentalResponse> {
+    return api.post<RentalResponse>(`/rent_books/rate_owner_and_book/${rentalId}`, { ownerRating, bookRating, reviewContent })
+      .then(res => res.data);
+  }
+
+  static async getReviewsByBookId(bookId: number): Promise<BookReview[]> {
+    return api.get<BookReview[]>(`/rent_books/reviews/${bookId}`)
+      .then(res => res.data);
   }
 }

@@ -59,7 +59,7 @@ export class RentBookService {
   // Получение книги по ID
   async getBookById(userId: number, bookId: number): Promise<Book> {
     const book = await this.prisma.book.findFirst({
-      where: { id: bookId, userId },
+      where: { id: bookId },
       include: { user: true },
     });
     if (!book) {
@@ -117,28 +117,40 @@ export class RentBookService {
     createRentalDto: CreateRentalDto,
   ): Promise<Rental> {
     const { bookId, rentStartDate, rentEndDate } = createRentalDto;
-    const book = await this.prisma.book.findUnique({ where: { id: bookId } });
-
+  
+    // Получаем книгу с информацией о владельце
+    const book = await this.prisma.book.findUnique({
+      where: { id: bookId },
+      include: { user: true }, // Включаем данные владельца
+    });
+  
     if (!book) throw new NotFoundException(`Book with ID ${bookId} not found`);
     if (book.availabilityStatus !== 'ACTIVE')
       throw new ForbiddenException(`Book is not available for rental`);
-
+  
+    // Получаем данные арендатора
+    const renter = await this.prisma.user.findUnique({
+      where: { id: renterId },
+    });
+  
+    if (!renter) throw new NotFoundException(`Renter with ID ${renterId} not found`);
+  
     // Преобразуем строки дат в объекты Date
     const startDate = new Date(rentStartDate);
     const endDate = new Date(rentEndDate);
-
+  
     // Проверяем, что endDate позже startDate
     if (endDate <= startDate) {
       throw new BadRequestException('End date must be after start date');
     }
-
+  
     // Вычисляем количество дней аренды
     const timeDiff = endDate.getTime() - startDate.getTime();
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Округляем вверх
-
+  
     // Вычисляем общую стоимость
     const totalPrice = book.price * daysDiff + book.deposit;
-
+  
     return this.prisma.rental.create({
       data: {
         bookId,
@@ -147,7 +159,32 @@ export class RentBookService {
         rentStartDate: startDate,
         rentEndDate: endDate,
         status: RentalStatus.PENDING,
-        price: totalPrice, // Добавляем расчетную стоимость
+        price: totalPrice,
+        pricePerDay: book.price, // Цена за день аренды из книги
+        deposit: book.deposit, // Депозит из книги
+  
+        // Кэшированные данные владельца
+        ownerName: book.user.name,
+        ownerLastname: book.user.lastname,
+        ownerSurname: book.user.surname,
+        ownerPhones: book.user.phoneNumbers,
+        ownerCardNumber: book.cardNumber,
+  
+        // Кэшированные данные арендатора
+        renterName: renter.name,
+        renterLastname: renter.lastname,
+        renterSurname: renter.surname,
+        renterPhones: renter.phoneNumbers,
+  
+        // Кэшированные данные книги
+        bookTitle: book.title,
+        bookAuthor: book.author,
+        bookCoverImages: book.coverImagesUrls,
+        bookCondition: book.condition,
+        bookLanguage: book.language,
+        bookCategory: book.category,
+        bookDescription: book.description,
+        bookPublishedYear: book.publishedYear,
       },
     });
   }
@@ -510,7 +547,6 @@ export class RentBookService {
         `Book with ID ${bookId} is already in favorites`,
       );
     }
-
     await this.prisma.user.update({
       where: { id: userId },
       data: {
@@ -554,5 +590,175 @@ export class RentBookService {
         },
       },
     });
+  }
+
+  async rateRenter(ownerId: number, rentalId: number, rating: number): Promise<Rental> {
+    const rental = await this.prisma.rental.findUnique({
+      where: { id: rentalId },
+    });
+  
+    if (!rental) {
+      throw new NotFoundException(`Rental with ID ${rentalId} not found`);
+    }
+  
+    if (rental.status !== 'COMPLETED' && rental.status !== 'CANCELED') {
+      throw new BadRequestException(`Rental must be in COMPLETED or CANCELED status to rate`);
+    }
+
+    if (rental.ownerId !== ownerId) {
+      throw new ForbiddenException(`You don't have permission to rate this rental`);
+    }
+  
+    if (rental.renterRating !== null) {
+      throw new BadRequestException(`You have already rated the renter`);
+    }
+  
+    const updatedRental = await this.prisma.rental.update({
+      where: { id: rentalId },
+      data: { renterRating: rating },
+    });
+  
+    // Пересчёт readerRating у пользователя-арендатора
+    const allRenterRatings = await this.prisma.rental.findMany({
+      where: {
+        renterId: rental.renterId,
+        renterRating: { not: null },
+      },
+      select: { renterRating: true },
+    });
+  
+    const averageReaderRating =
+      allRenterRatings.reduce((sum, r) => sum + (r.renterRating || 0), 0) /
+      allRenterRatings.length;
+  
+    await this.prisma.user.update({
+      where: { id: rental.renterId },
+      data: { readerRating: averageReaderRating },
+    });
+  
+    return updatedRental;
+  }
+  
+  // Арендатор оценивает владельца и книгу
+  async rateOwnerAndBook(
+    renterId: number,
+    rentalId: number,
+    ownerRating: number,
+    bookRating: number,
+    reviewContent?: string,
+  ): Promise<Rental> {
+    const rental = await this.prisma.rental.findUnique({
+      where: { id: rentalId },
+    });
+  
+    if (!rental) {
+      throw new NotFoundException(`Rental with ID ${rentalId} not found`);
+    }
+  
+    if (rental.status !== 'COMPLETED' && rental.status !== 'CANCELED') {
+      throw new BadRequestException(`Rental must be in COMPLETED or CANCELED status to rate`);
+    }
+  
+    if (rental.renterId !== renterId) {
+      throw new ForbiddenException(`You don't have permission to rate this rental`);
+    }
+  
+    if (rental.ownerRating !== null || rental.bookRating !== null) {
+      throw new BadRequestException(`You have already rated the owner and book`);
+    }
+  
+    // Start a transaction to ensure atomicity
+    const updatedRental = await this.prisma.$transaction(async (prisma) => {
+      // Update the rental with ratings
+      const rentalUpdate = await prisma.rental.update({
+        where: { id: rentalId },
+        data: {
+          ownerRating,
+          bookRating,
+          reviewContent,
+        },
+      });
+  
+      // Create a review if reviewContent is provided
+      if (reviewContent) {
+        await prisma.review.create({
+          data: {
+            bookId: rental.bookId,
+            userId: renterId,
+            content: reviewContent,
+            rating: bookRating, // Store the book rating in the review as well
+          },
+        });
+      }
+  
+      // Recalculate ownerRating for the owner
+      const allOwnerRatings = await prisma.rental.findMany({
+        where: {
+          ownerId: rental.ownerId,
+          ownerRating: { not: null },
+        },
+        select: { ownerRating: true },
+      });
+  
+      const averageOwnerRating =
+        allOwnerRatings.reduce((sum, r) => sum + (r.ownerRating || 0), 0) /
+        allOwnerRatings.length;
+  
+      await prisma.user.update({
+        where: { id: rental.ownerId },
+        data: { ownerRating: averageOwnerRating },
+      });
+  
+      // Recalculate bookRating for the book
+      const allBookRatings = await prisma.rental.findMany({
+        where: {
+          bookId: rental.bookId,
+          bookRating: { not: null },
+        },
+        select: { bookRating: true },
+      });
+  
+      const averageBookRating =
+        allBookRatings.reduce((sum, r) => sum + (r.bookRating || 0), 0) /
+        allBookRatings.length;
+  
+      await prisma.book.update({
+        where: { id: rental.bookId },
+        data: { bookRating: averageBookRating },
+      });
+  
+      return rentalUpdate;
+    });
+  
+    return updatedRental;
+  }
+
+  async getBookReviews(bookId: number) {
+    const bookExists = await this.prisma.book.findUnique({
+      where: { id: bookId },
+    });
+
+    if (!bookExists) {
+      throw new NotFoundException(`Book with ID ${bookId} not found`);
+    }
+
+    const reviews = await this.prisma.review.findMany({
+      where: { bookId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            surname: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return reviews;
   }
 }

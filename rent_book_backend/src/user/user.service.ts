@@ -22,6 +22,8 @@ export class UserService {
         phoneNumbers: true,
         cardNumbers: true,
         roles: true,
+        ownerRating: true,
+        readerRating: true,
         createdAt: true,
         updatedAt: true,
       },

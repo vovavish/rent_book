@@ -1,5 +1,5 @@
 import ApiRentBookController from "../../api/RentBookController";
-import { BookResponse, UpdateBookDto } from "../../types/response/bookResponse";
+import { BookResponse, BookReview, UpdateBookDto } from "../../types/response/bookResponse";
 import { RentalResponse, CreateRentalDto, RentalStatus } from "../../types/response/rentalResonse";
 import { makeAutoObservable, runInAction } from "mobx";
 
@@ -7,6 +7,7 @@ export class RentBookStore {
   private _books: BookResponse[] = [];
   private _availableBooks: BookResponse[] = [];
   private _currentBook: BookResponse | null = null;
+  private _currentBookReviews: BookReview[] = [];
   private _rentalsInOutBooks: RentalResponse[] = [];
   private _rentals: RentalResponse[] = [];
   private _favoriteBooks: BookResponse[] = [];
@@ -37,6 +38,10 @@ export class RentBookStore {
 
   get currentBook() {
     return this._currentBook;
+  }
+
+  get currentBookReviews() {
+    return this._currentBookReviews;
   }
 
   get rentals() {
@@ -84,6 +89,15 @@ export class RentBookStore {
   async fetchBookById(bookId: number) {
     await this.handleRequest(async () => {
       this._currentBook = await ApiRentBookController.getBookById(bookId);
+    }, "Failed to fetch book");
+  }
+
+  async fetchBookReviewsById(bookId: number) {
+    await this.handleRequest(async () => {
+      const response = await ApiRentBookController.getReviewsByBookId(bookId);
+      runInAction(() => {
+        this._currentBookReviews = response;
+      })
     }, "Failed to fetch book");
   }
 
@@ -339,6 +353,30 @@ export class RentBookStore {
       });
       throw e;
     }
+  }
+
+  async rateRenter(rentalId: number, rating: number) {
+    await this.handleRequest(async () => {
+      const response = await ApiRentBookController.rateRenter(rentalId, rating);
+      runInAction(() => {
+        let rental = this.rentals.find(rental => rental.id === rentalId);
+        if (rental) {
+          rental = response;
+        }
+      })
+    }, "Failed to rate renter");
+  }
+  
+  async rateOwnerAndBook(rentalId: number, ownerRating: number, bookRating: number, reviewContent: string) {
+    await this.handleRequest(async () => {
+      const response = await ApiRentBookController.rateOwnerAndBook(rentalId, ownerRating, bookRating, reviewContent);
+      runInAction(() => {
+        let rental = this.rentals.find(rental => rental.id === rentalId);
+        if (rental) {
+          rental = response;
+        }
+      })
+    }, "Failed to rate owner and book");
   }
 
   private async handleRequest(requestFn: () => Promise<any>, errorMessage: string) {
