@@ -97,6 +97,9 @@
 }
 
 .modalFooter {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
   padding: 1rem 1.5rem;
   background: #f9fafb;
   border-top: 1px solid #e5e7eb;

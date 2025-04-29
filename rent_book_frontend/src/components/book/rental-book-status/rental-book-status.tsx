@@ -8,7 +8,7 @@ interface RentalBookStatusProps {
 const statusToLabelMap: Record<RentalStatus, string> = {
   [RentalStatus.PENDING]: 'В ожидании',
   [RentalStatus.APPROVED_BY_OWNER]: 'Одобрена владельцем',
-  [RentalStatus.CONFIRMED]: 'Подтверждена',
+  [RentalStatus.CONFIRMED]: 'Оплачена',
   [RentalStatus.GIVEN_TO_READER]: 'Издание передано',
   [RentalStatus.CANCELED]: 'Прервана',
   [RentalStatus.ACTIVE]: 'Активна',

@@ -6,7 +6,9 @@ import { useStore } from '../../../hooks/useStore';
 import { BookImageSliderRental } from '../rental-image-slider';
 import { RentalBookStatus } from '../rental-book-status/rental-book-status';
 import dayjs from 'dayjs';
-import { Star } from 'lucide-react';
+import { RatingByReader } from '../rating';
+import { UserActionButton } from '../../ui';
+import { ConfirmModal } from '../../modal/modal-confirm';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -17,11 +19,14 @@ interface RentInOutBookCardProps {
 export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
   ({ rental, currentImageIndex, setCurrentImageIndices }) => {
     const { rentBookStore, authStore } = useStore();
-    const [ownerRating, setOwnerRating] = useState<number | null>(null);
-    const [bookRating, setBookRating] = useState<number | null>(null);
-    const [reviewContent, setReviewContent] = useState<string>('');
-    const [ownerHover, setOwnerHover] = useState<number | null>(null);
-    const [bookHover, setBookHover] = useState<number | null>(null);
+    const [, setOwnerRating] = useState<number | null>(null);
+    const [, setBookRating] = useState<number | null>(null);
+    const [, setReviewContent] = useState<string>('');
+    const [confirmState, setConfirmState] = useState<{
+      rentalId: number | null;
+      action: string | null;
+      message: string;
+    } | null>(null);
 
     const handleRentalAction = async (rentalId: number, action: string) => {
       try {
@@ -50,7 +55,12 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
       }
     };
 
-    const handleRateOwnerAndBook = async (rentalId: number, ownerRating: number, bookRating: number, reviewContent: string) => {
+    const handleRateOwnerAndBook = async (
+      rentalId: number,
+      ownerRating: number,
+      bookRating: number,
+      reviewContent: string,
+    ) => {
       try {
         await rentBookStore.rateOwnerAndBook(rentalId, ownerRating, bookRating, reviewContent);
         setOwnerRating(null);
@@ -60,183 +70,139 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
         console.error('Error rating owner and book:', error);
       }
     };
-    console.log('rental', rental);
+
+    const openConfirmModal = (rentalId: number, action: string, message: string) => {
+      setConfirmState({ rentalId, action, message });
+    };
+
+    const handleConfirmAction = async () => {
+      if (confirmState?.rentalId && confirmState?.action) {
+        await handleRentalAction(confirmState.rentalId, confirmState.action);
+        setConfirmState(null);
+      }
+    };
+
+    const handleCancelModal = () => {
+      setConfirmState(null);
+    };
+
     return (
-      <div className={styles['book-item']}>
-        <BookImageSliderRental
-          rental={rental}
-          rentalId={rental.id}
-          currentImageIndex={currentImageIndex}
-          setCurrentImageIndices={setCurrentImageIndices}
-        />
+      <>
+        {confirmState && (
+          <ConfirmModal
+            message={confirmState.message}
+            onConfirm={handleConfirmAction}
+            onCancel={handleCancelModal}
+            variant='reader'
+          />
+        )}
 
-        <div className={styles['book-info']}>
-          <div className={styles['book-header']}>
-            <h3>Книга</h3>
-            <RentalBookStatus rentalStatus={rental.status} />
-          </div>
-          <p className={styles['book-author']}>{rental.bookAuthor}</p>
-          <p className={styles['book-title']}>"{rental.bookTitle}"</p>
-          <div className={styles['book-price-wrapper']}>
-            <div className={styles['book-price']}>{rental.price}</div>
-            <p>руб</p>
-          </div>
-          <p>
-            {dayjs(rental.rentStartDate).format('DD-MM-YYYY')} -{' '}
-            {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
-          </p>
-          <p>Владелец - {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}</p>
+        <div className={styles['book-item']}>
+          <BookImageSliderRental
+            rental={rental}
+            rentalId={rental.id}
+            currentImageIndex={currentImageIndex}
+            setCurrentImageIndices={setCurrentImageIndices}
+          />
 
-          <div className={styles.rentalActions}>
-            {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (
-              <button
-                className={styles.actionButton}
-                onClick={() => handleRentalAction(rental.id, 'rejectFromPending')}
-              >
-                Отклонить заявку
-              </button>
-            )}
-            {rental.status === 'APPROVED_BY_OWNER' && rental.renterId === authStore.user?.id && (
-              <>
-                <button
-                  className={styles.actionButton}
-                  onClick={() => handleRentalAction(rental.id, 'confirm')}
-                >
-                  Оплатить
-                </button>
-                <button
-                  className={styles.actionButton}
-                  onClick={() => handleRentalAction(rental.id, 'rejectFromApprovedByOwner')}
-                >
-                  Отклонить
-                </button>
-              </>
-            )}
-            {rental.status === 'GIVEN_TO_READER' && rental.renterId === authStore.user?.id && (
-              <>
-                <button
-                  className={styles.actionButton}
-                  onClick={() => handleRentalAction(rental.id, 'confirmReceive')}
-                >
-                  Подтвердить получение
-                </button>
-                <button
-                  className={styles.actionButton}
-                  onClick={() => handleRentalAction(rental.id, 'cancelReceive')}
-                >
-                  Отменить
-                </button>
-              </>
-            )}
-            {rental.status === 'RETURN_APPROVAL' && rental.ownerId === authStore.user?.id && (
-              <button
-                className={styles.actionButton}
-                onClick={() => handleRentalAction(rental.id, 'confirmReturn')}
-              >
-                Подтвердить возврат
-              </button>
-            )}
+          <div className={styles['book-info']}>
+            <div className={styles['book-header']}>
+              <h3>Книга</h3>
+              <RentalBookStatus rentalStatus={rental.status} />
+            </div>
+            <p className={styles['book-author']}>{rental.bookAuthor}</p>
+            <p className={styles['book-title']}>"{rental.bookTitle}"</p>
+            <div className={styles['book-price-wrapper']}>
+              <div className={styles['book-price']}>{rental.price}</div>
+              <p>руб</p>
+            </div>
+            <p>
+              {dayjs(rental.rentStartDate).format('DD-MM-YYYY')} -{' '}
+              {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
+            </p>
+            <p>
+              Владелец - {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
+            </p>
 
-            {/* Оценка владельца и книги */}
-            {(rental.status === 'CANCELED' || rental.status === 'COMPLETED') && rental.renterId === authStore.user?.id && (
-              <div className={styles.ratingSection}>
-                {rental.ownerRating && rental.bookRating ? (
-                  <div className={styles.starsDisplay}>
-                    <div>
-                      <p>Оценка владельца:</p>
-                      {[...Array(5)].map((_, index) => (
-                        <Star
-                          key={index}
-                          size={24}
-                          color={index < rental.ownerRating! ? '#ffc107' : '#e4e5e9'}
-                        />
-                      ))}
-                    </div>
-                    <div>
-                      <p>Оценка книги:</p>
-                      {[...Array(5)].map((_, index) => (
-                        <Star
-                          key={index}
-                          size={24}
-                          color={index < rental.bookRating! ? '#ffc107' : '#e4e5e9'}
-                        />
-                      ))}
-                    </div>
-                    {rental.reviewContent && <p>Отзыв: {rental.reviewContent}</p>}
-                  </div>
-                ) : (
-                  <div className={styles.ratingInput}>
-                    <div>
-                      <p>Оцените владельца:</p>
-                      {[...Array(5)].map((_, index) => {
-                        const starValue = index + 1;
-                        return (
-                          <label key={starValue}>
-                            <input
-                              type="radio"
-                              name="ownerRating"
-                              value={starValue}
-                              onClick={() => setOwnerRating(starValue)}
-                              style={{ display: 'none' }}
-                            />
-                            <Star
-                              size={30}
-                              color={starValue <= (ownerHover ?? ownerRating ?? 0) ? '#ffc107' : '#e4e5e9'}
-                              style={{ cursor: 'pointer' }}
-                              onMouseEnter={() => setOwnerHover(starValue)}
-                              onMouseLeave={() => setOwnerHover(null)}
-                            />
-                          </label>
-                        );
-                      })}
-                    </div>
-                    <div>
-                      <p>Оцените книгу:</p>
-                      {[...Array(5)].map((_, index) => {
-                        const starValue = index + 1;
-                        return (
-                          <label key={starValue}>
-                            <input
-                              type="radio"
-                              name="bookRating"
-                              value={starValue}
-                              onClick={() => setBookRating(starValue)}
-                              style={{ display: 'none' }}
-                            />
-                            <Star
-                              size={30}
-                              color={starValue <= (bookHover ?? bookRating ?? 0) ? '#ffc107' : '#e4e5e9'}
-                              style={{ cursor: 'pointer' }}
-                              onMouseEnter={() => setBookHover(starValue)}
-                              onMouseLeave={() => setBookHover(null)}
-                            />
-                          </label>
-                        );
-                      })}
-                    </div>
-                    <div>
-                      <p>Отзыв о книге:</p>
-                      <textarea
-                        value={reviewContent}
-                        onChange={(e) => setReviewContent(e.target.value)}
-                        placeholder="Напишите отзыв о книге (необязательно)"
-                        className={styles.reviewTextarea}
-                      />
-                    </div>
-                    <button
-                      onClick={() => ownerRating && bookRating && handleRateOwnerAndBook(rental.id, ownerRating, bookRating, reviewContent)}
-                      disabled={!ownerRating || !bookRating}
-                      className={styles.submitRatingButton}
-                    >
-                      Подтвердить оценку
-                    </button>
+            <div className={styles.rentalActions}>
+              {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (
+                <UserActionButton
+                  onClick={() =>
+                    openConfirmModal(rental.id, 'rejectFromPending', 'Отклонить заявку?')
+                  }
+                  variant="rejected"
+                >
+                  Отклонить заявку
+                </UserActionButton>
+              )}
+              {rental.status === 'APPROVED_BY_OWNER' && rental.renterId === authStore.user?.id && (
+                <>
+                  <UserActionButton
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')
+                    }
+                    variant="reader"
+                  >
+                    Оплатить
+                  </UserActionButton>
+                  <UserActionButton
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'rejectFromApprovedByOwner', 'Отклонить бронирование?')
+                    }
+                    variant="rejected"
+                  >
+                    Отклонить
+                  </UserActionButton>
+                </>
+              )}
+              {rental.status === 'GIVEN_TO_READER' && rental.renterId === authStore.user?.id && (
+                <>
+                  <UserActionButton
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'confirmReceive', 'Подтвердить получение книги?')
+                    }
+                    variant="reader"
+                  >
+                    Подтвердить получение
+                  </UserActionButton>
+                  <UserActionButton
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'cancelReceive', 'Отменить получение книги?')
+                    }
+                    variant="rejected"
+                  >
+                    Отменить
+                  </UserActionButton>
+                </>
+              )}
+              {rental.status === 'RETURN_APPROVAL' && rental.ownerId === authStore.user?.id && (
+                <UserActionButton
+                  onClick={() =>
+                    openConfirmModal(rental.id, 'confirmReturn', 'Подтвердить возврат книги?')
+                  }
+                  variant="reader"
+                >
+                  Подтвердить возврат
+                </UserActionButton>
+              )}
+
+              {(rental.status === 'CANCELED' || rental.status === 'COMPLETED') &&
+                rental.renterId === authStore.user?.id && (
+                  <div className={styles.ratingSection}>
+                    <RatingByReader
+                      existingOwnerRating={rental.ownerRating}
+                      existingBookRating={rental.bookRating}
+                      existingReviewContent={rental.reviewContent}
+                      onSubmit={(ownerRating, bookRating, reviewContent) =>
+                        handleRateOwnerAndBook(rental.id, ownerRating, bookRating, reviewContent)
+                      }
+                    />
                   </div>
                 )}
-              </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   },
 );

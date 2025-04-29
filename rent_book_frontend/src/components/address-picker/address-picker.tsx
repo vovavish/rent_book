@@ -1,0 +1,88 @@
+import { useState } from 'react';
+import { YMaps, Map, Placemark } from '@iminside/react-yandex-maps';
+import styles from './address-picker.module.scss';
+
+export const AddressPicker = ({ onSelect, apiKey }: { onSelect: (location: { address: string; lat: number; lon: number }) => void; apiKey: string }) => {
+  const [address, setAddress] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState<{ address: string; lat: number; lon: number } | null>(null);
+
+  // Обработка поиска адреса
+  const handleSearch = async () => {
+    if (!address) return;
+    try {
+      const response = await fetch(
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${encodeURIComponent(address)}`
+      );
+      const data = await response.json();
+      const geoObject = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+      if (geoObject) {
+        const [lat, lon] = geoObject.Point.pos.split(' ').map(Number);
+        const selectedAddr = geoObject.metaDataProperty.GeocoderMetaData.text;
+        const newLocation = { address: selectedAddr, lat, lon };
+        setSelectedLocation(newLocation);
+        setAddress(selectedAddr); // Обновляем поле ввода
+        onSelect(newLocation);
+      } else {
+        alert('Адрес не найден');
+      }
+    } catch (error) {
+      console.error('Ошибка геокодирования адреса:', error);
+    }
+  };
+
+  const handleMapClick = async (e: any) => {
+    const coords = e.get('coords');
+    if (!coords || coords.length !== 2) {
+      console.error('Координаты не получены:', coords);
+      return;
+    }
+    const [lon, lat] = coords;
+    try {
+      const response = await fetch(
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${lat},${lon}`
+      );
+      const data = await response.json();
+      const geoObject = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+      if (geoObject) {
+        const selectedAddr = geoObject.metaDataProperty.GeocoderMetaData.text;
+        const newLocation = { address: selectedAddr, lat, lon };
+        setSelectedLocation(newLocation);
+        setAddress(selectedAddr); // Обновляем поле ввода
+        onSelect(newLocation);
+      } else {
+        alert('Не удалось найти адрес для этого местоположения');
+      }
+    } catch (error) {
+      console.error('Ошибка обратного геокодирования:', error);
+    }
+  };
+
+  const mapState = selectedLocation
+    ? { center: [selectedLocation.lon, selectedLocation.lat], zoom: 10 }
+    : { center: [55.75, 37.57], zoom: 9 };
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.inputContainer}>
+        <input
+          type="text"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="Введите адрес"
+        />
+        <button onClick={handleSearch} type='button'>Поиск</button>
+      </div>
+      <YMaps query={{ apikey: apiKey }}>
+        <Map
+          className={styles.map}
+          state={mapState}
+          onClick={handleMapClick}
+        >
+          {selectedLocation && (
+            <Placemark geometry={[selectedLocation.lon, selectedLocation.lat]} />
+          )}
+        </Map>
+      </YMaps>
+    </div>
+  );
+};

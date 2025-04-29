@@ -5,6 +5,7 @@ import { CreateBookDto, Condition, Format, BookStatus } from '../../types/respon
 import './my-rent-books.css';
 import { MyRentBookList } from '../../components/book/my-rent-books/my-rent-book-list';
 import { DashboardTitle } from '../../components/ui/dashboard-title';
+import { AddressPicker } from '../../components/address-picker/address-picker';
 
 export const MyRentBooksPage = observer(() => {
   const { rentBookStore, userProfileStore } = useStore();
@@ -107,6 +108,12 @@ export const MyRentBooksPage = observer(() => {
     setSelectedFiles([]);
     setSelectedCard('');
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleAddressSelect = ({address, lat, lon}: {address: string; lat: number; lon: number}) => {
+    console.log('Выбранный адрес:', address);
+    console.log('Координаты:', lat, lon);
+    // Можно сохранить в formik/useState, отправить в API и т.д.
   };
 
   const renderStep = () => {
@@ -372,6 +379,8 @@ export const MyRentBooksPage = observer(() => {
                   onChange={(e) => setNewBook({ ...newBook, deposit: Number(e.target.value) })}
                 />
               </div>
+
+              <AddressPicker onSelect={handleAddressSelect} apiKey='cfef434a-5494-4440-a548-f7408e0226d2'/>
             </div>
           </div>
         );
