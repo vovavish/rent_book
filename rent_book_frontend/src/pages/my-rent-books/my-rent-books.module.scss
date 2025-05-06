@@ -1,0 +1,263 @@
+$primary-color: #6f42c1;
+$dark-primary: #563d7c;
+
+.my-rent-books {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerAddButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 20px 0;
+  &:hover {
+    background-color: #45a049;
+  }
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modalHeader {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.stepsIndicator {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.step {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  cursor: pointer;
+  &.active {
+    background-color: $dark-primary;
+    color: white;
+  }
+  &.completed {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+.stepContent {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.bookFormGrid {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.formGroupWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 25px;
+}
+
+.formGroupImages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+}
+
+.formGroup {
+  display: flex;
+  gap: 5px;
+  label {
+    display: block;
+    font-weight: bold;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  textarea {
+    min-height: 100px;
+  }
+}
+
+.select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardItem {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  &.selected {
+    border-color: #4CAF50;
+    background-color: #f0fff0;
+  }
+}
+
+.confirmation {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 4px;
+  h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+}
+
+.previewImages {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.previewImage {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.primaryButton {
+  background-color: $primary-color;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:after {
+    content: ' >';
+  }
+  &:hover {
+    background-color: $dark-primary;
+  }
+  &:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+}
+
+.secondaryButton {
+  background-color: #f1f1f1;
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  &:before {
+    content: '< ';
+  }
+  &:hover {
+    background-color: #ddd;
+  }
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.error {
+  color: red;
+}
+
+.uploadButtonWrapper {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.uploadButtonWrapper:hover {
+  background-color: #e0e0e0;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.selectedFiles p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}

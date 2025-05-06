@@ -121,8 +121,11 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
             </p>
             <p>
-              Владелец - {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
+              Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
             </p>
+            {rental.status !== 'PENDING' && <p>
+              Адрес: {rental.address}
+            </p>}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (

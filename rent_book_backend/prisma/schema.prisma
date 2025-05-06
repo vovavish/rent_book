@@ -60,60 +60,164 @@ enum BookStatus {
 }
 
 enum Condition {
-  NEW
-  GOOD
-  WORN
-  DAMAGED
+  NewEdition // Новое издание - книга, недавно выпущенная, в отличном состоянии
+  UsedBook // Букинистическая книга - подержанная книга, бывшая в употреблении
+  RareEdition // Редкое издание - книга, выпущенная ограниченным тиражом или трудно находимая
+  AntiqueBook // Антикварная книга - старая книга, имеющая историческую или коллекционную ценность
+  ManuscriptEdition // Издание на правах рукописи - книга, выпущенная в предварительном виде, как рукопись
+  NumberedEdition // Нумерованное издание - книга с индивидуальным номером, часто ограниченного тиража
+  SignedEdition // Подписное издание - книга, подписанная автором или другим значимым лицом
+  SmallPrintRun // Малотиражное издание - книга, выпущенная небольшим тиражом
+  OffPrintRun // Внетиражное издание - книга, выпущенная вне основного тиража, часто для специальных целей
 }
 
 enum Format {
-  HARDCOVER
-  PAPERBACK
+  SmallFormat    // Малоформатное издание - издание небольшого размера, компактное
+  PocketEdition  // Карманное издание - издание, удобное для ношения в кармане
+  Miniature      // Миниатюрное издание - очень маленькое издание, часто коллекционное
+  TinyBook       // Книжка-малютка - чрезвычайно маленькая книга, часто для декоративных целей
+  Folio          // Фолиант - крупноформатное издание, обычно с большими страницами
+}
+
+enum Type {
+  Book // Книга - литературное произведение, обычно в твёрдом или мягком переплёте
+  Magazine // Журнал - периодическое издание с разнообразным содержимым
+  Newspaper // Газета - периодическое издание с новостями и статьями
+  Dictionary // Словарь - справочное издание с объяснением слов и их значений
+  Encyclopedia // Энциклопедия - издание с систематизированными знаниями по различным областям
+  Reference // Справочник - издание с краткой информацией для практического использования
+  Textbook // Учебник - книга, предназначенная для обучения по определённому предмету
+  Anthology // Хрестоматия - сборник избранных текстов, обычно литературных
+  Songbook // Песенник - сборник текстов песен, иногда с нотами
+  Manga // Манга - японские комиксы или графические романы
+}
+
+enum AgeRating {
+  ZeroPlus // 0+ - подходит для всех возрастов, без ограничений
+  SixPlus // 6+ - рекомендовано для детей от 6 лет
+  TwelvePlus // 12+ - рекомендовано для детей от 12 лет
+  SixteenPlus // 16+ - рекомендовано для подростков от 16 лет
+  EighteenPlus // 18+ - рекомендовано для взрослых от 18 лет
+}
+
+enum Periodicity {
+  NonPeriodic     // Непериодическое издание - издание, выпущенное однократно, без регулярного графика
+  Serial          // Сериальное издание - издание, выпускаемое в виде последовательных выпусков, но нерегулярно
+  Periodic        // Периодическое издание - издание, выпускаемое регулярно по фиксированному графику (например, ежемесячно)
+  Continuing      // Продолжающееся издание - издание, выпускаемое без заранее определённого завершения
+  Series          // Серия - группа изданий, объединённых общей темой или концепцией, выпускаемых последовательно
+}
+
+enum MaterialConstruction {
+  BookEdition         // Книжное издание - издание в виде книги, обычно в твёрдом или мягком переплёте
+  MagazineEdition     // Журнальное издание - издание в формате журнала, часто с мягкой обложкой
+  SheetEdition        // Листовое издание - издание, состоящее из одного или нескольких листов, не сшитых
+  Booklet             // Буклет (брошюра) - небольшое издание, обычно с мягкой обложкой и малым количеством страниц
+  NewspaperEdition    // Газетное издание - издание в формате газеты, на тонкой бумаге, часто складываемое
+  CardEdition         // Карточное издание - издание в виде карточек, часто для образовательных или коллекционных целей
+  Postcard            // Открытка - одностороннее или двустороннее издание, обычно с изображением и текстом
+  Poster              // Плакат / постер - крупноформатное листовое издание, часто с графическим содержимым
+  ValetEdition        // Валетное издание - издание в виде небольшого набора листов, часто для рекламы или информации
+  ToyBook             // Книжка-игрушка - книга с элементами игры, предназначенная для детей
+  MultiFormatEdition  // Мультиформатное издание - издание, сочетающее несколько форматов (например, книга и аудио)
+  CompositeEdition    // Комплектное издание - издание, включающее несколько компонентов (например, книга и диск)
+}
+
+enum Category {
+  ScienceFiction         // Научная фантастика - произведения о будущем, технологиях и космосе
+  Fantasy               // Фэнтези - истории с магией, мифическими существами и вымышленными мирами
+  AlternativeHistory    // Альтернативная история - сюжеты, основанные на изменённых исторических событиях
+  PostApocalypse        // Постапокалипсис - истории о мире после глобальной катастрофы
+  Cyberpunk             // Киберпанк - антиутопии с высокими технологиями и низким качеством жизни
+  FairyTale             // Сказка - волшебные истории, часто для детей
+  ClassicDetective      // Классический детектив - расследования в стиле Агаты Кристи или Шерлока Холмса
+  PoliceProcedural      // Полицейский процедурный - детективы с акцентом на работу полиции
+  PsychologicalThriller // Психологический триллер - напряжённые сюжеты с акцентом на психологию
+  SpyNovel              // Шпионский роман - истории о шпионах и разведке
+  CrimeNovel            // Криминальный роман - сюжеты о преступлениях и их последствиях
+  ContemporaryProse     // Современная проза - реалистичные истории о современной жизни
+  HistoricalProse       // Историческая проза - произведения, основанные на реальных исторических событиях
+  SocialDrama           // Социальная драма - истории, поднимающие социальные проблемы
+  Saga                  // Сага - многосерийные семейные или эпические истории
+  AdventureNovel        // Авантюрный роман - приключенческие сюжеты с динамичным повествованием
+  Romance               // Любовный роман - истории о романтических отношениях
+  HistoricalRomance     // Историко-любовный роман - любовные сюжеты в историческом контексте
+  EroticNovel           // Эротический роман - произведения с акцентом на эротические сцены
+  HumorousNovel         // Юмористический роман - лёгкие и смешные истории
+  GothicNovel           // Готический роман - мрачные истории с элементами романтики и мистики
+  Mysticism             // Мистика - сюжеты с таинственными и сверхъестественными явлениями
+  Horror                // Хоррор - произведения, вызывающие страх и напряжение
+  SeaAdventure          // Морские приключения - истории о море, пиратах и путешествиях
+  Travel                // Путешествия - рассказы о странствиях и открытиях
+  YoungAdult            // Подростковая проза - литература для подростков, часто с взрослением
+  ChildrensFiction      // Детская художественная литература - книги для детей
+  ComicsGraphicNovels   // Комиксы и графические романы - визуальные истории с текстом
+  BiographyMemoirs      // Биография / автобиография / мемуары - реальные истории жизни людей
+  Documentary           // Документалистика - нехудожественные произведения о реальных событиях
+  History               // История - литература, посвящённая историческим событиям и фактам
+  Journalism            // Публицистика - аналитические или критические статьи
+  Psychology            // Психология - книги о человеческом поведении и психике
+  SelfDevelopment       // Саморазвитие - литература для личностного роста
+  BusinessEconomics     // Бизнес и экономика - книги о предпринимательстве и финансах
+  PoliticalScience      // Политология - исследования политических систем и процессов
+  ReligionSpirituality  // Религия и духовность - литература о вере и духовных практиках
+  PopularScience        // Научно-популярная литература - доступное изложение научных тем
+  Guidebooks            // Путеводители - книги с информацией о путешествиях и местах
+  Cookbooks             // Кулинарные книги - рецепты и советы по приготовлению пищи
+  Essays                // Эссеистика - короткие размышления на различные темы
+  HumorSatire           // Юмор и сатира - произведения с комедийным или сатирическим подтекстом
 }
 
 model Book {
-  id              Int       @id @default(autoincrement()) // Уникальный идентификатор книги (PK)
-  title           String // Название книги
-  user            User      @relation("Owner", fields: [userId], references: [id]) // Владелец книги
-  userId          Int       @map("user_id")
-  condition       Condition // Состояние книги (new, good, worn, damaged)
-  publishedYear   Int // Год публикации
-  isbn            String    @unique // ISBN, уникальный, но опциональный
-  language        String // Язык книги (English, Russian и т.д.)
-  category        String // Категория или жанр
-  description     String // Краткое описание или аннотация
-  coverImagesUrls String[]  @map("cover_images_urls") // Ссылка на обложку
+  id     Int  @id @default(autoincrement()) // Уникальный идентификатор книги (PK)
+  user   User @relation("Owner", fields: [userId], references: [id]) // Владелец книги
+  userId Int  @map("user_id")
 
-  // Связь с авторами через промежуточную таблицу
-  author String // Связь с таблицей Book_Authors
+  cardNumber         String     @default("") @map("card_number")
+  
+  isbn            String?
 
-  // Дополнительные параметры книги
-  publisher      String? // Издательство
-  series         String? // Серия
-  edition        String? // Издание (первое, второе и т.д.)
-  pages          Int? // Количество страниц
-  dimensions     String? // Размеры книги (например, "15x20x3 см")
-  format         Format? // Тип обложки/формата (hardcover, paperback, ebook)
-  printRun       Int?    @map("print_run") // Тираж
-  weight         Int? // Вес в граммах
-  ageRestriction String? @map("age_restriction") // Возрастные ограничения
+  // данное об издании
+  title           String // 3a Название
+  frequencyTitle String? // 3b частное название
+  author          String // 3c автор(ы)
+  publisher       String // 3d Издательство
+  publishingCity  String // 3e Город издательства
+  publishedYear   Int // 3f Год публикации
+  printRun        Int       @map("print_run") // 3g Тираж
+  pages           Int // 3h Количество страниц
+  type            Type // 3i тип
+  description     String // 3j Текст объявления, описание
+  condition       Condition // 3k Состояние книги
+  ageRestriction  AgeRating // 3l возрастное ограничение
+  periodicity     Periodicity? // 3m переодичность
+  materialConstruction MaterialConstruction? // 3n материальная конструкция
+  format Format? // 3o формат
+  edition    Int? // 3q Издание БОЛЬШЕ НУЛЯ
+  category        Category[] // 3p жанр
+  weight     Float? // 3r Вес в граммах
+  language        String? // 3s Язык книги (English, Russian и т.д.)
+  coverImagesUrls String[] @map("cover_images_urls") // 3t Ссылка на обложку
 
   // Параметры для функциональности
-  price              Float // Цена книги (для оценки или аренды)
-  deposit            Float?     @default(0)
-  minDaysToRent      Int        @default(0) @map("min_days_to_rent")
-  cardNumber         String     @default("") @map("card_number")
-  availabilityStatus BookStatus @default(ACTIVE) // Статус доступности (active, rented, closed)
-  tags               String[] // Метки или ключевые слова
+  price              Float // 4a Цена книги (для оценки или аренды)
+  deposit            Float?     @default(0) //4b
+  minDaysToRent      Int        @default(0) @map("min_days_to_rent") //4c
+  address            String //4d
+  lat                Float
+  lon                Float
+
 
   rentals Rental[] // Связь с арендой
 
   // История использования
-  addedDate      DateTime  @default(now()) @map("added_date") // Дата добавления
+  addedDate      DateTime  @default(now()) @map("added_date") // 5a Дата добавления
+  availabilityStatus BookStatus @default(ACTIVE) // 5b Статус доступности (active, rented, closed)
+  timesReported  Int       @default(0) @map("times_reported") // 5c Количество жалоб
+  rentalCount    Int       @default(0) @map("rental_count") // 5d Количество аренд
+
   lastRentedDate DateTime? @map("last_rented_date") // Дата последней аренды
-  rentalCount    Int       @default(0) @map("rental_count") // Количество аренд
   rating         Float? // Средняя оценка книги
-  timesReported  Int       @default(0) @map("times_reported") // Количество жалоб
 
   favoritedBy User[] @relation("FavoriteBooks")
 
@@ -158,23 +262,40 @@ model Rental {
   renterPhones   String[]
 
   // Кэш данных книги
-  bookTitle         String
-  bookAuthor        String
-  bookCoverImages   String[]
-  bookCondition     Condition
-  bookLanguage      String
-  bookCategory      String
-  bookDescription   String
-  bookPublishedYear Int
+  bookIsbn            String?
+  bookTitle           String // 3a
+  bookFrequencyTitle String? // 3b частное название
+  bookAuthor          String // 3c
+  bookPublisher       String // 3d Издательство
+  bookPublishingCity  String // 3e Город издательства
+  bookPublishedYear   Int    // 3f Год публикации
+  bookPrintRun        Int    // 3g Тираж
+  bookPages           Int    // 3h Количество страниц
+  bookType            Type   // 3i тип
+  bookDescription     String // 3j Описание
+  bookCondition       Condition // 3k Состояние книги
+  bookAgeRestriction  AgeRating // 3l Возрастное ограничение
+  bookPeriodicity     Periodicity? // 3m Периодичность
+  bookMaterialConstruction MaterialConstruction? // 3n Материальная конструкция
+  bookFormat          Format? // 3o Формат
+  bookEdition         Int? // 3q Издание
+  bookCategory        Category[] // 3p Жанр (массив строк для упрощения)
+  bookWeight          Float? // 3r Вес в граммах
+  bookLanguage        String? // 3s Язык книги
+  bookCoverImages     String[] // 3t Ссылки на обложк
+
+  address String
+  lat     Float
+  lon     Float
 
   pricePerDay Float
   deposit     Float?
   price       Float  @default(0)
 
   // Оценки
-  ownerRating  Int?
-  renterRating Int?
-  bookRating   Int?
+  ownerRating   Int?
+  renterRating  Int?
+  bookRating    Int?
   reviewContent String?
 
   status        RentalStatus @default(PENDING)

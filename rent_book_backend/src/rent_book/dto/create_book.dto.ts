@@ -1,87 +1,108 @@
-import { IsString, IsInt, IsOptional, IsNumber, IsEnum, IsArray, Matches, IsCreditCard } from 'class-validator';
-import { BookStatus, Condition, Format } from '@prisma/client';
+import { IsString, IsInt, IsOptional, IsNumber, IsEnum, IsArray, Matches, IsPositive } from 'class-validator';
+import { BookStatus, Condition, Type, Periodicity, MaterialConstruction, Format, AgeRating, Category } from '@prisma/client';
 
 export class CreateBookDto {
-  @IsString()
-  title: string;
-
-  @IsEnum(Condition)
-  condition: Condition;
-
-  @IsInt()
-  publishedYear: number;
-
   @IsString()
   isbn: string;
 
   @IsString()
-  language: string;
+  title: string;
 
   @IsString()
-  category: string;
-
-  @IsString()
-  description: string;
+  @IsOptional()
+  frequencyTitle?: string;
 
   @IsString()
   author: string;
 
   @IsString()
-  @IsOptional()
-  publisher?: string;
+  publisher: string;
 
   @IsString()
-  @IsOptional()
-  series?: string;
-
-  @IsString()
-  @IsOptional()
-  edition?: string;
+  publishingCity: string;
 
   @IsInt()
-  @IsOptional()
-  pages?: number;
+  publishedYear: number;
+
+  @IsInt()
+  @IsPositive()
+  printRun: number;
+
+  @IsInt()
+  @IsPositive()
+  pages: number;
+
+  @IsEnum(Type)
+  type: Type;
 
   @IsString()
+  description: string;
+
+  @IsEnum(Condition)
+  condition: Condition;
+
+  @IsEnum(AgeRating)
+  ageRestriction: AgeRating;
+
+  @IsEnum(Periodicity)
   @IsOptional()
-  dimensions?: string;
+  periodicity?: Periodicity;
+
+  @IsEnum(MaterialConstruction)
+  @IsOptional()
+  materialConstruction?: MaterialConstruction;
 
   @IsEnum(Format)
   @IsOptional()
   format?: Format;
 
   @IsInt()
+  @IsPositive()
   @IsOptional()
-  printRun?: number;
+  edition?: number;
 
-  @IsInt()
+  @IsArray()
+  @IsEnum(Category, ({ each: true }))
+  category: Category[];
+
+  @IsNumber()
   @IsOptional()
   weight?: number;
 
   @IsString()
   @IsOptional()
-  ageRestriction?: string;
+  language?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  coverImagesUrls: string[];
 
   @IsNumber()
   price: number;
 
   @IsNumber()
-  deposit: number;
+  @IsOptional()
+  deposit?: number;
 
-  @IsNumber()
-  minDaysToRent: number;
+  @IsInt()
+  @IsOptional()
+  minDaysToRent?: number;
 
   @IsString()
-  @Matches(/^\d{16}$/, { each: true }) // Валидация 16 цифр
-  @IsCreditCard({ each: true }) // Дополнительная проверка номера карты
-  cardNumber: string;
+  address: string;
+
+  @IsNumber()
+  lat: number;
+
+  @IsNumber()
+  lon: number;
+
+  @IsString()
+  @Matches(/^\d{16}$/, { message: 'Card number must be 16 digits' })
+  @IsOptional()
+  cardNumber?: string;
 
   @IsEnum(BookStatus)
   @IsOptional()
   availabilityStatus?: BookStatus;
-
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  tags?: string[];
 }

@@ -1,9 +1,9 @@
-// pages/start-rent-book.tsx
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../hooks/useStore';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CreateRentalDto } from '../../types/response/rentalResonse';
+
 import styles from './start-rent-book.module.scss';
 
 export const StartRentBookPage = observer(() => {
@@ -205,7 +205,6 @@ export const StartRentBookPage = observer(() => {
               <p>Автор: {book.author}</p>
               <p>Состояние: {book.condition}</p>
               <p>Год издания: {book.publishedYear}</p>
-              <p>ISBN: {book.isbn}</p>
               <p>Язык: {book.language}</p>
               <p>Категория: {book.category}</p>
               <p>Цена за день: {book.price} рублей</p>
@@ -214,6 +213,12 @@ export const StartRentBookPage = observer(() => {
               <p>Владелец: {`${book.user.name} ${book.user.lastname} ${book.user.surname}`}</p>
               <p>Статус: {book.availabilityStatus}</p>
             </div>
+            {book.lat && book.lon && (
+              <div className={styles['map-container']}>
+                <h3>Местоположение книги</h3>
+                <p>{book.address.split(',').slice(0, 3).join(', ')}</p>
+              </div>
+            )}
           </div>
 
           {isOwner ? (

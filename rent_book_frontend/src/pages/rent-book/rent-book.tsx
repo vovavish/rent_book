@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import styles from './rent-book.module.scss';
 import { Star } from 'lucide-react';
+import { Placemark, YMaps, Map } from '@iminside/react-yandex-maps';
 
 export const RentBookPage = observer(() => {
   const { rentBookStore, authStore } = useStore();
@@ -78,6 +79,13 @@ export const RentBookPage = observer(() => {
             <p>Статус: {book.availabilityStatus}</p>
             <p>Владелец: {`${book.user.name} ${book.user.lastname} ${book.user.surname}`}</p>
 
+            {book.lat && book.lon && (
+              <div className={styles['map-container']}>
+                <h3>Местоположение книги</h3>
+                <p>{book.address.split(',').slice(0, 3).join(', ')}</p>
+              </div>
+            )}
+            
             {authStore.isAuth && book.user.id !== authStore.user?.id && (
               <Link to={`/rent_book/start/${book.id}`} className={styles['rent-button']}>
                 Арендовать

@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "Book" ADD COLUMN     "deposit" DOUBLE PRECISION DEFAULT 0,
-ADD COLUMN     "min_days_to_rent" INTEGER NOT NULL DEFAULT 0;

@@ -7,6 +7,9 @@ export interface CreateRentalDto {
 }
 
 export interface RentalResponse {
+  address: string;
+  lat: number;
+  lon: number;
   id: number;
   bookId: number;
   renterId: number;
