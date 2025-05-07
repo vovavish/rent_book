@@ -10,6 +10,7 @@ export class RentBookStore {
   private _currentBookReviews: BookReview[] = [];
   private _rentalsInOutBooks: RentalResponse[] = [];
   private _rentals: RentalResponse[] = [];
+  private _currentRental: RentalResponse | null = null;
   private _favoriteBooks: BookResponse[] = [];
 
   private _isLoading = false;
@@ -46,6 +47,10 @@ export class RentBookStore {
 
   get rentals() {
     return this._rentals;
+  }
+
+  get currentRental() {
+    return this._currentRental;
   }
 
   get isLoading() {
@@ -107,7 +112,13 @@ export class RentBookStore {
     }, "Failed to fetch book");
   }
 
-  async updateBook(bookId: number, bookData: UpdateBookDto) {
+  async fetchRentalById(rentalId: number) {
+    await this.handleRequest(async () => {
+      this._currentRental = await ApiRentBookController.getRentalById(rentalId);
+    }, "Failed to fetch book");
+  }
+
+  async updateBook(bookId: number, bookData: FormData) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.updateBook(bookId, bookData);
       runInAction(() => {

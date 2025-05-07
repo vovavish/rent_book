@@ -1,0 +1,137 @@
+.cardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardItem {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  &.selected {
+    border-color: #4caf50;
+    background-color: #f0fff0;
+  }
+}
+
+.formTitle {
+  font-weight: bold;
+  color: rgb(51, 51, 51);
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+}
+
+.accentText {
+  margin-top: 10px;
+  color: red;
+  font-size: 14px;
+}
+
+.bookFormGrid {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.formGroup {
+  display: flex;
+  gap: 5px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+
+  label {
+    color: rgb(51, 51, 51);
+    display: block;
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    color: rgb(51, 51, 51);
+    font-size: 13px;
+    background-color: #f9fafb;
+  }
+  
+  textarea {
+    min-height: 100px;
+  }
+}
+
+.formGroupDescription {
+  flex-direction: column;
+}
+
+.select {
+  width: 100%;
+  font-size: 13px,
+}
+
+.formGroupImages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  label {
+    display: block;
+    font-weight: bold;
+  }
+}
+
+.uploadButtonWrapper {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+  text-align: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.uploadButtonWrapper:hover {
+  background-color: #e0e0e0;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.selectedFiles p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.rentConditions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.formGroupWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 25px;
+}
+
+.accentLabel {
+  font-weight: bold;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+}
+
+.previewImages {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.previewImage {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}

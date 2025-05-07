@@ -38,12 +38,17 @@ export class AuthStore {
       console.log(response);
       localStorage.setItem('accessToken', response.access_token);
       localStorage.setItem('refreshToken', response.refresh_token);
-      this._user = response.userDto;
-      this._isAuth = true;
+      runInAction(() => {
+        this._user = response.userDto;
+        this._isAuth = true;
+      })
     } catch (e) {
       console.log(e);
+      throw e;
     } finally {
-      this._isUserLoading = false;
+      runInAction(() => {
+        this._isUserLoading = false;
+      })
     }
   }
 
@@ -54,12 +59,17 @@ export class AuthStore {
       console.log(response);
       localStorage.setItem('accessToken', response.access_token);
       localStorage.setItem('refreshToken', response.refresh_token);
-      this._user = response.userDto;
-      this._isAuth = true;
+      runInAction(() => {
+        this._user = response.userDto;
+        this._isAuth = true;
+      })
     } catch (e) {
       console.log(e);
+      throw e;
     } finally {
-      this._isUserLoading = false;
+      runInAction(() => {
+        this._isUserLoading = false;
+      })
     }
   }
 
@@ -69,10 +79,13 @@ export class AuthStore {
       console.log(response);
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
-      this._user = null;
-      this._isAuth = false;
+      runInAction(() => {
+        this._user = null;
+        this._isAuth = false;
+      })
     } catch (e) {
       console.log(e);
+      throw e;
     }
   }
 
@@ -93,6 +106,7 @@ export class AuthStore {
       })
     } catch (e) {
       console.log(e);
+      throw e;
     } finally {
       runInAction(() => {
         this._isUserLoading = false;

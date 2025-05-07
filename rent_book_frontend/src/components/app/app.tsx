@@ -2,7 +2,6 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
 import { HomePage } from '../../pages/home'; // Главная страница со списком книг
 import { RentBookPage } from '../../pages/rent-book'; // Страница конкретной книги
-import { StartRentBookPage } from '../../pages/start-rent-book'; // Страница конкретной книги
 import { Dashboard } from '../../pages/dashboard'; // Личный кабинет
 import { MyRentBooksPage } from '../../pages/my-rent-books'; // Мои книги (владельца)
 import { MyRentalsPage } from '../../pages/my-rentals'; // Мои аренды (арендатора)
@@ -51,7 +50,6 @@ export const App = () => {
           <Route path="/rent_book/:bookId" element={<RentBookPage />} />
 
           <Route path="/" element={<ProtectedRoute requiredRole="USER" />}>
-            <Route path="/rent_book/start/:bookId" element={<StartRentBookPage />} />
             <Route path="/dashboard" element={<Dashboard />}>
               <Route index element={<MyProfilePage />} />
               <Route path="profile" element={<MyProfilePage />} />

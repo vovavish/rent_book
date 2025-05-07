@@ -11,29 +11,32 @@ import {
   AgeRating,
   Periodicity,
   MaterialConstruction,
+  typeTranslations,
+  conditionTranslations,
+  ageRatingTranslations,
+  periodicityTranslations,
+  materialConstructionTranslations,
+  formatTranslations,
+  categoryTranslations,
 } from '../../types/response/bookResponse';
 import styles from './my-rent-books.module.scss';
 import { MyRentBookList } from '../../components/book/my-rent-books/my-rent-book-list';
 import { DashboardTitle } from '../../components/ui/dashboard-title';
 import { AddressPicker } from '../../components/address-picker/address-picker';
 import Select from 'react-select';
-
-type Option = {
-  value: Category;
-  label: string;
-};
+import clsx from 'clsx';
+import { UserActionButton } from '../../components/ui';
+import { ageRatingOptions, categoryOptions, conditionOptions, formatOptions, materialConstructionOptions, periodicityOptions, typeOptions } from '../../constants/translations';
+import { customStyles } from '../../constants/react-select-styles';
 
 export const MyRentBooksPage = observer(() => {
   const { rentBookStore, userProfileStore } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [newBook, setNewBook] = useState<Partial<CreateBookDto>>({
-    condition: Condition.NEW_EDITION,
-    format: Format.SMALL_FORMAT,
     availabilityStatus: BookStatus.ACTIVE,
     deposit: 0,
     minDaysToRent: 1,
-    type: Type.BOOK,
     category: [],
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -66,6 +69,7 @@ export const MyRentBooksPage = observer(() => {
           cardNumber: selectedCard,
         }),
       );
+      
       await rentBookStore.createBook(formData);
       closeModal();
     } catch (error) {
@@ -100,13 +104,15 @@ export const MyRentBooksPage = observer(() => {
       currentStep === 3 &&
       (!newBook.title ||
         !newBook.author ||
-        !newBook.isbn ||
+        !newBook.publishingCity ||
+        !newBook.publisher ||
         !newBook.publishedYear ||
-        !newBook.language ||
-        !newBook.category?.length ||
-        !newBook.description ||
-        !newBook.condition ||
+        !newBook.printRun ||
+        !newBook.pages ||
         !newBook.type ||
+        !newBook.condition ||
+        !newBook.ageRestriction ||
+        !newBook.description ||
         !selectedFiles.length)
     ) {
       alert('Пожалуйста, заполните обязательные поля (*)');
@@ -146,17 +152,7 @@ export const MyRentBooksPage = observer(() => {
     lon: number;
   }) => {
     setNewBook((prev) => ({ ...prev, address, lat, lon }));
-  };
-
-  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const categories = e.target.value.split(',').map((cat) => cat.trim() as Category);
-    setNewBook((prev) => ({ ...prev, category: categories }));
-  };
-
-  const categoryOptions: Option[] = Object.values(Category).map((cat) => ({
-    value: cat,
-    label: cat,
-  }));
+  };  
 
   const renderStep = () => {
     const profile = userProfileStore.profile;
@@ -179,7 +175,15 @@ export const MyRentBooksPage = observer(() => {
                 <strong>Email:</strong> {profile?.email || 'Не указано'}
               </p>
               <p>
-                <strong>Телефон:</strong> {profile?.phoneNumbers[0] || 'Не указано'}
+                <strong>Телефон{profile?.phoneNumbers?.length || 0 > 1 ? 'ы' : ''}:</strong>{' '}
+                {profile?.phoneNumbers.length
+                  ? profile.phoneNumbers.map((phone, index) => (
+                      <span key={index}>
+                        {phone}
+                        {index < profile.phoneNumbers.length - 1 && ', '}
+                      </span>
+                    ))
+                  : 'Не указано'}
               </p>
             </div>
             {(!profile?.name ||
@@ -216,7 +220,7 @@ export const MyRentBooksPage = observer(() => {
         return (
           <div className={styles.stepContent}>
             <div className={styles.bookFormGrid}>
-              <h3>Основная информация:</h3>
+              <h3 className={styles.formTitle}>Основная информация:</h3>
               <div className={styles.formGroupWrapper}>
                 <div className={styles.formGroup}>
                   <label>Автор:*</label>
@@ -275,6 +279,15 @@ export const MyRentBooksPage = observer(() => {
                   />
                 </div>
                 <div className={styles.formGroup}>
+                  <label>Тираж:*</label>
+                  <input
+                    type="number"
+                    value={newBook.printRun || ''}
+                    onChange={(e) => setNewBook({ ...newBook, printRun: Number(e.target.value) })}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
                   <label>Количество страниц:*</label>
                   <input
                     type="number"
@@ -284,95 +297,111 @@ export const MyRentBooksPage = observer(() => {
                 </div>
               </div>
               <div className={styles.formGroup}>
-                <label>Выберите тип издания*</label>
-                <select
-                  value={newBook.type}
-                  onChange={(e) => setNewBook({ ...newBook, type: e.target.value as Type })}
-                >
-                  {Object.values(Type).map((type) => (
-                    <option key={type} value={type}>
-                      {type}
-                    </option>
-                  ))}
-                </select>
+                <label className={styles.accentLabel}>Тип издания*</label>
+                <Select
+                  value={typeOptions.find((opt) => opt.value === newBook.type) || null}
+                  onChange={(selectedOption) =>
+                    setNewBook({
+                      ...newBook,
+                      type: selectedOption?.value as Type,
+                    })
+                  }
+                  options={typeOptions}
+                  placeholder="Не выбрано"
+                  className={styles.select}
+                  styles={customStyles}
+                />
               </div>
               <div className={styles.formGroup}>
-                <label>Состояние*</label>
-                <select
-                  value={newBook.condition}
-                  onChange={(e) =>
-                    setNewBook({ ...newBook, condition: e.target.value as Condition })
+                <label className={styles.accentLabel}>Состояние*</label>
+                <Select
+                  value={conditionOptions.find((opt) => opt.value === newBook.condition) || null}
+                  onChange={(selectedOption) =>
+                    setNewBook({
+                      ...newBook,
+                      condition: selectedOption?.value as Condition,
+                    })
                   }
-                >
-                  {Object.values(Condition).map((condition) => (
-                    <option key={condition} value={condition}>
-                      {condition}
-                    </option>
-                  ))}
-                </select>
+                  options={conditionOptions}
+                  placeholder="Не выбрано"
+                  className={styles.select}
+                  styles={customStyles}
+                />
               </div>
               <div className={styles.formGroup}>
-                <label>Возрастное ограничение:*</label>
-                <select
-                  value={newBook.ageRestriction}
-                  onChange={(e) =>
-                    setNewBook({ ...newBook, ageRestriction: e.target.value as AgeRating })
+                <label className={styles.accentLabel}>Возрастное ограничение:*</label>
+                <Select
+                  value={
+                    ageRatingOptions.find((opt) => opt.value === newBook.ageRestriction) || null
                   }
-                >
-                  {Object.values(AgeRating).map((ageRating) => (
-                    <option key={ageRating} value={ageRating}>
-                      {ageRating}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(selectedOption) =>
+                    setNewBook({
+                      ...newBook,
+                      ageRestriction: selectedOption?.value as AgeRating,
+                    })
+                  }
+                  options={ageRatingOptions}
+                  placeholder="Не выбрано"
+                  className={styles.select}
+                  styles={customStyles}
+                />
               </div>
-              <h3>Прочее:</h3>
+              <h3 className={styles.formTitle}>Прочее:</h3>
               <div className={styles.formGroupWrapper}>
                 <div className={styles.formGroup}>
                   <label>Переодичность издания:</label>
-                  <select
-                    value={newBook.periodicity}
-                    onChange={(e) =>
-                      setNewBook({ ...newBook, periodicity: e.target.value as Periodicity })
+                  <Select
+                    value={
+                      periodicityOptions.find((opt) => opt.value === newBook.periodicity) || null
                     }
-                  >
-                    {Object.values(Periodicity).map((periodicity) => (
-                      <option key={periodicity} value={periodicity}>
-                        {periodicity}
-                      </option>
-                    ))}
-                  </select>
+                    onChange={(selectedOption) =>
+                      setNewBook({
+                        ...newBook,
+                        periodicity: selectedOption?.value as Periodicity,
+                      })
+                    }
+                    options={periodicityOptions}
+                    placeholder="Не выбрано"
+                    className={styles.select}
+                    styles={customStyles}
+                  />
                 </div>
                 <div className={styles.formGroup}>
                   <label>Материальная конструкция:</label>
-                  <select
-                    value={newBook.periodicity}
-                    onChange={(e) =>
+                  <Select
+                    value={
+                      materialConstructionOptions.find(
+                        (opt) => opt.value === newBook.materialConstruction,
+                      ) || null
+                    }
+                    onChange={(selectedOption) =>
                       setNewBook({
                         ...newBook,
-                        materialConstruction: e.target.value as MaterialConstruction,
+                        materialConstruction: selectedOption?.value as MaterialConstruction,
                       })
                     }
-                  >
-                    {Object.values(MaterialConstruction).map((materialConstruction) => (
-                      <option key={materialConstruction} value={materialConstruction}>
-                        {materialConstruction}
-                      </option>
-                    ))}
-                  </select>
+                    options={materialConstructionOptions}
+                    placeholder="Не выбрано"
+                    className={styles.select}
+                    styles={customStyles}
+                  />
                 </div>
                 <div className={styles.formGroup}>
                   <label>Формат:</label>
-                  <select
-                    value={newBook.periodicity}
-                    onChange={(e) => setNewBook({ ...newBook, format: e.target.value as Format })}
-                  >
-                    {Object.values(Format).map((format) => (
-                      <option key={format} value={format}>
-                        {format}
-                      </option>
-                    ))}
-                  </select>
+
+                  <Select
+                    value={formatOptions.find((opt) => opt.value === newBook.format) || null}
+                    onChange={(selectedOption) =>
+                      setNewBook({
+                        ...newBook,
+                        format: selectedOption?.value as Format,
+                      })
+                    }
+                    options={formatOptions}
+                    placeholder="Не выбрано"
+                    className={styles.select}
+                    styles={customStyles}
+                  />
                 </div>
                 <div className={styles.formGroup}>
                   <label>Жанры:</label>
@@ -386,10 +415,12 @@ export const MyRentBooksPage = observer(() => {
                     value={categoryOptions.filter((option) =>
                       newBook.category?.includes(option.value),
                     )}
+                    placeholder="Выберите жанры..."
+                    styles={customStyles}
                   />
                 </div>
                 <div className={styles.formGroup}>
-                  <label>Вес:</label>
+                  <label>Вес (г):</label>
                   <input
                     type="number"
                     value={newBook.weight || ''}
@@ -414,18 +445,19 @@ export const MyRentBooksPage = observer(() => {
                     required
                   />
                 </div>
-                <div className={styles.formGroup}>
-                  <label>Описание:*</label>
-                  <textarea
-                    value={newBook.description || ''}
-                    onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
-                    required
-                  />
-                </div>
+              </div>
+
+              <div className={clsx(styles.formGroup, styles.formGroupDescription)}>
+                <label className={styles.formTitle}>Описание:*</label>
+                <textarea
+                  value={newBook.description || ''}
+                  onChange={(e) => setNewBook({ ...newBook, description: e.target.value })}
+                  required
+                />
               </div>
 
               <div className={styles.formGroupImages}>
-                <label className={styles.label}>Загрузите изображения:*</label>
+                <h3 className={styles.formTitle}>Загрузите изображения:*</h3>
 
                 <div
                   className={styles.uploadButtonWrapper}
@@ -452,6 +484,7 @@ export const MyRentBooksPage = observer(() => {
                 )}
               </div>
             </div>
+            <div className={styles.accentText}>* - обязательно к заполнению</div>
           </div>
         );
       case 4:
@@ -459,7 +492,7 @@ export const MyRentBooksPage = observer(() => {
           <div className={styles.stepContent}>
             <div className={styles.rentConditions}>
               <div className={styles.formGroup}>
-                <label>Минимальный срок аренды (дни)*</label>
+                <label className={styles.accentLabel}>Минимальный срок аренды (дни)*</label>
                 <input
                   type="number"
                   min="1"
@@ -471,7 +504,7 @@ export const MyRentBooksPage = observer(() => {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>Цена аренды (руб/день)*</label>
+                <label className={styles.accentLabel}>Цена аренды (руб/день)*</label>
                 <input
                   type="number"
                   value={newBook.price || ''}
@@ -480,7 +513,7 @@ export const MyRentBooksPage = observer(() => {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label>Залог (руб)</label>
+                <label className={styles.accentLabel}>Залог (руб)</label>
                 <input
                   type="number"
                   min="0"
@@ -505,23 +538,62 @@ export const MyRentBooksPage = observer(() => {
                 {userProfileStore.profile?.surname}
               </p>
               <p>Email: {userProfileStore.profile?.email}</p>
-              <p>Телефон: {userProfileStore.profile?.phoneNumbers[0]}</p>
+              <p>
+                Телефон{profile?.phoneNumbers?.length || 0 > 1 ? 'ы' : ''}:{' '}
+                {profile?.phoneNumbers.length
+                  ? profile.phoneNumbers.map((phone, index) => (
+                      <span key={index}>
+                        {phone}
+                        {index < profile.phoneNumbers.length - 1 && ', '}
+                      </span>
+                    ))
+                  : 'Не указано'}
+              </p>
               <h4>Карта:</h4>
               <p>**** **** **** {selectedCard.slice(-4)}</p>
-              <h4>Информация о книге:</h4>
+              <h4>Информация об издании:</h4>
+              <p>ISBN: {newBook.isbn || 'Не указано'}</p>
               <p>Название: {newBook.title}</p>
-              <p>Автор: {newBook.author}</p>
-              <p>ISBN: {newBook.isbn}</p>
+              <p>Частотное название: {newBook.frequencyTitle || 'Не указано'}</p>
+              <p>
+                Состояние:{' '}
+                {(newBook.condition && conditionTranslations[newBook.condition]) || 'Не указано'}
+              </p>
               <p>Год издания: {newBook.publishedYear}</p>
-              <p>Язык: {newBook.language}</p>
-              <p>Категории: {newBook.category?.join(', ')}</p>
+              <p>Язык: {newBook.language || 'Не указано'}</p>
+              <p>
+                Категории:{' '}
+                {newBook.category?.map((cat) => categoryTranslations[cat]).join(', ') ||
+                  'Не указано'}
+              </p>
               <p>Описание: {newBook.description}</p>
-              <p>Состояние: {newBook.condition}</p>
-              <p>Тип: {newBook.type}</p>
-              <p>Формат: {newBook.format}</p>
+              <p>Автор: {newBook.author}</p>
               <p>Издательство: {newBook.publisher || 'Не указано'}</p>
-              <p>Город издания: {newBook.publishingCity || 'Не указано'}</p>
+              <p>Город издания: {newBook.publishingCity}</p>
               <p>Количество страниц: {newBook.pages || 'Не указано'}</p>
+              <p>Формат: {newBook.format ? formatTranslations[newBook.format] : 'Не указано'}</p>
+              <p>Тираж: {newBook.printRun || 'Не указано'}</p>
+              <p>Вес: {newBook.weight || 'Не указано'}</p>
+              <p>
+                Возрастное ограничение:{' '}
+                {newBook.ageRestriction
+                  ? ageRatingTranslations[newBook.ageRestriction]
+                  : 'Не указано'}
+              </p>
+              <p>Цена: {newBook.price}</p>
+              <p>Депозит: {newBook.deposit}</p>
+              <p>Минимальный срок аренды: {newBook.minDaysToRent}</p>
+              <p>Тип: {(newBook.type && typeTranslations[newBook.type]) || 'Не указано'}</p>
+              <p>
+                Периодичность:{' '}
+                {newBook.periodicity ? periodicityTranslations[newBook.periodicity] : 'Не указано'}
+              </p>
+              <p>
+                Материальная конструкция:{' '}
+                {newBook.materialConstruction
+                  ? materialConstructionTranslations[newBook.materialConstruction]
+                  : 'Не указано'}
+              </p>
               <h4>Условия аренды:</h4>
               <p>Минимальный срок: {newBook.minDaysToRent} дней</p>
               <p>Цена аренды: {newBook.price} руб.</p>
@@ -551,9 +623,9 @@ export const MyRentBooksPage = observer(() => {
     <div className={styles.myRentBooks}>
       <div className={styles.header}>
         <DashboardTitle>Мои объявления</DashboardTitle>
-        <button onClick={() => setIsModalOpen(true)} className={styles.headerAddButton}>
+        <UserActionButton onClick={() => setIsModalOpen(true)} variant='owner'>
           + разместить объявление
-        </button>
+        </UserActionButton>
       </div>
 
       {isModalOpen && (
@@ -563,8 +635,8 @@ export const MyRentBooksPage = observer(() => {
               ×
             </button>
             <div className={styles.modalHeader}>
-              <h2>Новое объявление</h2>
-              <h3>
+              <h2 className={styles.modalHeader__title}>Новое объявление</h2>
+              <h3 className={styles.modalHeader__step}>
                 Шаг {currentStep}: {stepTitles[currentStep - 1]}
               </h3>
               <div className={styles.stepsIndicator}>
@@ -590,9 +662,9 @@ export const MyRentBooksPage = observer(() => {
                   </button>
                 )}
                 {currentStep < 5 ? (
-                  <button type="button" onClick={nextStep} className={styles.primaryButton}>
-                    Далее
-                  </button>
+                  <UserActionButton type="button" onClick={nextStep} variant='owner'>
+                    Далее &gt;
+                  </UserActionButton>
                 ) : (
                   <button
                     type="button"

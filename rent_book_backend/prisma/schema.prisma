@@ -57,6 +57,7 @@ enum BookStatus {
   ACTIVE
   RENTED
   CLOSED
+  DELETED
 }
 
 enum Condition {
@@ -288,6 +289,7 @@ model Rental {
   lat     Float
   lon     Float
 
+  message     String
   pricePerDay Float
   deposit     Float?
   price       Float  @default(0)

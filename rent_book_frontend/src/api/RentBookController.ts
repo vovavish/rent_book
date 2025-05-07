@@ -28,9 +28,14 @@ export default class ApiRentBookController {
       .then(res => res.data);
   }
 
+  static async getRentalById(rentalId: number): Promise<RentalResponse> {
+    return api.get<RentalResponse>(`/rent_books/getRentalById/${rentalId}`)
+      .then(res => res.data);
+  }
+
   static async updateBook(
     bookId: number,
-    updateBookDto: UpdateBookDto
+    updateBookDto: FormData
   ): Promise<BookResponse> {
     return api.patch<BookResponse>(`/rent_books/update/${bookId}`, updateBookDto)
       .then(res => res.data);

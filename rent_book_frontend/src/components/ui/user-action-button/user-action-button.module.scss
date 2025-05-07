@@ -4,8 +4,11 @@
   border: none;
   border-radius: 8px;
   font-size: 1rem;
+  font-weight: bold;
+  
   cursor: pointer;
   transition: background-color 0.2s ease;
+  font-family: inherit;
 
   &:disabled {
     opacity: 0.5;
@@ -24,10 +27,10 @@
 
 .readerButton {
   @include base-button;
-  background-color: #22c55e;
+  background-color: rgb(173, 193, 120);
 
   &:hover {
-    background-color: #16a34a;
+    background-color: rgb(157, 175, 106);
   }
 }
 

@@ -18,7 +18,7 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = observer(({onlyUnAuthoriz
 
   const location = useLocation();
 
-  if (!authStore.isAuthChecked || authStore.isUserLoading) {
+  if (!authStore.isAuthChecked) {
     return <Preloader />
   }
 

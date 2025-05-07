@@ -63,21 +63,12 @@
       white-space: nowrap;
     }
 
-    .rent-link {
-      display: inline-block;
-      margin-top: auto;
-      padding: 0.6rem 1rem;
-      background: linear-gradient(to right, #3498db, #9b59b6);
-      color: white;
-      text-align: center;
+    .rentLink {
       text-decoration: none;
-      border-radius: 4px;
-      font-weight: 500;
-      transition: opacity 0.3s ease;
+    }
 
-      &:hover {
-        opacity: 0.9;
-      }
+    .rentLinkButton {
+      width: 100%;
     }
   }
 }
@@ -87,4 +78,8 @@
   gap: 10px;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.clickable {
+  cursor: pointer;
 }

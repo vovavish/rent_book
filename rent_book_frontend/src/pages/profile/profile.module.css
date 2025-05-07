@@ -120,25 +120,14 @@
 }
 
 .editButton {
-  composes: button;
-  background-color: var(--primary-color);
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.editButton:hover {
-  background-color: var(--primary-hover);
-  transform: translateY(-1px);
-}
-
-.addButton {
-  composes: button;
-  background-color: var(--success-color);
-  color: white;
-}
-
-.addButton:hover {
-  background-color: #218838;
-  transform: translateY(-1px);
+.gap {
+  display: flex;
+  gap: 10px;
 }
 
 .saveButton {
@@ -206,6 +195,11 @@
   width: 20px;
   height: 20px;
   margin-right: 0.5rem;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
 }
 
 /* Form styles */
@@ -311,6 +305,7 @@
 .addItemForm {
   display: flex;
   margin-top: 1rem;
+  gap: 10px;
 }
 
 /* Empty state */
@@ -392,4 +387,9 @@
 
 .errorMessage svg {
   margin-right: 0.5rem;
+}
+
+.logout {
+  display: flex;
+  justify-content: end;
 }

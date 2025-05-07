@@ -67,15 +67,26 @@ export class RentBookController {
     return this.bookService.getToRentalBookById(bookId);
   }
 
+  @UseGuards(AtGuard)
+  @Get('getRentalById/:rentalId')
+  async getRentalById(@Param('rentalId', ParseIntPipe) rentalId: number) {
+    return this.bookService.getRentalById(rentalId);
+  }
+
   // Обновление объявления
   @UseGuards(AtGuard)
   @Patch('update/:bookId')
+  @UseInterceptors(FilesInterceptor('coverImages', 10))
   async updateBook(
     @GetCurrentUserId() userId: number,
     @Param('bookId', ParseIntPipe) bookId: number,
-    @Body() updateBookDto: UpdateBookDto,
+    @Body('data') data: string,
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return this.bookService.updateBook(userId, bookId, updateBookDto);
+    console.log('update files', files);
+    console.log('data', data);
+    const updateBookDto: UpdateBookDto = JSON.parse(data);
+    return this.bookService.updateBook(userId, bookId, updateBookDto, files);
   }
 
   // Удаление объявления

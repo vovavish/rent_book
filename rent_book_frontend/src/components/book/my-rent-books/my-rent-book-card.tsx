@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BookResponse } from '../../../types/response/bookResponse';
+import { BookResponse, typeTranslations } from '../../../types/response/bookResponse';
 import { BookImageSlider } from '../book-home-slider';
 
 import styles from '../book-card.module.scss';
@@ -25,7 +25,7 @@ export const MyRentBookCard: FC<MyRentBookCardProps> = observer(
 
         <div className={styles['book-info']}>
           <div className={styles['book-header']}>
-            <h3>Книга</h3>
+            <h3>{typeTranslations[book.type]}</h3>
             <AvailablityBookStatus availabilityStatus={book.availabilityStatus} />
           </div>
           <p className={styles['book-author']}>{book.author}</p>

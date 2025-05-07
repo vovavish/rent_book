@@ -6,6 +6,7 @@ import { BookImageSlider } from '../book-home-slider';
 import { FavoriteButton } from '../favorite-button';
 
 import styles from '../book-card.module.scss';
+import { UserActionButton } from '../../ui';
 
 interface BookCardProps {
   book: BookResponse;
@@ -38,9 +39,10 @@ export const FavoriteBookCard: FC<BookCardProps> = ({
           <p>руб/день</p>
         </div>
         {book.availabilityStatus === 'ACTIVE' && (
-          <Link to={`/rent_book/${book.id}`} className={styles['rent-link']}>
-            Подробнее
-          </Link>
+          <Link to={`/rent_book/${book.id}`} className={styles.rentLink}>
+          {' '}
+          <UserActionButton variant="reader" className={styles.rentLinkButton}>Подробнее</UserActionButton>
+        </Link>
         )}
         {book.availabilityStatus === 'RENTED' && (
           <p className={styles['book-status']}>Данная книга арендуется</p>

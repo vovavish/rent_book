@@ -122,6 +122,9 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
               Читатель -{' '}
               {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
             </p>
+            <p>
+              Сообщение - {rental.message}
+            </p>
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (

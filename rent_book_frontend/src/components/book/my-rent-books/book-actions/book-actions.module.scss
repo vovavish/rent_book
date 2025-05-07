@@ -1,4 +1,10 @@
 .book_actions {
   display: flex;
   gap: 10px;
+  justify-content: space-between;
+}
+
+.main_actions {
+  display: flex;
+  gap: 10px;
 }

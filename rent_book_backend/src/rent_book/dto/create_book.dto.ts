@@ -3,6 +3,7 @@ import { BookStatus, Condition, Type, Periodicity, MaterialConstruction, Format,
 
 export class CreateBookDto {
   @IsString()
+  @IsOptional()
   isbn: string;
 
   @IsString()

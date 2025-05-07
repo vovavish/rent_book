@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, SyntheticEvent } from 'react';
 import { RentalResponse } from '../../types/response/rentalResonse';
 
 import styles from './book-home-slider.module.scss';
@@ -19,13 +19,16 @@ export const BookImageSliderRental: FC<BookImageSliderRentalProps> = ({
   const book = rental.book;
   const hasMultipleImages = book.coverImagesUrls?.length > 1;
 
-  const nextImage = () => {
+  const nextImage = (e: SyntheticEvent) => {
+    e.stopPropagation();
     const nextIdx = (currentImageIndex + 1) % book.coverImagesUrls.length;
     setCurrentImageIndices((prev) => ({ ...prev, [rentalId]: nextIdx }));
   };
 
-  const prevImage = () => {
-    const prevIdx = (currentImageIndex - 1 + book.coverImagesUrls.length) % book.coverImagesUrls.length;
+  const prevImage = (e: SyntheticEvent) => {
+    e.stopPropagation();
+    const prevIdx =
+      (currentImageIndex - 1 + book.coverImagesUrls.length) % book.coverImagesUrls.length;
     setCurrentImageIndices((prev) => ({ ...prev, [rentalId]: prevIdx }));
   };
 
@@ -59,7 +62,10 @@ export const BookImageSliderRental: FC<BookImageSliderRentalProps> = ({
                 <span
                   key={index}
                   className={`${styles.dot} ${currentImageIndex === index ? styles.active : ''}`}
-                  onClick={() => setCurrentImageIndices((prev) => ({ ...prev, [rentalId]: index }))}
+                  onClick={(e: SyntheticEvent) => {
+                    e.stopPropagation();
+                    setCurrentImageIndices((prev) => ({ ...prev, [rentalId]: index }));
+                  }}
                 />
               ))}
             </div>

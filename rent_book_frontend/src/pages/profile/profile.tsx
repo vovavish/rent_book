@@ -3,9 +3,10 @@ import { useStore } from '../../hooks/useStore';
 import { useEffect, useState } from 'react';
 import styles from './profile.module.css';
 import { DashboardTitle } from '../../components/ui/dashboard-title';
+import { UserActionButton } from '../../components/ui';
 
 export const MyProfilePage = observer(() => {
-  const { userProfileStore } = useStore();
+  const { userProfileStore, authStore } = useStore();
   const [editMode, setEditMode] = useState<'profile' | 'phones' | 'cards' | null>(null);
   const [name, setName] = useState('');
   const [lastname, setLastname] = useState('');
@@ -84,9 +85,9 @@ export const MyProfilePage = observer(() => {
         <div className={styles.errorIcon}>!</div>
         <h3>Профиль не найден</h3>
         <p>Не удалось загрузить данные вашего профиля</p>
-        <button className={styles.retryButton} onClick={() => userProfileStore.fetchProfile()}>
+        <UserActionButton onClick={() => userProfileStore.fetchProfile()}>
           Попробовать снова
-        </button>
+        </UserActionButton>
       </div>
     );
   }
@@ -123,15 +124,17 @@ export const MyProfilePage = observer(() => {
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Основная информация</h2>
           {editMode !== 'profile' && (
-            <button onClick={() => setEditMode('profile')} className={styles.editButton}>
-              <svg className={styles.editIcon} viewBox="0 0 24 24">
-                <path
-                  fill="currentColor"
-                  d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
-                />
-              </svg>
-              Редактировать
-            </button>
+            <UserActionButton onClick={() => setEditMode('profile')}>
+              <div className={styles.editButton}>
+                <svg className={styles.editIcon} viewBox="0 0 24 24">
+                  <path
+                    fill="currentColor"
+                    d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                  />
+                </svg>
+                Редактировать
+              </div>
+            </UserActionButton>
           )}
         </div>
 
@@ -168,12 +171,12 @@ export const MyProfilePage = observer(() => {
               />
             </div>
             <div className={styles.formActions}>
-              <button onClick={() => setEditMode(null)} className={styles.cancelButton}>
+              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
                 Отмена
-              </button>
-              <button onClick={handleSaveProfile} className={styles.saveButton}>
+              </UserActionButton>
+              <UserActionButton onClick={handleSaveProfile}>
                 Сохранить изменения
-              </button>
+              </UserActionButton>
             </div>
           </div>
         ) : (
@@ -204,12 +207,11 @@ export const MyProfilePage = observer(() => {
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Телефонные номера</h2>
           {editMode !== 'phones' && (
-            <button
+            <UserActionButton
               onClick={() => setEditMode('phones')}
-              className={phoneNumbers.length > 0 ? styles.editButton : styles.addButton}
             >
               {phoneNumbers.length > 0 ? (
-                <>
+                <div className={styles.editButton}>
                   <svg className={styles.editIcon} viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -217,16 +219,16 @@ export const MyProfilePage = observer(() => {
                     />
                   </svg>
                   Редактировать
-                </>
+                </div>
               ) : (
-                <>
+                <div className={styles.editButton}>
                   <svg className={styles.addIcon} viewBox="0 0 24 24">
                     <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                   </svg>
                   Добавить номер
-                </>
+                </div>
               )}
-            </button>
+            </UserActionButton>
           )}
         </div>
 
@@ -238,18 +240,20 @@ export const MyProfilePage = observer(() => {
                   {phoneNumbers.map((phone) => (
                     <li key={phone} className={styles.listItem}>
                       <span className={styles.itemText}>{phone}</span>
-                      <button
+                      <UserActionButton
                         onClick={() => removePhone(phone)}
-                        className={styles.removeButton}
                         aria-label="Удалить номер"
+                        variant='cancel'
                       >
-                        <svg className={styles.removeIcon} viewBox="0 0 24 24">
-                          <path
-                            fill="currentColor"
-                            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-                          />
-                        </svg>
-                      </button>
+                        <div className={styles.editButton}>
+                          <svg className={styles.icon} viewBox="0 0 24 24">
+                            <path
+                              fill="currentColor"
+                              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                            />
+                          </svg>
+                        </div>
+                      </UserActionButton>
                     </li>
                   ))}
                 </ul>
@@ -273,22 +277,24 @@ export const MyProfilePage = observer(() => {
                   placeholder="+7 (XXX) XXX-XX-XX"
                   className={styles.formInput}
                 />
-                <button onClick={addPhone} className={styles.addItemButton}>
-                  <svg className={styles.addIcon} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                  </svg>
-                  Добавить
-                </button>
+                <UserActionButton onClick={addPhone}>
+                  <div className={styles.editButton}>
+                    <svg className={styles.addIcon} viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                    </svg>
+                    Добавить
+                  </div>
+                </UserActionButton>
               </div>
             </div>
 
             <div className={styles.formActions}>
-              <button onClick={() => setEditMode(null)} className={styles.cancelButton}>
+              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
                 Отмена
-              </button>
-              <button onClick={handleSavePhones} className={styles.saveButton}>
+              </UserActionButton>
+              <UserActionButton onClick={handleSavePhones}>
                 Сохранить изменения
-              </button>
+              </UserActionButton>
             </div>
           </div>
         ) : (
@@ -326,12 +332,11 @@ export const MyProfilePage = observer(() => {
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Банковские карты</h2>
           {editMode !== 'cards' && (
-            <button
+            <UserActionButton
               onClick={() => setEditMode('cards')}
-              className={cardNumbers.length > 0 ? styles.editButton : styles.addButton}
             >
               {cardNumbers.length > 0 ? (
-                <>
+                <div className={styles.editButton}>
                   <svg className={styles.editIcon} viewBox="0 0 24 24">
                     <path
                       fill="currentColor"
@@ -339,16 +344,16 @@ export const MyProfilePage = observer(() => {
                     />
                   </svg>
                   Редактировать
-                </>
+                </div>
               ) : (
-                <>
+                <div className={styles.editButton}>
                   <svg className={styles.addIcon} viewBox="0 0 24 24">
                     <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                   </svg>
                   Добавить карту
-                </>
+                </div>
               )}
-            </button>
+            </UserActionButton>
           )}
         </div>
 
@@ -360,18 +365,20 @@ export const MyProfilePage = observer(() => {
                   {cardNumbers.map((card) => (
                     <li key={card} className={styles.listItem}>
                       <span className={styles.itemText}>{card}</span>
-                      <button
+                      <UserActionButton
                         onClick={() => removeCard(card)}
-                        className={styles.removeButton}
                         aria-label="Удалить карту"
+                        variant='cancel'
                       >
-                        <svg className={styles.removeIcon} viewBox="0 0 24 24">
-                          <path
-                            fill="currentColor"
-                            d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
-                          />
-                        </svg>
-                      </button>
+                        <div className={styles.editButton}>
+                          <svg className={styles.icon} viewBox="0 0 24 24">
+                            <path
+                              fill="currentColor"
+                              d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"
+                            />
+                          </svg>
+                        </div>
+                      </UserActionButton>
                     </li>
                   ))}
                 </ul>
@@ -395,22 +402,24 @@ export const MyProfilePage = observer(() => {
                   placeholder="XXXX XXXX XXXX XXXX"
                   className={styles.formInput}
                 />
-                <button onClick={addCard} className={styles.addItemButton}>
-                  <svg className={styles.addIcon} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                  </svg>
-                  Добавить
-                </button>
+                <UserActionButton onClick={addCard}>
+                  <div className={styles.editButton}>
+                    <svg className={styles.addIcon} viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                    </svg>
+                    Добавить
+                  </div>
+                </UserActionButton>
               </div>
             </div>
 
             <div className={styles.formActions}>
-              <button onClick={() => setEditMode(null)} className={styles.cancelButton}>
+              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
                 Отмена
-              </button>
-              <button onClick={handleSaveCards} className={styles.saveButton}>
+              </UserActionButton>
+              <UserActionButton onClick={handleSaveCards}>
                 Сохранить изменения
-              </button>
+              </UserActionButton>
             </div>
           </div>
         ) : (
@@ -442,6 +451,9 @@ export const MyProfilePage = observer(() => {
             )}
           </div>
         )}
+      </div>
+      <div className={styles.logout}>
+        <UserActionButton onClick={() => authStore.logout()}>Выход</UserActionButton>
       </div>
     </div>
   );

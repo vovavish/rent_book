@@ -2,16 +2,30 @@ import { useState } from 'react';
 import { YMaps, Map, Placemark } from '@iminside/react-yandex-maps';
 import styles from './address-picker.module.scss';
 
-export const AddressPicker = ({ onSelect, apiKey }: { onSelect: (location: { address: string; lat: number; lon: number }) => void; apiKey: string }) => {
-  const [address, setAddress] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<{ address: string; lat: number; lon: number } | null>(null);
+export const AddressPicker = ({
+  onSelect,
+  apiKey,
+  defaultLocation
+}: {
+  onSelect: (location: { address: string; lat: number; lon: number }) => void;
+  apiKey: string;
+  defaultLocation?: { address: string; lat: number; lon: number };
+}) => {
+  const [address, setAddress] = useState(defaultLocation?.address || '');
+  const [selectedLocation, setSelectedLocation] = useState<{
+    address: string;
+    lat: number;
+    lon: number;
+  } | null>(defaultLocation || null);
 
   // Обработка поиска адреса
   const handleSearch = async () => {
     if (!address) return;
     try {
       const response = await fetch(
-        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${encodeURIComponent(address)}`
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${encodeURIComponent(
+          address,
+        )}`,
       );
       const data = await response.json();
       const geoObject = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
@@ -39,7 +53,7 @@ export const AddressPicker = ({ onSelect, apiKey }: { onSelect: (location: { add
     const [lon, lat] = coords;
     try {
       const response = await fetch(
-        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${lat},${lon}`
+        `https://geocode-maps.yandex.ru/1.x/?apikey=${apiKey}&format=json&geocode=${lat},${lon}`,
       );
       const data = await response.json();
       const geoObject = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
@@ -69,15 +83,14 @@ export const AddressPicker = ({ onSelect, apiKey }: { onSelect: (location: { add
           value={address}
           onChange={(e) => setAddress(e.target.value)}
           placeholder="Введите адрес"
+          className={styles.input}
         />
-        <button onClick={handleSearch} type='button'>Поиск</button>
+        <button onClick={handleSearch} type="button" className={styles.button}>
+          Поиск
+        </button>
       </div>
       <YMaps query={{ apikey: apiKey }}>
-        <Map
-          className={styles.map}
-          state={mapState}
-          onClick={handleMapClick}
-        >
+        <Map className={styles.map} state={mapState} onClick={handleMapClick}>
           {selectedLocation && (
             <Placemark geometry={[selectedLocation.lon, selectedLocation.lat]} />
           )}

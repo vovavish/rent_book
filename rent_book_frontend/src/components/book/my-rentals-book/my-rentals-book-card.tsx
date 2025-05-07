@@ -9,6 +9,8 @@ import dayjs from 'dayjs';
 import { RatingByReader } from '../rating';
 import { UserActionButton } from '../../ui';
 import { ConfirmModal } from '../../modal/modal-confirm';
+import { ModalWithChildren } from '../../modal/modal-with-children';
+import { Contract } from '../../contract/contract';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -27,6 +29,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
       action: string | null;
       message: string;
     } | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleRentalAction = async (rentalId: number, action: string) => {
       try {
@@ -93,17 +96,37 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
             message={confirmState.message}
             onConfirm={handleConfirmAction}
             onCancel={handleCancelModal}
-            variant='reader'
+            variant="reader"
           />
         )}
 
+        {isModalOpen && (
+          <ModalWithChildren
+            headerText="Просмотр договора аренды"
+            onCancel={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            <Contract rentalId={rental.id}/>
+          </ModalWithChildren>
+        )}
+
         <div className={styles['book-item']}>
-          <BookImageSliderRental
-            rental={rental}
-            rentalId={rental.id}
-            currentImageIndex={currentImageIndex}
-            setCurrentImageIndices={setCurrentImageIndices}
-          />
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsModalOpen(true);
+            }}
+            className={styles.clickable}
+          >
+            <BookImageSliderRental
+              rental={rental}
+              rentalId={rental.id}
+              currentImageIndex={currentImageIndex}
+              setCurrentImageIndices={setCurrentImageIndices}
+            />
+          </div>
 
           <div className={styles['book-info']}>
             <div className={styles['book-header']}>
@@ -123,9 +146,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
             <p>
               Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
             </p>
-            {rental.status !== 'PENDING' && <p>
-              Адрес: {rental.address}
-            </p>}
+            {rental.status !== 'PENDING' && <p>Адрес: {rental.address}</p>}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (
@@ -141,16 +162,18 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               {rental.status === 'APPROVED_BY_OWNER' && rental.renterId === authStore.user?.id && (
                 <>
                   <UserActionButton
-                    onClick={() =>
-                      openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')
-                    }
+                    onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
                     variant="reader"
                   >
                     Оплатить
                   </UserActionButton>
                   <UserActionButton
                     onClick={() =>
-                      openConfirmModal(rental.id, 'rejectFromApprovedByOwner', 'Отклонить бронирование?')
+                      openConfirmModal(
+                        rental.id,
+                        'rejectFromApprovedByOwner',
+                        'Отклонить бронирование?',
+                      )
                     }
                     variant="rejected"
                   >

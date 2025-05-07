@@ -7,12 +7,14 @@ import { BookList } from '../../components/book/book-list';
 import styles from './home.module.scss';
 
 export const HomePage = observer(() => {
-  const { rentBookStore } = useStore();
+  const { rentBookStore, authStore } = useStore();
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
 
   useEffect(() => {
     rentBookStore.fetchBooks();
-    rentBookStore.fetchUserFavorites();
+    if (authStore.isAuth) {
+      rentBookStore.fetchUserFavorites();
+    }
   }, []);
 
   if (rentBookStore.isLoading || rentBookStore.isFavoritesLoading) {

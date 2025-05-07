@@ -1,4 +1,4 @@
-import { IsInt, IsDateString } from 'class-validator';
+import { IsInt, IsDateString, IsString } from 'class-validator';
 
 export class CreateRentalDto {
   @IsInt()
@@ -9,4 +9,7 @@ export class CreateRentalDto {
 
   @IsDateString()
   rentEndDate: string;
+
+  @IsString()
+  message: string;
 }
