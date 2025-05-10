@@ -4,10 +4,10 @@ import styles from './user-action-button.module.scss';
 import clsx from 'clsx';
 
 type UserActionButtonProps = {
-  onClick?: () => void;
+  onClick?: (e: React.FormEvent | React.SyntheticEvent) => Promise<void> | void;
   disabled?: boolean;
   children: React.ReactNode;
-  variant?: 'owner' | 'reader' | 'cancel' | 'rejected';
+  variant?: 'owner' | 'reader' | 'cancel' | 'rejected' | 'standard';
   type?: 'button' | 'submit';
   className?: string;
 };
@@ -25,6 +25,7 @@ export const UserActionButton: React.FC<UserActionButtonProps> = ({
     reader: styles.readerButton,
     cancel: styles.cancelButton,
     rejected: styles.rejectedButton,
+    standard: styles.standardButton,
   }[variant];
 
   return (

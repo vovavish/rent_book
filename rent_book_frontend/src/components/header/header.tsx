@@ -1,12 +1,15 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import { Heart, User, Search } from 'lucide-react';
 
-import AllJanres from '../../assets/darhboard_alt.svg';
+import AllJanresIcon from '../../assets/DarhboardAlt.svg?react';
 
 import styles from './header.module.scss';
 
 import { useStore } from '../../hooks/useStore';
 import { observer } from 'mobx-react-lite';
 import { Link, useLocation } from 'react-router-dom';
+import { UserActionButton } from '../ui';
 
 export const Header = observer(() => {
   const { authStore } = useStore();
@@ -26,18 +29,18 @@ export const Header = observer(() => {
           </li>
           <li className={styles.navListItem}>
             <a href="/" className={styles.navLink}>
-              Как это работает?
+              Новинки
+            </a>
+          </li>
+          <li className={styles.navListItem}>
+            <a href="/" className={styles.navLink}>
+              Рекомендации
             </a>
           </li>
           <li className={styles.navListItem}>
             <a href="/" className={styles.navLink}>
               О проекте
             </a>
-          </li>
-          <li className={styles.navListItem}>
-            <Link to="/support/new" className={styles.navLink}>
-              Поддержка
-            </Link>
           </li>
           <li className={styles.navListItem}>
             <Link to="/dashboard/favorites" className={styles.navLink}>
@@ -62,40 +65,45 @@ export const Header = observer(() => {
       <div className={styles.titleContainer}>
         <hr className={styles.hr} />
         <h1 className={styles.title}>Арендуйте книгу</h1>
+        {!isBooksPage && !isSupportPage && !isAdminPage && (
+          <div className={styles.searchContainer}>
+            <UserActionButton variant="reader">
+              <a href="/" className={styles.searchLinkJanres}>
+                <AllJanresIcon className={styles.searchLinkJanresImage} /> <div>Все жанры</div>
+              </a>
+            </UserActionButton>
+            <div className={styles.search}>
+              <div className={styles.searchInputContainer}>
+                <input type="text" placeholder="Найти издание..." className={styles.searchInput} />
+                <Search />
+              </div>
+              <div>или</div>
+              <div>
+                <UserActionButton variant="owner">
+                  <Link to="/dashboard/books" className={styles.rentOutBook}>
+                    Разместить объявление
+                  </Link>
+                </UserActionButton>
+              </div>
+            </div>
+          </div>
+        )}
         <hr className={styles.hr} />
       </div>
       <nav className={styles.navAdditional}>
         <ul className={styles.navAdditionalList}>
           <li className={styles.navListItem}>
             <a href="/" className={styles.navLink}>
-              Новинки
+              Как это работает?
             </a>
           </li>
           <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
-              Рекомендации
-            </a>
+            <Link to="/support/new" className={styles.navLink}>
+              Поддержка
+            </Link>
           </li>
         </ul>
       </nav>
-      {!isBooksPage && !isSupportPage && !isAdminPage && <div className={styles.searchContainer}>
-        <a href="/" className={styles.searchLinkJanres}>
-          <img src={AllJanres} alt="AllJanres" className={styles.searchLinkJanresImage} />
-          Все жанры
-        </a>
-        <div className={styles.search}>
-          <div className={styles.searchInputContainer}>
-            <input type="text" placeholder="Найти издание..." className={styles.searchInput} />
-            <Search />
-          </div>
-          <div>или</div>
-          <div>
-            <Link to="/dashboard/books" className={styles.rentOutBook}>
-              Разместить объявление
-            </Link>
-          </div>
-        </div>
-      </div>}
     </header>
   );
 });

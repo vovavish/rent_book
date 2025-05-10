@@ -141,16 +141,27 @@ export const StartRentBookPage = observer(() => {
             <p className={styles.ownerMessage}>Вы не можете арендовать свою собственную книгу</p>
           ) : book.availabilityStatus === 'ACTIVE' ? (
             <form onSubmit={handleRentRequest} className={styles['rent-form']}>
-              <div className={styles['form-group']}>
-                <label htmlFor="rentStartDate">Дата начала аренды:</label>
-                <input
-                  type="date"
-                  id="rentStartDate"
-                  value={rentalData.rentStartDate}
-                  min={new Date().toISOString().split('T')[0]}
-                  onChange={handleDateChange}
-                  required
-                />
+              <div className={styles.formTitleInfo}>
+                {book.author}, {book.title}. {book.frequencyTitle && `${book.frequencyTitle}`}
+              </div>
+              <div>
+                <div className={styles.ownerData}>
+                  Владелец: {book.user.lastname} {book.user.name} {book.user.surname}
+                </div>
+                <h2 className={styles.orderTitle}>Детали заказа</h2>
+                <div className={styles['form-group']}>
+                  <label htmlFor="rentStartDate">Дата начала аренды:</label>
+                  <input
+                    type="date"
+                    id="rentStartDate"
+                    value={rentalData.rentStartDate}
+                    min={new Date().toISOString().split('T')[0]}
+                    onChange={handleDateChange}
+                    placeholder="дд.мм.гггг"
+                    required
+                    className={styles.input}
+                  />
+                </div>
               </div>
               <div className={styles['form-group']}>
                 <label htmlFor="rentEndDate">Дата окончания аренды:</label>
@@ -167,9 +178,6 @@ export const StartRentBookPage = observer(() => {
                     Минимальный срок аренды: {book.minDaysToRent} дней
                   </p>
                 )}
-                <div>
-                  Владелец: {book.user.lastname} {book.user.name} {book.user.surname}
-                </div>
                 <div className={styles.message}>
                   <label>
                     Напишите сообщение владельцу! Опишите почему вы хотите арендовать именно эту
@@ -179,17 +187,18 @@ export const StartRentBookPage = observer(() => {
                     id="message"
                     value={rentalData.message}
                     onChange={(e) => setRentalData({ ...rentalData, message: e.target.value })}
-                    placeholder="Напишите сообщение владельцу"
+                    placeholder="Введите текст..."
+                    className={styles.textarea}
                   />
                 </div>
-              </div>
-              <div className={styles['price-calculation']}>
-                <p>Депозит: {book.deposit} рублей</p>
-                <p>Арендная плата: {(totalPrice - book.deposit).toFixed(2)} рублей</p>
-                <p className={styles.totalPrice}>
-                  <div className={styles.uppercase}>Итого:</div>
-                  <div>{totalPrice.toFixed(2)} рублей</div>
-                </p>
+                <div className={styles['price-calculation']}>
+                  <p><span className={styles.accentText}>Депозит:</span> {book.deposit} рублей</p>
+                  <p><span className={styles.accentText}>Арендная плата:</span> {(totalPrice - book.deposit).toFixed(2)} рублей</p>
+                  <p className={styles.totalPrice}>
+                    <span className={styles.uppercase}>Итого:</span>
+                    <span>{totalPrice.toFixed(2)} рублей</span>
+                  </p>
+                </div>
               </div>
               <UserActionButton type="submit" disabled={rentBookStore.isLoading} variant="reader">
                 {rentBookStore.isLoading ? 'Отправка...' : 'Запросить аренду'}

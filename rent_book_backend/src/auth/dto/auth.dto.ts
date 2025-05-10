@@ -21,3 +21,13 @@ export class AuthDto {
   @IsString()
   password: string;
 }
+
+export class changePasswordDto {
+  @IsNotEmpty()
+  @IsString()
+  oldPassword: string;
+
+  @IsNotEmpty()
+  @IsString()
+  newPassword: string;
+}

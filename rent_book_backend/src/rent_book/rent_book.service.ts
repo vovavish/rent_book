@@ -206,7 +206,11 @@ export class RentBookService {
         renterPhones: renter.phoneNumbers,
 
         // Кэшированные данные книги
+        bookIsCashPayment: book.isCashPayment,
         bookIsbn: book.isbn,
+        bookIndexBBK: book.indexBBK,
+        bookIndexUDK: book.indexUDK,
+        bookIsnm: book.isnm,
         bookTitle: book.title,
         bookFrequencyTitle: book.frequencyTitle,
         bookAuthor: book.author,

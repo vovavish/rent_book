@@ -7,7 +7,6 @@ import {
   Format,
   BookStatus,
   Type,
-  Category,
   AgeRating,
   Periodicity,
   MaterialConstruction,
@@ -26,8 +25,17 @@ import { AddressPicker } from '../../components/address-picker/address-picker';
 import Select from 'react-select';
 import clsx from 'clsx';
 import { UserActionButton } from '../../components/ui';
-import { ageRatingOptions, categoryOptions, conditionOptions, formatOptions, materialConstructionOptions, periodicityOptions, typeOptions } from '../../constants/translations';
+import {
+  ageRatingOptions,
+  categoryOptions,
+  conditionOptions,
+  formatOptions,
+  materialConstructionOptions,
+  periodicityOptions,
+  typeOptions,
+} from '../../constants/translations';
 import { customStyles } from '../../constants/react-select-styles';
+import { ModalWithChildren } from '../../components/modal/modal-with-children';
 
 export const MyRentBooksPage = observer(() => {
   const { rentBookStore, userProfileStore } = useStore();
@@ -38,6 +46,7 @@ export const MyRentBooksPage = observer(() => {
     deposit: 0,
     minDaysToRent: 1,
     category: [],
+    price: 0,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -59,6 +68,7 @@ export const MyRentBooksPage = observer(() => {
 
   const handleCreateBook = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const formData = new FormData();
       selectedFiles.forEach((file) => formData.append('coverImages', file));
@@ -69,7 +79,7 @@ export const MyRentBooksPage = observer(() => {
           cardNumber: selectedCard,
         }),
       );
-      
+
       await rentBookStore.createBook(formData);
       closeModal();
     } catch (error) {
@@ -96,8 +106,8 @@ export const MyRentBooksPage = observer(() => {
         return;
       }
     }
-    if (currentStep === 2 && !selectedCard) {
-      alert('Пожалуйста, выберите карту');
+    if (currentStep === 2 && !selectedCard && !newBook.isCashPayment) {
+      alert('Пожалуйста, выберите средство получения оплаты');
       return;
     }
     if (
@@ -114,6 +124,13 @@ export const MyRentBooksPage = observer(() => {
         !newBook.ageRestriction ||
         !newBook.description ||
         !selectedFiles.length)
+    ) {
+      alert('Пожалуйста, заполните обязательные поля (*)');
+      return;
+    }
+    if (
+      currentStep === 4 &&
+      (!newBook.minDaysToRent || !newBook.address)
     ) {
       alert('Пожалуйста, заполните обязательные поля (*)');
       return;
@@ -152,7 +169,7 @@ export const MyRentBooksPage = observer(() => {
     lon: number;
   }) => {
     setNewBook((prev) => ({ ...prev, address, lat, lon }));
-  };  
+  };
 
   const renderStep = () => {
     const profile = userProfileStore.profile;
@@ -205,7 +222,10 @@ export const MyRentBooksPage = observer(() => {
                   <div
                     key={index}
                     className={`${styles.cardItem} ${selectedCard === card ? styles.selected : ''}`}
-                    onClick={() => setSelectedCard(card)}
+                    onClick={() => {
+                      setSelectedCard(card);
+                      setNewBook({ ...newBook, isCashPayment: false });
+                    }}
                   >
                     **** **** **** {card.slice(-4)}
                   </div>
@@ -213,6 +233,21 @@ export const MyRentBooksPage = observer(() => {
               ) : (
                 <p>У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.</p>
               )}
+            </div>
+            <div className={styles.cashPaymentOption}>
+              <label>
+                Получить оплату наличными
+                <input
+                  type="checkbox"
+                  checked={newBook.isCashPayment}
+                  onChange={(e) => {
+                    setNewBook({ ...newBook, isCashPayment: e.target.checked });
+                    if (e.target.checked) {
+                      setSelectedCard('');
+                    }
+                  }}
+                />
+              </label>
             </div>
           </div>
         );
@@ -271,10 +306,29 @@ export const MyRentBooksPage = observer(() => {
                   <label>Год издания:*</label>
                   <input
                     type="number"
+                    min="1450"
+                    max={new Date().getFullYear()}
                     value={newBook.publishedYear || ''}
-                    onChange={(e) =>
-                      setNewBook({ ...newBook, publishedYear: Number(e.target.value) })
-                    }
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === '') {
+                        setNewBook({ ...newBook, publishedYear: 0 });
+                        return;
+                      }
+
+                      const numberValue = Number(value);
+                      if (!isNaN(numberValue)) {
+                        setNewBook({ ...newBook, publishedYear: numberValue });
+                      }
+                    }}
+                    onBlur={() => {
+                      const year = newBook.publishedYear;
+                      if (year && year < 1450) {
+                        setNewBook({ ...newBook, publishedYear: 1450 });
+                      } else if (year && year > new Date().getFullYear()) {
+                        setNewBook({ ...newBook, publishedYear: new Date().getFullYear() });
+                      }
+                    }}
                     required
                   />
                 </div>
@@ -297,7 +351,7 @@ export const MyRentBooksPage = observer(() => {
                 </div>
               </div>
               <div className={styles.formGroup}>
-                <label className={styles.accentLabel}>Тип издания*</label>
+                <label className={styles.accentLabel}>Тип издания:*</label>
                 <Select
                   value={typeOptions.find((opt) => opt.value === newBook.type) || null}
                   onChange={(selectedOption) =>
@@ -313,7 +367,7 @@ export const MyRentBooksPage = observer(() => {
                 />
               </div>
               <div className={styles.formGroup}>
-                <label className={styles.accentLabel}>Состояние*</label>
+                <label className={styles.accentLabel}>Состояние:*</label>
                 <Select
                   value={conditionOptions.find((opt) => opt.value === newBook.condition) || null}
                   onChange={(selectedOption) =>
@@ -436,15 +490,48 @@ export const MyRentBooksPage = observer(() => {
                     required
                   />
                 </div>
-                <div className={styles.formGroup}>
-                  <label>ISBN:</label>
-                  <input
-                    type="text"
-                    value={newBook.isbn || ''}
-                    onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
-                    required
-                  />
-                </div>
+                {newBook.type === Type.BOOK && (
+                  <>
+                    <div className={styles.formGroup}>
+                      <label>ISBN:</label>
+                      <input
+                        type="text"
+                        value={newBook.isbn || ''}
+                        onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Индекс УДК:</label>
+                      <input
+                        type="text"
+                        value={newBook.indexUDK || ''}
+                        onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Индекс ББК:</label>
+                      <input
+                        type="text"
+                        value={newBook.indexBBK || ''}
+                        onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+                {newBook.type === Type.NOTEBOOK && (
+                  <div className={styles.formGroup}>
+                    <label>ISMN:</label>
+                    <input
+                      type="text"
+                      value={newBook.isnm || ''}
+                      onChange={(e) => setNewBook({ ...newBook, isnm: e.target.value })}
+                      required
+                    />
+                  </div>
+                )}
               </div>
 
               <div className={clsx(styles.formGroup, styles.formGroupDescription)}>
@@ -507,7 +594,7 @@ export const MyRentBooksPage = observer(() => {
                 <label className={styles.accentLabel}>Цена аренды (руб/день)*</label>
                 <input
                   type="number"
-                  value={newBook.price || ''}
+                  value={newBook.price || 0}
                   onChange={(e) => setNewBook({ ...newBook, price: Number(e.target.value) })}
                   required
                 />
@@ -526,6 +613,7 @@ export const MyRentBooksPage = observer(() => {
                 apiKey="cfef434a-5494-4440-a548-f7408e0226d2"
               />
             </div>
+            <div className={styles.accentText}>* - обязательно к заполнению</div>
           </div>
         );
       case 5:
@@ -623,62 +711,56 @@ export const MyRentBooksPage = observer(() => {
     <div className={styles.myRentBooks}>
       <div className={styles.header}>
         <DashboardTitle>Мои объявления</DashboardTitle>
-        <UserActionButton onClick={() => setIsModalOpen(true)} variant='owner'>
+        <UserActionButton onClick={() => setIsModalOpen(true)} variant="owner">
           + разместить объявление
         </UserActionButton>
       </div>
 
       {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modal}>
-            <button className={styles.closeButton} onClick={closeModal}>
-              ×
-            </button>
-            <div className={styles.modalHeader}>
-              <h2 className={styles.modalHeader__title}>Новое объявление</h2>
-              <h3 className={styles.modalHeader__step}>
-                Шаг {currentStep}: {stepTitles[currentStep - 1]}
-              </h3>
-              <div className={styles.stepsIndicator}>
-                {[1, 2, 3, 4, 5].map((step) => (
-                  <div
-                    key={step}
-                    className={`${styles.step} ${currentStep === step ? styles.active : ''} ${
-                      currentStep > step ? styles.completed : ''
-                    }`}
-                    onClick={() => currentStep > step && setCurrentStep(step)}
-                  >
-                    {step}
-                  </div>
-                ))}
-              </div>
+        <ModalWithChildren onCancel={closeModal} headerText="Новое объявление">
+          <div className={styles.modalHeader}>
+            <h3 className={styles.modalHeader__step}>
+              Шаг {currentStep}: {stepTitles[currentStep - 1]}
+            </h3>
+            <div className={styles.stepsIndicator}>
+              {[1, 2, 3, 4, 5].map((step) => (
+                <div
+                  key={step}
+                  className={`${styles.step} ${currentStep === step ? styles.active : ''} ${
+                    currentStep > step ? styles.completed : ''
+                  }`}
+                  onClick={() => currentStep > step && setCurrentStep(step)}
+                >
+                  {step}
+                </div>
+              ))}
             </div>
-            <form className={styles.createBookForm} encType="multipart/form-data">
-              {renderStep()}
-              <div className={styles.modalFooter}>
-                {currentStep > 1 && (
-                  <button type="button" onClick={prevStep} className={styles.secondaryButton}>
-                    Назад
-                  </button>
-                )}
-                {currentStep < 5 ? (
-                  <UserActionButton type="button" onClick={nextStep} variant='owner'>
-                    Далее &gt;
-                  </UserActionButton>
-                ) : (
-                  <button
-                    type="button"
-                    disabled={rentBookStore.isLoading}
-                    className={styles.primaryButton}
-                    onClick={handleCreateBook}
-                  >
-                    {rentBookStore.isLoading ? 'Создание...' : 'Создать книгу'}
-                  </button>
-                )}
-              </div>
-            </form>
           </div>
-        </div>
+          <form className={styles.createBookForm} encType="multipart/form-data">
+            {renderStep()}
+            <div className={styles.modalFooter}>
+              {currentStep > 1 && (
+                <button type="button" onClick={prevStep} className={styles.secondaryButton}>
+                  Назад
+                </button>
+              )}
+              {currentStep < 5 ? (
+                <UserActionButton type="button" onClick={nextStep} variant="owner">
+                  Далее &gt;
+                </UserActionButton>
+              ) : (
+                <UserActionButton
+                  type="button"
+                  disabled={rentBookStore.isLoading}
+                  className={styles.primaryButton}
+                  onClick={handleCreateBook}
+                >
+                  {rentBookStore.isLoading ? 'Создание...' : 'Опубликовать'}
+                </UserActionButton>
+              )}
+            </div>
+          </form>
+        </ModalWithChildren>
       )}
 
       {rentBookStore.isLoading && !isModalOpen && <p>Загрузка...</p>}

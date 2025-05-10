@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto } from './dto';
+import { AuthDto, changePasswordDto } from './dto';
 import { UserDto } from 'src/user/dto';
 import { Tokens } from './types';
 import { JwtService } from '@nestjs/jwt';
@@ -95,6 +95,35 @@ export class AuthService {
       },
       data: {
         refreshTokenHash: null,
+      }
+    })
+  }
+
+  async changePassword(userId: number, dto: changePasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      }
+    });
+
+    if (!user) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const passwordMatches = await bcrypt.compare(dto.oldPassword, user.passwordHash);
+
+    if (!passwordMatches) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const newPassword = await this.hashData(dto.newPassword);
+
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        passwordHash: newPassword,
       }
     })
   }

@@ -11,7 +11,7 @@
   --dark-color: #343a40;
   --border-color: #e0e0e0;
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --text-color: #333;
+  --text-color: rgb(51, 51, 51);
   --text-light: #6c757d;
   --bg-color: #f5f7fa;
   --card-bg: #ffffff;
@@ -19,25 +19,16 @@
   --transition: all 0.3s ease;
 }
 
-/* Base styles */
 .container {
   color: var(--text-color);
 }
 
-/* Header styles */
 .header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--border-color);
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 600;
-  color: var(--dark-color);
-  margin: 0;
 }
 
 .avatar {
@@ -63,8 +54,7 @@
 .ratings {
   display: flex;
   flex-direction: column;
-  font-size: 14px;
-  color: #555;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .ratingItem {
@@ -98,31 +88,11 @@
 }
 
 .cardTitle {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
   font-weight: 600;
   margin: 0;
   color: var(--dark-color);
   padding-right: 20px;
-}
-
-/* Button styles */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.625rem 1.25rem;
-  border-radius: var(--radius);
-  font-weight: 500;
-  cursor: pointer;
-  transition: var(--transition);
-  border: none;
-  font-size: 0.9rem;
-}
-
-.editButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .gap {
@@ -130,22 +100,9 @@
   gap: 10px;
 }
 
-.saveButton {
-  composes: button;
-  background-color: var(--success-color);
-  color: white;
-}
-
 .saveButton:hover {
   background-color: #218838;
   transform: translateY(-1px);
-}
-
-.cancelButton {
-  composes: button;
-  background-color: var(--light-color);
-  color: var(--secondary-color);
-  border: 1px solid var(--border-color);
 }
 
 .cancelButton:hover {
@@ -153,48 +110,27 @@
   transform: translateY(-1px);
 }
 
-.removeButton {
-  composes: button;
-  background: none;
-  color: var(--danger-color);
-  padding: 0.25rem;
-  border-radius: 50%;
-  width: 28px;
-  height: 28px;
-}
 
 .removeButton:hover {
   background-color: rgba(220, 53, 69, 0.1);
-}
-
-.addItemButton {
-  composes: button;
-  background-color: var(--primary-color);
-  color: white;
-  padding: 0.625rem 1rem;
-  margin-left: 0.5rem;
 }
 
 .addItemButton:hover {
   background-color: var(--primary-hover);
 }
 
-.retryButton {
-  composes: button;
-  background-color: var(--primary-color);
-  color: white;
-  margin-top: 1rem;
-}
-
 .retryButton:hover {
   background-color: var(--primary-hover);
+}
+
+.editIcon {
+  color: rgb(51, 51, 51);
 }
 
 /* Icon styles */
 .editIcon, .addIcon, .removeIcon, .itemIcon, .emptyIcon {
   width: 20px;
   height: 20px;
-  margin-right: 0.5rem;
 }
 
 .icon {
@@ -215,7 +151,7 @@
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: var(--dark-color);
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .formInput {
@@ -225,6 +161,7 @@
   border-radius: var(--radius);
   font-size: 1rem;
   transition: var(--transition);
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .formInput:focus {
@@ -256,13 +193,13 @@
 }
 
 .infoLabel {
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
   color: var(--text-light);
   margin-bottom: 0.25rem;
 }
 
 .infoValue {
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
   font-weight: 500;
 }
 
@@ -299,6 +236,7 @@
 .itemText {
   flex-grow: 1;
   margin: 0 1rem;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 /* Add item form */
@@ -389,7 +327,30 @@
   margin-right: 0.5rem;
 }
 
-.logout {
+.profileFooter {
   display: flex;
   justify-content: end;
+  gap: 5px;
+}
+
+.myRating {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.editButton {
+  display: flex;
+}
+
+.editWrapper {
+  border-radius: 4px;
+  aspect-ratio: 1/1;
+  padding: 0.5rem;
+  cursor: pointer;
+  background-color: transparent;
+  &:hover {
+    background-color: #e9ecef;
+  }
 }

@@ -1,10 +1,25 @@
-import { IsString, IsInt, IsOptional, IsNumber, IsEnum, IsArray, Matches, IsPositive } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber, IsEnum, IsArray, Matches, IsPositive, IsBoolean } from 'class-validator';
 import { BookStatus, Condition, Type, Periodicity, MaterialConstruction, Format, AgeRating, Category } from '@prisma/client';
 
 export class CreateBookDto {
+  @IsBoolean()
+  isCashPayment: boolean;
+  
   @IsString()
   @IsOptional()
   isbn: string;
+
+  @IsString()
+  @IsOptional()
+  indexUDK: string;
+
+  @IsString()
+  @IsOptional()
+  indexBBK: string;
+
+  @IsString()
+  @IsOptional()
+  isnm: string;
 
   @IsString()
   title: string;

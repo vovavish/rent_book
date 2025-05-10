@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 10px;
+  padding: 1rem;
+  color: rgb(51, 51, 51);
 
   .error {
     color: #e74c3c;
@@ -19,25 +20,28 @@
 .book_top {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
+
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .book_bottom {
   width: 100%;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 15px;
   margin-top: 15px;
 
-  grid-template-areas: "bookInfo ownerInfo";
+  grid-template-areas: "bookInfo reviewsInfo";
 
-  @media (max-width: 530px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "ownerInfo"
-      "bookInfo";
-
+      "bookInfo"
+      "reviewsInfo";
   }
 }
 
@@ -45,12 +49,26 @@
   display: flex;
   gap: 1rem;
   width: 100%;
+
+  @media screen and (max-width: 530px) {
+    flex-direction: column;
+    
+  }
+}
+
+.bookAuthorAndTitle {
+  display: flex;
+  font-size: clamp(1.25rem, 1.118rem + 0.5634vw, 1.625rem);
+  width: 100%;
+  margin-bottom: 15px;
+  font-weight: bold;
+  justify-content: space-between;
 }
 
 .bookInfoHeader {
   display: flex;
   flex-direction: column;
-  font-size: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
   width: 100%;
   gap: 5px;
   justify-content: space-between;
@@ -65,12 +83,19 @@
     }
 
     &Age {
-      font-weight: bold;
+      font-weight: normal;
+    }
+
+    &Left {
+      display: flex;
+      gap: 10px;
     }
   }
 
-  &Author {
-    text-decoration: underline;
+  &Bottom {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
   }
 }
 
@@ -79,19 +104,14 @@
   gap: 20px;
   align-items: center;
 }
-.bookPrice {
-  display: flex;
-  gap: 5px;
-}
 
 .boldText {
   font-weight: bold;
 }
 
 .categoryName {
-  text-transform: uppercase;
   font-weight: bold;
-  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
 }
 
 .normalText {
@@ -103,10 +123,10 @@
   flex-direction: column;
   gap: 5px;
   grid-area: bookInfo;
-  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
   &Title {
     font-weight: bold;
-    text-transform: uppercase;
+    font-size: inherit;
   }
 
   &MainInfo {
@@ -118,6 +138,7 @@
     &Item {
       display: flex;
       gap: 5px;
+      font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
     }
   }
 
@@ -128,24 +149,66 @@
 }
 
 .rating,
-.owner,
 .review-header {
+  display: flex;
+  gap: 5px;
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+}
+
+.owner {
   display: flex;
   gap: 5px;
 }
 
-.aboutOwner {
-  grid-area: ownerInfo;
-}
+.ownerInfo {
+  padding-top: 25px;
+  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 
-@media screen and (max-width: 1024px) {
-  .book_top {
-    grid-template-columns: 1fr 1fr;
+  @media screen and (max-width: 1024px) {
+    padding-top: 0;
   }
 }
 
-@media screen and (max-width: 530px) {
-  .book_top {
-    grid-template-columns: 1fr;
-  }
+.reviews-list {
+  list-style: none;
+  padding: 0;
+  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
+  margin-top: 5px;
+}
+
+.review-item {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.review-author {
+  font-weight: bold;
+  text-align: end;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.review-content {
+  margin-top: 0.5rem;
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+}
+
+.complain {
+  width: fit-content;
 }

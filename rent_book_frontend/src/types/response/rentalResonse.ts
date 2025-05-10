@@ -42,7 +42,11 @@ export interface RentalResponse {
   renterPhones: string[];
 
   //Кэш книги
+  bookIsCashPayment: boolean;
   bookIsbn?: string;                              // ISBN (необязательный)
+  bookIndexUDK?: string;                          // Индекс УДК (необязательный)
+  bookIndexBBK?: string;                          // Индекс ББК (необязательный)
+  bookIsnm?: string;                              // Индекс ИСНМ (необязательный)
   bookTitle: string;                              // Название
   bookFrequencyTitle?: string;                    // Частное название (например, выпуск серии)
   bookAuthor: string;                             // Автор

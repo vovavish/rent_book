@@ -185,7 +185,7 @@ $dark-primary: #563d7c;
 
 .select {
   width: 100%;
-  font-size: 13px,
+  font-size: 13px;
 }
 
 .cardsList {
@@ -264,7 +264,7 @@ $dark-primary: #563d7c;
   color: black;
   padding: 10px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-family: inherit;
   font-size: 1rem;
   font-weight: bold;
@@ -322,4 +322,12 @@ $dark-primary: #563d7c;
 
 .ownerInfo {
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+}
+
+.cashPaymentOption {
+  margin-top: 10px;
+
+  input[type="checkbox"] {
+    accent-color: rgb(174, 125, 172);;
+  }
 }

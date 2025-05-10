@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { YMaps, Map, Placemark } from '@iminside/react-yandex-maps';
 import styles from './address-picker.module.scss';
+import { UserActionButton } from '../ui';
 
 export const AddressPicker = ({
   onSelect,
@@ -85,9 +86,9 @@ export const AddressPicker = ({
           placeholder="Введите адрес"
           className={styles.input}
         />
-        <button onClick={handleSearch} type="button" className={styles.button}>
+        <UserActionButton onClick={handleSearch} type="button" className={styles.button}>
           Поиск
-        </button>
+        </UserActionButton>
       </div>
       <YMaps query={{ apikey: apiKey }}>
         <Map className={styles.map} state={mapState} onClick={handleMapClick}>

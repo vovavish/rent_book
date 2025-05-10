@@ -2,7 +2,7 @@
   color: #fff;
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 1rem;
   font-weight: bold;
   
@@ -63,4 +63,9 @@
     cursor: not-allowed;
     text-decoration: none;
   }
+}
+
+.standardButton {
+  @include base-button;
+  background-color: #f8f9fa;
 }

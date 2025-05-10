@@ -49,6 +49,7 @@ export enum BookStatus {
 
 export enum Type {
   BOOK = 'Book',
+  NOTEBOOK = 'NoteBook',
   MAGAZINE = 'Magazine',
   NEWSPAPER = 'Newspaper',
   DICTIONARY = 'Dictionary',
@@ -62,6 +63,7 @@ export enum Type {
 
 export const typeTranslations: Record<Type, string> = {
   [Type.BOOK]: 'Книга',
+  [Type.NOTEBOOK]: 'Нотное издание',
   [Type.MAGAZINE]: 'Журнал',
   [Type.NEWSPAPER]: 'Газета',
   [Type.DICTIONARY]: 'Словарь',
@@ -226,7 +228,11 @@ export const categoryTranslations: Record<Category, string> = {
 };
 
 export interface CreateBookDto {
+  isCashPayment: boolean;
   isbn?: string;
+  indexUDK?: string;
+  indexBBK?: string;
+  isnm?: string;
   title: string;
   frequencyTitle?: string;
   condition: Condition;
@@ -263,7 +269,11 @@ export interface BookResponse {
   id: number;
   userId: number;
   user: IUser;
-  isbn: string;
+  isCashPayment: boolean;
+  isbn?: string;
+  indexUDK?: string;
+  indexBBK?: string;
+  isnm?: string;
   title: string;
   frequencyTitle?: string;
   condition: Condition;

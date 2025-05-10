@@ -15,7 +15,7 @@ export const Dashboard = observer(() => {
         <nav className={common['dashboard-nav']}>
           <NavLink 
             to="/dashboard/profile" 
-            className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink) : common.navLink}
+            className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink, common.accentLink) : clsx(common.navLink, common.accentLink)}
           >
             Профиль
           </NavLink>

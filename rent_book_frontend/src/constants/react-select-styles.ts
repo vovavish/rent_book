@@ -1,3 +1,5 @@
+import { SingleValue } from "react-select/animated";
+
 export const customStyles = {
   control: (provided: any) => ({
     ...provided,
@@ -19,5 +21,9 @@ export const customStyles = {
     color: state.isSelected ? 'white' : 'rgb(51, 51, 51)',
     cursor: 'pointer',
     fontSize: 'clamp(0.75rem, 0.706rem + 0.1878vw, 0.875rem)',
+  }),
+  singleValue: (provided: any) => ({
+    ...provided,
+    color: 'rgb(128, 128, 128)',
   }),
 };

@@ -339,15 +339,48 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
               required
             />
           </div>
-          <div className={styles.formGroup}>
-            <label>ISBN:</label>
-            <input
-              type="text"
-              value={newBook.isbn || ''}
-              onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
-              required
-            />
-          </div>
+          {newBook.type === Type.BOOK && (
+            <>
+              <div className={styles.formGroup}>
+                <label>ISBN:</label>
+                <input
+                  type="text"
+                  value={newBook.isbn || ''}
+                  onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Индекс УДК:</label>
+                <input
+                  type="text"
+                  value={newBook.indexUDK || ''}
+                  onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
+                  required
+                />
+              </div>
+              <div className={styles.formGroup}>
+                <label>Индекс ББК:</label>
+                <input
+                  type="text"
+                  value={newBook.indexBBK || ''}
+                  onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
+                  required
+                />
+              </div>
+            </>
+          )}
+          {newBook.type === Type.NOTEBOOK && (
+            <div className={styles.formGroup}>
+              <label>ISMN:</label>
+              <input
+                type="text"
+                value={newBook.isnm || ''}
+                onChange={(e) => setNewBook({ ...newBook, isnm: e.target.value })}
+                required
+              />
+            </div>
+          )}
         </div>
 
         <div className={clsx(styles.formGroup, styles.formGroupDescription)}>

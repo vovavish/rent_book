@@ -107,7 +107,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               setIsModalOpen(false);
             }}
           >
-            <Contract rentalId={rental.id}/>
+            <Contract rentalId={rental.id} />
           </ModalWithChildren>
         )}
 
@@ -161,12 +161,21 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               )}
               {rental.status === 'APPROVED_BY_OWNER' && rental.renterId === authStore.user?.id && (
                 <>
-                  <UserActionButton
-                    onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
-                    variant="reader"
-                  >
-                    Оплатить
-                  </UserActionButton>
+                  {rental.bookIsCashPayment ? (
+                    <UserActionButton
+                      onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
+                      variant="reader"
+                    >
+                      Подтвердить оплату
+                    </UserActionButton>
+                  ) : (
+                    <UserActionButton
+                      onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
+                      variant="reader"
+                    >
+                      Оплатить
+                    </UserActionButton>
+                  )}
                   <UserActionButton
                     onClick={() =>
                       openConfirmModal(

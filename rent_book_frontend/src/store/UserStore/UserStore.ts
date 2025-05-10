@@ -34,7 +34,10 @@ export class UserProfileStore {
 
   async fetchProfile() {
     await this.handleRequest(async () => {
-      this._profile = await ApiUserController.getProfile();
+      const response = await ApiUserController.getProfile();
+      runInAction(() => {
+        this._profile = response;
+      })
     }, "Failed to fetch user profile");
   }
 

@@ -82,6 +82,7 @@ enum Format {
 
 enum Type {
   Book // Книга - литературное произведение, обычно в твёрдом или мягком переплёте
+  NoteBook // Нотное издание
   Magazine // Журнал - периодическое издание с разнообразным содержимым
   Newspaper // Газета - периодическое издание с новостями и статьями
   Dictionary // Словарь - справочное издание с объяснением слов и их значений
@@ -177,6 +178,9 @@ model Book {
   cardNumber         String     @default("") @map("card_number")
   
   isbn            String?
+  indexUDK        String?
+  indexBBK        String?
+  isnm            String?
 
   // данное об издании
   title           String // 3a Название
@@ -208,6 +212,7 @@ model Book {
   lat                Float
   lon                Float
 
+  isCashPayment      Boolean @default(false)
 
   rentals Rental[] // Связь с арендой
 
@@ -263,7 +268,11 @@ model Rental {
   renterPhones   String[]
 
   // Кэш данных книги
+  bookIsCashPayment   Boolean @default(false)
   bookIsbn            String?
+  bookIndexUDK        String?
+  bookIndexBBK        String?
+  bookIsnm            String?
   bookTitle           String // 3a
   bookFrequencyTitle String? // 3b частное название
   bookAuthor          String // 3c

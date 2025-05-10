@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import styles from './profile.module.css';
 import { DashboardTitle } from '../../components/ui/dashboard-title';
 import { UserActionButton } from '../../components/ui';
+import { Star } from 'lucide-react';
+import { ModalWithChildren } from '../../components/modal/modal-with-children';
+import { ChangePassword } from '../../components/change-password/change-password';
 
 export const MyProfilePage = observer(() => {
   const { userProfileStore, authStore } = useStore();
@@ -15,7 +18,8 @@ export const MyProfilePage = observer(() => {
   const [cardNumbers, setCardNumbers] = useState<string[]>([]);
   const [newPhone, setNewPhone] = useState('');
   const [newCard, setNewCard] = useState('');
-  console.log('userProfileStore', userProfileStore.profile)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const ownerRating = userProfileStore.profile?.ownerRating ?? 0;
   const readerRating = userProfileStore.profile?.readerRating ?? 0;
 
@@ -94,6 +98,16 @@ export const MyProfilePage = observer(() => {
 
   return (
     <div className={styles.container}>
+      {isModalOpen && (
+        <ModalWithChildren onCancel={() => setIsModalOpen(false)} headerText="Смена пароля">
+          <ChangePassword
+            onSubmit={async (oldPassword, newPassword) => {
+              await authStore.changePassword(oldPassword, newPassword);
+              setIsModalOpen(false);
+            }}
+          />
+        </ModalWithChildren>
+      )}
       <header className={styles.header}>
         <DashboardTitle>Мой профиль</DashboardTitle>
         <div className={styles.avatarContainer}>
@@ -102,8 +116,15 @@ export const MyProfilePage = observer(() => {
             {lastname[0]}
           </div>
           <div className={styles.ratings}>
-            <div className={styles.ratingItem}>Владелец: {ownerRating.toFixed(1)}</div>
-            <div className={styles.ratingItem}>Читатель: {readerRating.toFixed(1)}</div>
+            <div>Мой рейтинг:</div>
+            <div className={styles.myRating}>
+              <div className={styles.ratingItem}>Владелец: {ownerRating.toFixed(1)}</div>
+              <Star size={16} color="#FFD700" />
+            </div>
+            <div className={styles.myRating}>
+              <div className={styles.ratingItem}>Читатель: {readerRating.toFixed(1)}</div>
+              <Star size={16} color="#FFD700" />
+            </div>
           </div>
         </div>
       </header>
@@ -124,7 +145,11 @@ export const MyProfilePage = observer(() => {
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Основная информация</h2>
           {editMode !== 'profile' && (
-            <UserActionButton onClick={() => setEditMode('profile')}>
+            <UserActionButton
+              onClick={() => setEditMode('profile')}
+              variant="standard"
+              className={styles.editWrapper}
+            >
               <div className={styles.editButton}>
                 <svg className={styles.editIcon} viewBox="0 0 24 24">
                   <path
@@ -132,7 +157,6 @@ export const MyProfilePage = observer(() => {
                     d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
                   />
                 </svg>
-                Редактировать
               </div>
             </UserActionButton>
           )}
@@ -171,12 +195,10 @@ export const MyProfilePage = observer(() => {
               />
             </div>
             <div className={styles.formActions}>
-              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
+              <UserActionButton onClick={() => setEditMode(null)} variant="rejected">
                 Отмена
               </UserActionButton>
-              <UserActionButton onClick={handleSaveProfile}>
-                Сохранить изменения
-              </UserActionButton>
+              <UserActionButton onClick={handleSaveProfile}>Сохранить изменения</UserActionButton>
             </div>
           </div>
         ) : (
@@ -209,6 +231,8 @@ export const MyProfilePage = observer(() => {
           {editMode !== 'phones' && (
             <UserActionButton
               onClick={() => setEditMode('phones')}
+              variant="standard"
+              className={styles.editWrapper}
             >
               {phoneNumbers.length > 0 ? (
                 <div className={styles.editButton}>
@@ -218,7 +242,6 @@ export const MyProfilePage = observer(() => {
                       d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
                     />
                   </svg>
-                  Редактировать
                 </div>
               ) : (
                 <div className={styles.editButton}>
@@ -243,7 +266,7 @@ export const MyProfilePage = observer(() => {
                       <UserActionButton
                         onClick={() => removePhone(phone)}
                         aria-label="Удалить номер"
-                        variant='cancel'
+                        variant="rejected"
                       >
                         <div className={styles.editButton}>
                           <svg className={styles.icon} viewBox="0 0 24 24">
@@ -289,12 +312,10 @@ export const MyProfilePage = observer(() => {
             </div>
 
             <div className={styles.formActions}>
-              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
+              <UserActionButton onClick={() => setEditMode(null)} variant="rejected">
                 Отмена
               </UserActionButton>
-              <UserActionButton onClick={handleSavePhones}>
-                Сохранить изменения
-              </UserActionButton>
+              <UserActionButton onClick={handleSavePhones}>Сохранить изменения</UserActionButton>
             </div>
           </div>
         ) : (
@@ -334,6 +355,8 @@ export const MyProfilePage = observer(() => {
           {editMode !== 'cards' && (
             <UserActionButton
               onClick={() => setEditMode('cards')}
+              variant="standard"
+              className={styles.editWrapper}
             >
               {cardNumbers.length > 0 ? (
                 <div className={styles.editButton}>
@@ -343,7 +366,6 @@ export const MyProfilePage = observer(() => {
                       d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
                     />
                   </svg>
-                  Редактировать
                 </div>
               ) : (
                 <div className={styles.editButton}>
@@ -368,7 +390,7 @@ export const MyProfilePage = observer(() => {
                       <UserActionButton
                         onClick={() => removeCard(card)}
                         aria-label="Удалить карту"
-                        variant='cancel'
+                        variant="rejected"
                       >
                         <div className={styles.editButton}>
                           <svg className={styles.icon} viewBox="0 0 24 24">
@@ -414,12 +436,10 @@ export const MyProfilePage = observer(() => {
             </div>
 
             <div className={styles.formActions}>
-              <UserActionButton onClick={() => setEditMode(null)} variant='cancel'>
+              <UserActionButton onClick={() => setEditMode(null)} variant="rejected">
                 Отмена
               </UserActionButton>
-              <UserActionButton onClick={handleSaveCards}>
-                Сохранить изменения
-              </UserActionButton>
+              <UserActionButton onClick={handleSaveCards}>Сохранить изменения</UserActionButton>
             </div>
           </div>
         ) : (
@@ -452,7 +472,10 @@ export const MyProfilePage = observer(() => {
           </div>
         )}
       </div>
-      <div className={styles.logout}>
+      <div className={styles.profileFooter}>
+        <UserActionButton onClick={() => setIsModalOpen(true)} variant="reader">
+          Изменить пароль
+        </UserActionButton>
         <UserActionButton onClick={() => authStore.logout()}>Выход</UserActionButton>
       </div>
     </div>

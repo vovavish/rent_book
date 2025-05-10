@@ -114,4 +114,13 @@ export class AuthStore {
       })
     }
   }
+
+  async changePassword(oldPassword: string, newPassword: string) {
+    try {
+      await ApiAuthController.changePassword(oldPassword, newPassword);
+    } catch (e) {
+      console.log(e);
+      throw e;
+    }
+  }
 }

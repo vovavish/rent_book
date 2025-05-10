@@ -15,4 +15,8 @@ export default class ApiAuthController {
   static async logout(): Promise<any> {
     return api.post('/auth/logout');
   }
+
+  static async changePassword(oldPassword: string, newPassword: string): Promise<any> {
+    return api.post('/auth/local/changepassword', { oldPassword, newPassword });
+  }
 }

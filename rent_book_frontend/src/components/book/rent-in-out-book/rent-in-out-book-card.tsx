@@ -91,7 +91,7 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
             message={confirmState.message}
             onConfirm={handleConfirmAction}
             onCancel={handleCancelModal}
-            variant='owner'
+            variant="owner"
           />
         )}
 
@@ -122,9 +122,7 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
               Читатель -{' '}
               {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
             </p>
-            <p>
-              Сообщение - {rental.message}
-            </p>
+            <p>Сообщение - {rental.message}</p>
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (
@@ -166,17 +164,31 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
               )}
               {rental.status === 'CONFIRMED' && rental.ownerId === authStore.user?.id && (
                 <div className={styles.cardActions}>
-                  <UserActionButton
-                    onClick={() =>
-                      openConfirmModal(
-                        rental.id,
-                        'giveToReader',
-                        'Подтвердить передачу книги читателю?',
-                      )
-                    }
-                  >
-                    Подтвердить передачу
-                  </UserActionButton>
+                  {rental.bookIsCashPayment ? (
+                    <UserActionButton
+                      onClick={() =>
+                        openConfirmModal(
+                          rental.id,
+                          'giveToReader',
+                          'Подтвердить получение оплаты и передачу книги читателю?',
+                        )
+                      }
+                    >
+                      Подтвердить получение оплаты и передачу
+                    </UserActionButton>
+                  ) : (
+                    <UserActionButton
+                      onClick={() =>
+                        openConfirmModal(
+                          rental.id,
+                          'giveToReader',
+                          'Подтвердить передачу книги читателю?',
+                        )
+                      }
+                    >
+                      Подтвердить передачу
+                    </UserActionButton>
+                  )}
                   <UserActionButton
                     variant="rejected"
                     onClick={() =>

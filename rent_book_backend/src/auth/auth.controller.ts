@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Req } from '@nestjs/common';
 
 import { AuthService } from './auth.service';
-import { AuthDto } from './dto';
+import { AuthDto, changePasswordDto } from './dto';
 import { Tokens } from './types';
 import { AtGuard, RtGuard } from 'src/common/guards';
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators';
@@ -28,6 +28,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   logout(@GetCurrentUserId() userId: number) {
     return this.authService.logout(userId);
+  }
+
+  @UseGuards(AtGuard)
+  @Post('local/changepassword')
+  changePassword(@GetCurrentUserId() userId: number, @Body() dto: changePasswordDto) {
+    console.log('dto', dto);
+    return this.authService.changePassword(userId, dto);
   }
 
   @Public()

@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../hooks/useStore';
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './rent-book.module.scss';
 import { Star } from 'lucide-react';
 import { BookImageSlider } from '../../components/book/book-home-slider';
@@ -9,6 +9,9 @@ import {
   ageRatingTranslations,
   categoryTranslations,
   conditionTranslations,
+  formatTranslations,
+  materialConstructionTranslations,
+  periodicityTranslations,
   typeTranslations,
 } from '../../types/response/bookResponse';
 import { UserActionButton } from '../../components/ui';
@@ -22,6 +25,7 @@ export const RentBookPage = observer(() => {
   const { bookId } = useParams<{ bookId: string }>();
   const [currentImageIndices, setCurrentImageIndices] = useState<Record<number, number>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isComplainModalOpen, setIsComplainModalOpen] = useState(false);
 
   useEffect(() => {
     if (bookId) {
@@ -37,49 +41,118 @@ export const RentBookPage = observer(() => {
       {isModalOpen && (
         <ModalWithChildren
           onCancel={() => setIsModalOpen(false)}
-          headerText='Отправка заявки на аренду'
+          headerText="Отправка заявки на аренду"
         >
           <StartRentBookPage />
         </ModalWithChildren>
       )}
+      {isComplainModalOpen && (
+        <ModalWithChildren
+          onCancel={() => setIsComplainModalOpen(false)}
+          headerText="Пожаловаться"
+        >
+          <div>Пожаловаться</div>
+        </ModalWithChildren>
+      )}
+
       {rentBookStore.isLoading && <p>Загрузка...</p>}
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
 
       {book ? (
         <>
-          <div className={styles.book_top}>
+          <div className={styles.bookAuthorAndTitle}>
             <div>
+              {book.author}, {book.title}. {book.frequencyTitle && book.frequencyTitle}
+            </div>
+          </div>
+          <div className={styles.book_top}>
+            <div className={styles.bookMainInfo}>
               <BookImageSlider
                 book={book}
                 currentImageIndex={currentImageIndices[book.id] || 0}
                 setCurrentImageIndices={setCurrentImageIndices}
               />
-            </div>
-            <div className={styles.bookMainInfo}>
+
               <div className={styles.bookInfoHeader}>
                 <div className={styles.bookInfoHeaderTop}>
-                  <div className={styles.bookInfoHeaderTopType}>{typeTranslations[book.type]}</div>
+                  <div className={styles.bookInfoHeaderTopLeft}>
+                    <div className={styles.bookInfoHeaderTopType}>
+                      {typeTranslations[book.type]}
+                    </div>
+                    <div className={styles.rating}>
+                      <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
+                      <Star size={16} color="#FFD700" fill="#FFD700" />
+                    </div>
+                  </div>
                   <div className={styles.bookInfoHeaderTopAge}>
                     {ageRatingTranslations[book.ageRestriction!]}
                   </div>
                 </div>
-                <div className={styles.bookInfoHeaderAuthor}>{book.author}</div>
-                <div>{book.title}</div>
-                {book.frequencyTitle && <div>{book.frequencyTitle}</div>}
-                <div className={styles.rating}>
-                  <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
-                  <Star size={16} color="#FFD700" fill="#FFD700" />
+
+                <div className={styles.bookInfoHeaderBottom}>
+                  <div>
+                    <span className={styles.boldText}>{book.price}</span> руб/день
+                  </div>
+                  <div>депозит - <span className={styles.boldText}>{book.deposit}</span> руб</div>
+                  {!authStore.isAuth || book.user.id !== authStore.user?.id ? (
+                    <>
+                      <div className={styles.actions}>
+                        <UserActionButton
+                          variant="reader"
+                          onClick={() => {
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Арендовать
+                        </UserActionButton>
+                        или
+                        <FavoriteButton bookId={book.id} />
+                      </div>
+                      <UserActionButton onClick={() => setIsComplainModalOpen(true)} variant="owner" className={styles.complain}>
+                        Пожаловаться
+                      </UserActionButton>
+                    </>
+                  ) : (
+                    <p>Это ваша книга</p>
+                  )}
                 </div>
-                <div className={styles.bookPrice}>
-                  <div className={styles.boldText}>{book.price}</div>
-                  <div>руб/день</div>
+              </div>
+            </div>
+            <div className={styles.ownerInfo}>
+              <div className={styles.owner}>
+                <h3 className={styles.aboutBookTitle}>Владелец:</h3>
+                {book.user.ownerRating !== null && (
+                  <div className={styles.rating}>
+                    <span>{book.user.ownerRating.toFixed(1)}</span>
+                    <Star size={16} color="#FFD700" fill="#FFD700" />
+                  </div>
+                )}
+              </div>
+              <div className={styles.aboutBookMainInfo}>
+                <div className={clsx(styles.aboutBookMainInfoItem)}>
+                  <div className={styles.normalText}>
+                    {book.user.name} {book.user.lastname} {book.user.surname}
+                  </div>
                 </div>
-                <div>депозит - {book.deposit} руб</div>
-                {!authStore.isAuth || book.user.id !== authStore.user?.id ? <div className={styles.actions}>
-                  <UserActionButton variant="reader" onClick={() => {setIsModalOpen(true)}}>Арендовать</UserActionButton>
-                  или
-                  <FavoriteButton bookId={book.id} />
-                </div> : <p>Это ваша книга</p>}
+              </div>
+              <div className={styles.aboutBookMainInfo}>
+                <div className={clsx(styles.aboutBookMainInfoItem)}>
+                  <div className={styles.normalText}>{book.user.phoneNumbers.join(', ')}</div>
+                </div>
+              </div>
+              <h3 className={styles.aboutBookTitle}>Местоположение:</h3>
+              <div className={styles.aboutBookMainInfo}>
+                <div className={clsx(styles.aboutBookMainInfoItem)}>
+                  <div className={styles.normalText}>
+                    {book.address.split(',').slice(0, 3).join(', ')}
+                  </div>
+                </div>
+              </div>
+              <h3 className={styles.aboutBookTitle}>Описание:</h3>
+              <div className={styles.aboutBookMainInfo}>
+                <div className={clsx(styles.aboutBookMainInfoItem)}>
+                  <div className={styles.normalText}>{book.description}</div>
+                </div>
               </div>
             </div>
           </div>
@@ -129,14 +202,13 @@ export const RentBookPage = observer(() => {
                   {book.category.map((c) => categoryTranslations[c]).join(', ')}
                 </div>
               </div>
-              {book.periodicity ||
-                book.materialConstruction ||
-                (book.format && <h3 className={styles.aboutBookTitle}>Прочее:</h3>)}
+              {(book.periodicity || book.materialConstruction || book.format) && (
+                <h3 className={styles.aboutBookTitle}>Прочее:</h3>
+              )}
               {book.periodicity && (
                 <div className={styles.aboutBookMainInfo}>
                   <div className={clsx(styles.aboutBookMainInfoItem)}>
-                    Периодичность издания:{' '}
-                    <div className={styles.normalText}>{book.periodicity}</div>
+                    Периодичность издания: {periodicityTranslations[book.periodicity]}
                   </div>
                 </div>
               )}
@@ -144,18 +216,20 @@ export const RentBookPage = observer(() => {
                 <div className={styles.aboutBookMainInfo}>
                   <div className={clsx(styles.aboutBookMainInfoItem)}>
                     Материальная конструкция:{' '}
-                    <div className={styles.normalText}>{book.materialConstruction}</div>
+                    {materialConstructionTranslations[book.materialConstruction]}
                   </div>
                 </div>
               )}
               {book.format && (
                 <div className={styles.aboutBookMainInfo}>
                   <div className={clsx(styles.aboutBookMainInfoItem)}>
-                    Формат: <div className={styles.normalText}>{book.format}</div>
+                    Формат: {formatTranslations[book.format]}
                   </div>
                 </div>
               )}
-              <h3 className={styles.aboutBookTitle}>Отзывы:</h3>
+            </div>
+            <div className={styles.bookReviews}>
+              <h3 className={styles.categoryName}>Отзывы:</h3>
               {rentBookStore.currentBookReviews.length > 0 ? (
                 <ul className={styles['reviews-list']}>
                   {rentBookStore.currentBookReviews.map((review) => (
@@ -180,43 +254,6 @@ export const RentBookPage = observer(() => {
               ) : (
                 <p>Отзывов пока нет</p>
               )}
-            </div>
-            <div className={styles.aboutOwner}>
-              <div className={styles.owner}>
-                <h3 className={styles.aboutBookTitle}>Владелец:</h3>
-                {book.user.ownerRating !== null && (
-                  <div className={styles.rating}>
-                    <span>{book.user.ownerRating.toFixed(1)}</span>
-                    <Star size={16} color="#FFD700" fill="#FFD700" />
-                  </div>
-                )}
-              </div>
-              <div className={styles.aboutBookMainInfo}>
-                <div className={clsx(styles.aboutBookMainInfoItem)}>
-                  <div className={styles.normalText}>
-                    {book.user.name} {book.user.lastname} {book.user.surname}
-                  </div>
-                </div>
-              </div>
-              <div className={styles.aboutBookMainInfo}>
-                <div className={clsx(styles.aboutBookMainInfoItem)}>
-                  <div className={styles.normalText}>{book.user.phoneNumbers.join(', ')}</div>
-                </div>
-              </div>
-              <h3 className={styles.aboutBookTitle}>Местоположение:</h3>
-              <div className={styles.aboutBookMainInfo}>
-                <div className={clsx(styles.aboutBookMainInfoItem)}>
-                  <div className={styles.normalText}>
-                    {book.address.split(',').slice(0, 3).join(', ')}
-                  </div>
-                </div>
-              </div>
-              <h3 className={styles.aboutBookTitle}>Описание:</h3>
-              <div className={styles.aboutBookMainInfo}>
-                <div className={clsx(styles.aboutBookMainInfoItem)}>
-                  <div className={styles.normalText}>{book.description}</div>
-                </div>
-              </div>
             </div>
           </div>
         </>
