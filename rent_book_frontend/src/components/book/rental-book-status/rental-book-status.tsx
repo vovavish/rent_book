@@ -32,7 +32,7 @@ const statusToColorMap: Record<RentalStatus, string> = {
 export const RentalBookStatus = ({ rentalStatus }: RentalBookStatusProps) => {
   const statusLabel = statusToLabelMap[rentalStatus];
   const statusClassName = statusToColorMap[rentalStatus];
-  console.log('rentalStatus', rentalStatus);
+
   return (
     <div className={`${styles.rental_status} ${statusClassName}`}>
       {statusLabel}

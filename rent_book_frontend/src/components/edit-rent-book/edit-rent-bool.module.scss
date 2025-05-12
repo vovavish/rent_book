@@ -135,3 +135,31 @@
   max-height: 100px;
   object-fit: cover;
 }
+
+.standardText {
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  color: rgb(51, 51, 51);
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+}
+
+.cashPaymentOption {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+
+  input[type="checkbox"] {
+    accent-color: rgb(174, 125, 172);
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}

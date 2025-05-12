@@ -63,8 +63,8 @@ export const LoginPage = () => {
                 условиями использования
               </Link>{' '}
               и{' '}
-              <Link to="/policy" className={styles.link}>
-                политикой конфеденциальности
+              <Link to="/privacy" className={styles.link}>
+                политикой конфиденциальности
               </Link>
             </p>
           </form>

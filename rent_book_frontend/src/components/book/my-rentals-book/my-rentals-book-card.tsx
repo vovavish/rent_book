@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import styles from '../book-card.module.scss';
 import { observer } from 'mobx-react-lite';
-import { RentalResponse } from '../../../types/response/rentalResonse';
+import { RentalResponse, RentalStatus } from '../../../types/response/rentalResonse';
 import { useStore } from '../../../hooks/useStore';
 import { BookImageSliderRental } from '../rental-image-slider';
 import { RentalBookStatus } from '../rental-book-status/rental-book-status';
@@ -11,6 +11,7 @@ import { UserActionButton } from '../../ui';
 import { ConfirmModal } from '../../modal/modal-confirm';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
+import { File } from 'lucide-react';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -112,14 +113,14 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
         )}
 
         <div className={styles['book-item']}>
-          <div
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsModalOpen(true);
-            }}
-            className={styles.clickable}
-          >
+          <div className={styles['book-image-wrapper']}>
+            {rental.status !== RentalStatus.PENDING && rental.status !== RentalStatus.REJECTED && (
+              <File
+                size={22}
+                className={styles.bookContract}
+                onClick={() => setIsModalOpen(true)}
+              />
+            )}
             <BookImageSliderRental
               rental={rental}
               rentalId={rental.id}
@@ -146,7 +147,9 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
             <p className={styles.standardText}>
               Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
             </p>
-            {rental.status !== 'PENDING' && <p className={styles.standardText}>Адрес: {rental.address}</p>}
+            {rental.status !== 'PENDING' && (
+              <p className={styles.standardText}>Адрес: {rental.address}</p>
+            )}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (

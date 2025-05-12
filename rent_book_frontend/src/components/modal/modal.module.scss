@@ -60,14 +60,10 @@
 }
 
 .modalTitle {
-  font-size: 1.25rem;
+  font-size: clamp(1.125rem, 0.993rem + 0.5634vw, 1.5rem);
   font-weight: 600;
   color: rgb(51, 51, 51);
   margin: 0;
-
-  @media (min-width: 768px) {
-    font-size: 1.5rem;
-  }
 }
 
 .closeIcon {

@@ -1,18 +1,22 @@
 .home-page {
-  max-width: 1440px;
-  margin: 0 auto;
+  width: 100%;
   padding: 2rem 1rem;
   font-family: Inter, 'serif';
+  flex: 1;
 
-  &-title {
-    font-size: 32px;
+  @media screen and (max-width: 768px) {
+    padding: 2rem 0.5rem;
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: 2rem 0.1rem;
   }
 
   h1 {
     text-align: center;
     margin-bottom: 2rem;
-    font-size: 2.5rem;
-    color: #2c3e50;
+    font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+    color: rgb(51, 51, 51);
     position: relative;
     padding-bottom: 0.5rem;
   }

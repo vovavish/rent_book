@@ -34,6 +34,7 @@ export const AdminRequestsNew = observer(() => {
           }}
           onCancel={() => setIsModalOpen(false)}
           message='Вы уверены, что хотите отправить обращение в работу?'
+          variant='admin'
         />
       )}
       <DashboardTitle>Новые обращения</DashboardTitle>
@@ -49,7 +50,7 @@ export const AdminRequestsNew = observer(() => {
               setIsModalOpen(true);
             }}
             disabled={supportRequestStore.isLoading}
-            variant="owner"
+            variant="admin"
           >
             Отправить в работу
           </UserActionButton>

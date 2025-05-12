@@ -43,6 +43,7 @@ export const AdminRequestsInProgress = observer(() => {
           }}
           onCancel={() => setIsModalOpen(false)}
           message="Вы уверены, что хотите закрыть обращение?"
+          variant='admin'
         />
       )}
       <DashboardTitle>Обращения в работе</DashboardTitle>
@@ -66,12 +67,25 @@ export const AdminRequestsInProgress = observer(() => {
               />
             )}
             <div className={styles.buttonGroup}>
+              {showResponseInput[request.id] ? (
+                
               <UserActionButton
                 onClick={() => toggleResponseInput(request.id)}
                 disabled={supportRequestStore.isLoading}
+                variant='rejected'
               >
-                {showResponseInput[request.id] ? 'Отменить' : 'Закрыть обращение'}
+                Отменить
               </UserActionButton>
+              ) : (
+                
+              <UserActionButton
+                onClick={() => toggleResponseInput(request.id)}
+                disabled={supportRequestStore.isLoading}
+                variant='admin'
+              >
+                Закрыть обращение
+              </UserActionButton>
+              )}
               {showResponseInput[request.id] && (
                 <UserActionButton
                   onClick={() => {
@@ -79,7 +93,7 @@ export const AdminRequestsInProgress = observer(() => {
                     setCurrentRequest(request.id);
                   }}
                   disabled={supportRequestStore.isLoading || !responseText[request.id]?.trim()}
-                  variant="reader"
+                  variant='admin'
                 >
                   Подтвердить закрытие
                 </UserActionButton>

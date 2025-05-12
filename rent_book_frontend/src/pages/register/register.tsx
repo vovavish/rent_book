@@ -108,7 +108,7 @@ export const RegisterPage = () => {
               </Link>{' '}
               и{' '}
               <Link to="/policy" className={styles.link}>
-                политикой конфеденциальности
+                политикой конфиденциальности
               </Link>
             </p>
           </form>

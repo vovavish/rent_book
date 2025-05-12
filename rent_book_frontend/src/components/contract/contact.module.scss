@@ -1,0 +1,41 @@
+.previewImages {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.previewImage {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+.formTitle {
+  font-weight: bold;
+  color: rgb(51, 51, 51);
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+}
+
+.formGroup {
+  display: flex;
+  gap: 5px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+
+  label {
+    color: rgb(51, 51, 51);
+    display: block;
+  }
+}
+
+.formGroupPerson {
+  display: flex;
+  gap: 5px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  flex-direction: column;
+  
+  label {
+    color: rgb(51, 51, 51);
+    display: block;
+  }
+}

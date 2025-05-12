@@ -5,7 +5,7 @@ import styles from './modal.module.scss';
 
 interface ConfirmModalProps {
   message: string;
-  variant?: 'owner' | 'reader';
+  variant?: 'owner' | 'reader' | 'admin';
   onConfirm: () => void;
   onCancel: () => void;
 }

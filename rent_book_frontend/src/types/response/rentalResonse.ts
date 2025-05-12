@@ -79,12 +79,14 @@ export interface RentalResponse {
     name: string;
     lastname: string;
     surname?: string;
+    email: string;
   };
   owner: {
     id: number;
     name: string;
     lastname: string;
     surname?: string;
+    email: string;
   };
 }
 

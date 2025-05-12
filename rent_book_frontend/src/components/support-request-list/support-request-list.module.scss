@@ -66,22 +66,22 @@
   color: rgb(51, 51, 51);
   font-size: 12px;
   padding: 4px 8px;
-  border-radius: 8px;
+  border-radius: 4px;
   text-transform: uppercase;
   font-weight: bold;
 }
 
 .registered {
-  background-color: #ffe082;
-  color: #795548;
+  background-color: #fff7ed;
+  color: #f97316;
 }
 
 .inProgress {
-  background-color: #90caf9;
-  color: #0d47a1;
+  background-color: #e0f2fe;
+  color: #0284c7;
 }
 
 .closed {
-  background-color: #ef9a9a;
-  color: #b71c1c;
+  background-color: #ffe4e6;
+  color: #e11d48;
 }

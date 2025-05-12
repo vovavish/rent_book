@@ -1,14 +1,15 @@
-import { Mail, HelpCircle } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import styles from './footer.module.scss';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContainer}>
         <div className={styles.footerSection}>
-          <h3 className={styles.footerTitle}>БукРент - площадка для аренды бумажной литературы</h3>
+          <h3 className={styles.footerTitle}>ЛитЭра - площадка для аренды бумажной литературы</h3>
           <p className={styles.footerText}>
-            Доступ к тысячам книг, журналов и прочей литературы без необходимости покупки! Читайте
+            Доступ к тысячам книг, журналов и прочей литературе без необходимости покупки! Читайте
             любимые произведения и открывайте новые.
           </p>
         </div>
@@ -17,59 +18,59 @@ export const Footer = () => {
           <h3 className={styles.footerTitle}>Навигация</h3>
           <ul className={styles.footerList}>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/" className={styles.footerLink}>
                 Главная
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="#" className={styles.footerLink}>
                 Новинки
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="#" className={styles.footerLink}>
                 Рекомендации
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="#" className={styles.footerLink}>
                 Как это работает?
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="#" className={styles.footerLink}>
                 О проекте
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/support/new" className={styles.footerLink}>
                 Поддержка
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
-<div className={styles.footerSection}>
+        <div className={styles.footerSection}>
           <h3 className={styles.footerTitle}>Личный кабинет</h3>
           <ul className={styles.footerList}>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/dashboard/books" className={styles.footerLink}>
                 Мои объявления
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/dashboard/rent_in_out" className={styles.footerLink}>
                 Сдаю
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/dashboard/my_rents" className={styles.footerLink}>
                 Арендую
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className={styles.footerLink}>
+              <Link to="/dashboard/favorites" className={styles.footerLink}>
                 Избранное
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -77,17 +78,33 @@ export const Footer = () => {
           <h3 className={styles.footerTitle}>Контакты</h3>
           <ul className={styles.footerList}>
             <li className={styles.contactItem}>
-              <Mail size={16} className={styles.contactIcon} />
+              <Mail size={22} className={styles.contactIcon} />
               <span>book_rental@yandex.ru</span>
+            </li>
+          </ul>
+          <h3 className={styles.footerTitle}>Правила и политика</h3>
+          <ul className={styles.footerList}>
+            <li>
+              <Link to="/privacy" className={styles.footerLink}>
+                Политика конфиденциальности
+              </Link>
+            </li>
+            <li>
+              <Link to="/terms" className={styles.footerLink}>
+                Условия использования
+              </Link>
+            </li>
+            <li>
+              <Link to="/public_offer" className={styles.footerLink}>
+                Шаблон договора публичной оферты
+              </Link>
             </li>
           </ul>
         </div>
       </div>
 
       <div className={styles.footerBottom}>
-        <p className={styles.copyright}>
-          © {new Date().getFullYear()} БукРент. Все права защищены.
-        </p>
+        <p className={styles.copyright}>© {new Date().getFullYear()} ЛитЭра. Все права защищены.</p>
       </div>
     </footer>
   );

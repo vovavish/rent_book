@@ -7,7 +7,7 @@ type UserActionButtonProps = {
   onClick?: (e: React.FormEvent | React.SyntheticEvent) => Promise<void> | void;
   disabled?: boolean;
   children: React.ReactNode;
-  variant?: 'owner' | 'reader' | 'cancel' | 'rejected' | 'standard';
+  variant?: 'owner' | 'reader' | 'cancel' | 'rejected' | 'admin' | 'standard';
   type?: 'button' | 'submit';
   className?: string;
 };
@@ -25,6 +25,7 @@ export const UserActionButton: React.FC<UserActionButtonProps> = ({
     reader: styles.readerButton,
     cancel: styles.cancelButton,
     rejected: styles.rejectedButton,
+    admin: styles.adminButton,
     standard: styles.standardButton,
   }[variant];
 

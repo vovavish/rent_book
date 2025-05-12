@@ -36,6 +36,7 @@ import {
 } from '../../constants/translations';
 import { customStyles } from '../../constants/react-select-styles';
 import { ModalWithChildren } from '../../components/modal/modal-with-children';
+import { Link } from 'react-router-dom';
 
 export const MyRentBooksPage = observer(() => {
   const { rentBookStore, userProfileStore } = useStore();
@@ -48,6 +49,9 @@ export const MyRentBooksPage = observer(() => {
     category: [],
     price: 0,
     isCashPayment: false,
+    address: 'Россия, Москва',
+    lat: 55.7558,
+    lon: 37.6173,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -714,6 +718,9 @@ export const MyRentBooksPage = observer(() => {
                   />
                 ))}
               </div>
+            </div>
+            <div>
+              <p className={clsx(styles.standardText, styles.marginTop)}>При размещении объявления вы соглашаетесь с <Link to="terms">условиями использования</Link> и <Link to="privacy">политикой конфиденциальности</Link></p>
             </div>
           </div>
         );

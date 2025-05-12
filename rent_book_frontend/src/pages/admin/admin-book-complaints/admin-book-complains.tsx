@@ -39,7 +39,7 @@ export const AdminBookComplains = observer(() => {
               <div className={styles.complainMessage}>Сообщение: {complain.message}</div>
             )}
             <Link to={`/rent_book/${complain.book.id}`}>
-              <UserActionButton variant="owner">Просмотреть издание</UserActionButton>
+              <UserActionButton variant="admin">Просмотреть издание</UserActionButton>
             </Link>
           </div>
         ))

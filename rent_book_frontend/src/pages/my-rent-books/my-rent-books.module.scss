@@ -1,8 +1,8 @@
 $primary-color: #6f42c1;
 $dark-primary: #563d7c;
 
-.my-rent-books {
-  padding: 20px;
+.myRentBooks {
+  width: 100%;
 }
 
 .header {
@@ -349,4 +349,8 @@ $dark-primary: #563d7c;
   font-size: clamp(0.875rem, 0.831rem + 0.1878vw, 1rem);
   color: rgb(51, 51, 51);
   font-weight: bold;
+}
+
+.marginTop {
+  margin-top: 20px;
 }

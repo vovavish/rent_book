@@ -36,7 +36,7 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
   const [newBook, setNewBook] = useState<Partial<BookResponse | null>>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [selectedCard, setSelectedCard] = useState<string>('');
+  const [selectedCard, setSelectedCard] = useState<string>(newBook?.cardNumber || '');
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -95,7 +95,6 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
         'data',
         JSON.stringify({
           ...newBookWithoutIdAndUser,
-          cardNumber: selectedCard,
         }),
       );
       for (const [key, value] of formData.entries()) {
@@ -115,20 +114,49 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
   return (
     <div className={styles.stepContent}>
       <div className={styles.cardsList}>
-        <h3 className={styles.formTitle}>Карта:</h3>
+        <h3 className={styles.formTitle}>Способ оплаты:</h3>
         {userProfileStore.profile?.cardNumbers?.length! > 0 ? (
           userProfileStore.profile?.cardNumbers.map((card, index) => (
             <div
               key={index}
-              className={`${styles.cardItem} ${selectedCard === card ? styles.selected : ''}`}
-              onClick={() => setSelectedCard(card)}
+              className={`${styles.cardItem} ${newBook.cardNumber === card ? styles.selected : ''}`}
+              onClick={() => {
+                setNewBook({ ...newBook, cardNumber: card, isCashPayment: false });
+              }}
             >
               **** **** **** {card.slice(-4)}
             </div>
           ))
         ) : (
-          <p>У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.</p>
+          <p className={clsx(styles.standardText, styles.warning)}>
+            У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.
+          </p>
         )}
+      </div>
+      <div className={styles.cashPaymentOption}>
+        <input
+          type="checkbox"
+          checked={newBook.isCashPayment}
+          id="isCashPayment"
+          onChange={(e) => {
+            if (e.target.checked) {
+              setNewBook({ ...newBook, cardNumber: '', isCashPayment: e.target.checked });
+            } else {
+              if (!userProfileStore.profile?.cardNumbers?.length) {
+                alert('Чтобы изменить способ оплаты, пожалуйста, добавьте карту в профиле');
+              } else {
+                setNewBook({
+                  ...newBook,
+                  cardNumber: userProfileStore.profile.cardNumbers[0],
+                  isCashPayment: e.target.checked,
+                });
+              }
+            }
+          }}
+        />
+        <label htmlFor="isCashPayment" className={styles.standardText}>
+          Получить оплату наличными
+        </label>
       </div>
       <div className={styles.bookFormGrid}>
         <h3 className={styles.formTitle}>Основная информация:</h3>
@@ -340,36 +368,34 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
             />
           </div>
           {newBook.type === Type.BOOK && (
-            <>
-              <div className={styles.formGroup}>
-                <label>ISBN:</label>
-                <input
-                  type="text"
-                  value={newBook.isbn || ''}
-                  onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
-                  required
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Индекс УДК:</label>
-                <input
-                  type="text"
-                  value={newBook.indexUDK || ''}
-                  onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
-                  required
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>Индекс ББК:</label>
-                <input
-                  type="text"
-                  value={newBook.indexBBK || ''}
-                  onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
-                  required
-                />
-              </div>
-            </>
+            <div className={styles.formGroup}>
+              <label>ISBN:</label>
+              <input
+                type="text"
+                value={newBook.isbn || ''}
+                onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+                required
+              />
+            </div>
           )}
+          <div className={styles.formGroup}>
+            <label>Индекс УДК:</label>
+            <input
+              type="text"
+              value={newBook.indexUDK || ''}
+              onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label>Индекс ББК:</label>
+            <input
+              type="text"
+              value={newBook.indexBBK || ''}
+              onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
+              required
+            />
+          </div>
           {newBook.type === Type.NOTEBOOK && (
             <div className={styles.formGroup}>
               <label>ISMN:</label>

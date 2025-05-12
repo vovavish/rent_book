@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { observer } from 'mobx-react-lite';
-import { RentalResponse } from '../../../types/response/rentalResonse';
+import { RentalResponse, RentalStatus } from '../../../types/response/rentalResonse';
 import { useStore } from '../../../hooks/useStore';
 import { BookImageSliderRental } from '../rental-image-slider';
 import { RentalBookStatus } from '../rental-book-status/rental-book-status';
@@ -11,6 +11,9 @@ import { RatingByOwner } from '../rating';
 
 import styles from '../book-card.module.scss';
 import clsx from 'clsx';
+import { ModalWithChildren } from '../../modal/modal-with-children';
+import { Contract } from '../../contract/contract';
+import { File } from 'lucide-react';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -27,6 +30,7 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
       action: string | null;
       message: string;
     } | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleRentalAction = async (rentalId: number, action: string) => {
       try {
@@ -90,13 +94,33 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
           />
         )}
 
+        {isModalOpen && (
+          <ModalWithChildren
+            headerText="Просмотр договора аренды"
+            onCancel={() => {
+              setIsModalOpen(false);
+            }}
+          >
+            <Contract rentalId={rental.id} />
+          </ModalWithChildren>
+        )}
+
         <div className={styles['book-item']}>
-          <BookImageSliderRental
-            rental={rental}
-            rentalId={rental.id}
-            currentImageIndex={currentImageIndex}
-            setCurrentImageIndices={setCurrentImageIndices}
-          />
+          <div className={styles['book-image-wrapper']}>
+            {rental.status !== RentalStatus.PENDING && rental.status !== RentalStatus.REJECTED && (
+              <File
+                size={22}
+                className={styles.bookContract}
+                onClick={() => setIsModalOpen(true)}
+              />
+            )}
+            <BookImageSliderRental
+              rental={rental}
+              rentalId={rental.id}
+              currentImageIndex={currentImageIndex}
+              setCurrentImageIndices={setCurrentImageIndices}
+            />
+          </div>
 
           <div className={styles['book-info']}>
             <div className={styles['book-header']}>
@@ -117,7 +141,11 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
               Читатель -{' '}
               {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
             </p>
-            {rental.message && <p className={clsx(styles.standardText, styles.croppedText)}>Сообщение - {rental.message}</p>}
+            {rental.message && (
+              <p className={clsx(styles.standardText, styles.croppedText)}>
+                Сообщение - {rental.message}
+              </p>
+            )}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (

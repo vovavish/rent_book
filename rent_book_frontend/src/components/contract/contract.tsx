@@ -1,37 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import styles from './contact.module.scss';
 import {
-  AgeRating,
   ageRatingTranslations,
-  BookResponse,
   categoryTranslations,
-  Condition,
   conditionTranslations,
-  Format,
   formatTranslations,
-  MaterialConstruction,
   materialConstructionTranslations,
-  Periodicity,
   periodicityTranslations,
-  Type,
   typeTranslations,
 } from '../../types/response/bookResponse';
 import clsx from 'clsx';
 import { useStore } from '../../hooks/useStore';
 import { Preloader } from '../ui';
 import { observer } from 'mobx-react-lite';
+import dayjs from 'dayjs';
 
 interface ContractProps {
   rentalId: number;
 }
 
 export const Contract = observer(({ rentalId }: ContractProps) => {
-  const { rentBookStore, userProfileStore } = useStore();
+  const { rentBookStore } = useStore();
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        userProfileStore.fetchProfile();
         await rentBookStore.fetchRentalById(rentalId);
       } catch (error) {
         console.error('Error fetching book:', error);
@@ -39,28 +32,40 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
     };
 
     fetchBook();
-  }, []);
+  }, [rentalId]);
 
   const rental = rentBookStore.currentRental!;
 
   if (!rental) {
-    return <Preloader />
+    return <Preloader />;
   }
+
+  console.log('rentalsdfgsdfg', rental);
 
   return (
     <div className={styles.stepContent}>
       <div className={styles.bookFormGrid}>
-        <h3 className={styles.formTitle}>Владелец:</h3>
-        <div className={styles.formGroup}>
-          <div>{rental.ownerLastname} {rental.ownerName} {rental.ownerSurname}</div>
+        <h3 className={styles.formTitle}>Арендодатель (владелец издания):</h3>
+        <div className={styles.formGroupPerson}>
+          <div>
+            {rental.ownerLastname} {rental.ownerName} {rental.ownerSurname}
+          </div>
+          <div>{rental.owner.email}</div>
           <div>{rental.ownerPhones.join(', ')}</div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.accentLabel}>Адрес: {rental.address}</label>
+          </div>
         </div>
-        <h3 className={styles.formTitle}>Читатель:</h3>
-        <div className={styles.formGroup}>
-          <div>{rental.renterLastname} {rental.renterName} {rental.renterSurname}</div>
+        <h3 className={styles.formTitle}>Арендатор (читатель):</h3>
+        <div className={styles.formGroupPerson}>
+          <div>
+            {rental.renterLastname} {rental.renterName} {rental.renterSurname}
+          </div>
+          <div>{rental.renter.email}</div>
           {rental.renterPhones && <div>{rental.renterPhones.join(', ')}</div>}
         </div>
-        <h3 className={styles.formTitle}>Основная информация:</h3>
+        <h3 className={styles.formTitle}>Информация об издании:</h3>
         <div className={styles.formGroupWrapper}>
           <div className={styles.formGroup}>
             <label>Автор: {rental.bookAuthor}</label>
@@ -74,7 +79,7 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
             </div>
           )}
           <div className={styles.formGroup}>
-            <label>Город издательства:{rental.bookPublishingCity}</label>
+            <label>Город издательства: {rental.bookPublishingCity}</label>
           </div>
           <div className={styles.formGroup}>
             <label>Издательство: {rental.bookPublisher}</label>
@@ -90,11 +95,13 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
           </div>
         </div>
         <div className={styles.formGroup}>
-          <label className={styles.accentLabel}>Тип издания {typeTranslations[rental.bookType]}</label>
+          <label className={styles.accentLabel}>
+            Тип издания: {typeTranslations[rental.bookType]}
+          </label>
         </div>
         <div className={styles.formGroup}>
           <label className={styles.accentLabel}>
-            Состояние {conditionTranslations[rental.bookCondition]}
+            Состояние: {conditionTranslations[rental.bookCondition]}
           </label>
         </div>
         <div className={styles.formGroup}>
@@ -102,11 +109,12 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
             Возрастное ограничение: {ageRatingTranslations[rental.bookAgeRestriction!]}
           </label>
         </div>
-        <h3 className={styles.formTitle}>Прочее:</h3>
         <div className={styles.formGroupWrapper}>
           <div className={styles.formGroup}>
             {rental.bookPeriodicity && (
-              <label>Переодичность издания: {periodicityTranslations[rental.bookPeriodicity]}</label>
+              <label>
+                Переодичность издания: {periodicityTranslations[rental.bookPeriodicity]}
+              </label>
             )}
           </div>
           <div className={styles.formGroup}>
@@ -121,7 +129,11 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
             {rental.bookFormat && <label>Формат: {formatTranslations[rental.bookFormat]}</label>}
           </div>
           <div className={styles.formGroup}>
-            {rental.bookCategory && <label>Жанры: {rental.bookCategory.map((c) => categoryTranslations[c]).join(', ')}</label>}
+            {rental.bookCategory.length > 0 && (
+              <label>
+                Жанры: {rental.bookCategory.map((c) => categoryTranslations[c]).join(', ')}
+              </label>
+            )}
           </div>
           <div className={styles.formGroup}>
             {rental.bookWeight && <label>Вес (г): {rental.bookWeight}</label>}
@@ -132,14 +144,23 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
           <div className={styles.formGroup}>
             {rental.bookIsbn && <label>ISBN: {rental.bookIsbn}</label>}
           </div>
+          <div className={styles.formGroup}>
+            {rental.bookIndexBBK && <label>Индекс ББК: {rental.bookIndexBBK}</label>}
+          </div>
+          <div className={styles.formGroup}>
+            {rental.bookIndexUDK && <label>Индекс УДК: {rental.bookIndexUDK}</label>}
+          </div>
+          <div className={styles.formGroup}>
+            {rental.bookIsnm && <label>ISNM: {rental.bookIsnm}</label>}
+          </div>
         </div>
 
         <div className={clsx(styles.formGroup, styles.formGroupDescription)}>
-          <label className={styles.formTitle}>Описание: {rental.bookDescription}</label>
+          <label>Описание: {rental.bookDescription}</label>
         </div>
 
         <div className={styles.formGroupImages}>
-          <h3 className={styles.formTitle}>Изображения объявления:*</h3>
+          <h3 className={styles.formTitle}>Изображения издания:</h3>
 
           <div className={styles.previewImages}>
             {rental.bookCoverImages?.map((file, index) => (
@@ -152,23 +173,26 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
             ))}
           </div>
 
+          <h3 className={styles.formTitle}>Условия аренды:</h3>
           <div className={styles.rentConditions}>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>День начала аренды: {rental.rentStartDate}</label>
+              <label className={styles.accentLabel}>
+                C {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} до {dayjs(rental.rentEndDate).format('DD.MM.YYYY')} (
+                {dayjs(rental.rentEndDate).diff(dayjs(rental.rentStartDate), 'days')} дней)
+              </label>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>День конца аренды: {rental.rentEndDate}</label>
+              <label className={styles.accentLabel}></label>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>Цена аренды: {rental.price} руб</label>
+              <label className={styles.accentLabel}>Цена аренды: {rental.pricePerDay} руб/день</label>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>Депозит {rental.deposit} руб</label>
+              <label className={styles.accentLabel}>Депозит: {rental.deposit} руб</label>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>Адрес: {rental.address}</label>
+              <label className={styles.accentLabel}>Итого: {rental.price} руб</label>
             </div>
-
           </div>
         </div>
       </div>

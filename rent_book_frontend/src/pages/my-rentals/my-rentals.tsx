@@ -20,7 +20,7 @@ export const MyRentalsPage = observer(() => {
   if (rentBookStore.isLoading) {
     <Preloader />;
   }
-  console.log('rentBookStore.rentals', rentBookStore.rentals);
+  
   return (
     <div className={styles.container}>
       <DashboardTitle>Мои аренды</DashboardTitle>

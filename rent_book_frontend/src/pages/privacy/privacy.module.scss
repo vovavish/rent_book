@@ -1,0 +1,31 @@
+.container {
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  color: rgb(51, 51, 51);
+  padding: 0 1rem;
+  flex: 1;
+}
+
+.title {
+  font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+  text-align: center;
+}
+
+.categoryTitle {
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  margin: 10px 0;
+}
+
+.categoryText {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: justify;
+}
+
+.marginLeft {
+  margin-left: 10px;
+}
+
+.subparagraph {
+  margin-left: 20px;
+}

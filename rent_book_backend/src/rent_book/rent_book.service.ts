@@ -97,6 +97,7 @@ export class RentBookService {
   async getRentalById(rentalId: number): Promise<Rental> {
     return await this.prisma.rental.findUnique({
       where: { id: rentalId },
+      include: { owner: true, renter: true },
     });
   }
 

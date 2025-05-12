@@ -13,13 +13,24 @@ export const Dashboard = observer(() => {
       <h1 className={common['dashboard-title']}>Личный кабинет</h1>
       <div className={common['dashboard-container']}>
         <nav className={common['dashboard-nav']}>
+          <div className={common['dashboard-nav-group']}>
+
           <NavLink 
             to="/dashboard/profile" 
             className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink, common.accentLink) : clsx(common.navLink, common.accentLink)}
-          >
+            >
             Профиль
           </NavLink>
 
+          {authStore.user?.roles.includes('ADMIN') && (
+            <NavLink 
+            to="/admin/dashboard" 
+            className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink, common.accentLink) : clsx(common.navLink, common.accentLink)}
+            >
+            Техподдержка
+          </NavLink>
+          )}
+          </div>
           <div className={common['dashboard-nav-group']}>
             <div className={common['dashboard-nav-title']}>Я - владелец</div>
             <NavLink 

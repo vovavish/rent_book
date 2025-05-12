@@ -18,13 +18,17 @@ import { useStore } from '../../hooks/useStore';
 import { useEffect } from 'react';
 import { ProtectedRoute } from '../protected-route';
 
-import styles from './app.module.scss';
 import { MyFavoritesPage } from '../../pages/my-favorites';
 import { DashboardSupport } from '../../pages/dashboard-support/dashboard-support';
 import { ArchiveTickets, MyTickets, NewTicket } from '../../pages/user-support';
 import { DashboardAdmin } from '../../pages/dashboard-admin/dashboard-admin';
 import { AdminRequestsClosed, AdminRequestsInProgress, AdminRequestsNew } from '../../pages/admin';
 import { AdminBookComplains } from '../../pages/admin/admin-book-complaints/admin-book-complains';
+import { Privacy } from '../../pages/privacy/privacy';
+import { Terms } from '../../pages/terms/terms';
+import { PublicOffer } from '../../pages/public-offer/public-offer';
+
+import styles from './app.module.scss';
 
 export const App = () => {
   const { authStore, userProfileStore } = useStore();
@@ -49,6 +53,10 @@ export const App = () => {
           <Route index element={<HomePage />} />
 
           <Route path="/rent_book/:bookId" element={<RentBookPage />} />
+
+          <Route path="/privacy" element={<Privacy />}></Route>
+          <Route path="/terms" element={<Terms />}></Route>
+          <Route path="/public_offer" element={<PublicOffer />}></Route>
 
           <Route path="/" element={<ProtectedRoute requiredRole="USER" />}>
             <Route path="/dashboard" element={<Dashboard />}>

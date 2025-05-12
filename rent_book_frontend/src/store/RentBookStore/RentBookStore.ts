@@ -117,14 +117,28 @@ export class RentBookStore {
 
   async fetchToRentalBookById(bookId: number) {
     await this.handleRequest(async () => {
-      this._currentBook = await ApiRentBookController.getToRentalBookById(bookId);
+      const response = await ApiRentBookController.getToRentalBookById(bookId);
+
+      runInAction(() => {
+        this._currentBook = response;
+      })
     }, 'Failed to fetch book');
   }
 
   async fetchRentalById(rentalId: number) {
-    await this.handleRequest(async () => {
-      this._currentRental = await ApiRentBookController.getRentalById(rentalId);
-    }, 'Failed to fetch book');
+    try {
+      this._error = null;
+      const response = await ApiRentBookController.getRentalById(rentalId);
+      runInAction(() => {
+        this._currentRental = response;
+      });
+    } catch (e) {
+      console.log(e);
+      runInAction(() => {
+        this._error = 'Failed to fetch book';
+      });
+      throw e;
+    }
   }
 
   async updateBook(bookId: number, bookData: FormData) {

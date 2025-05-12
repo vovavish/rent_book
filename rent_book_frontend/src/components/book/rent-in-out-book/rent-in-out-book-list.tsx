@@ -20,7 +20,7 @@ export const RentInOutBookList: FC<RentInOutBookListProps> = ({
   if (rental.length === 0) {
     return <EmptyText>Вы пока ничего не сдаете в аренду</EmptyText>;
   }
-  console.log('rental', rental);
+  
   return (
     <div className={styles['books-list']}>
       {rental.map((rental) => (

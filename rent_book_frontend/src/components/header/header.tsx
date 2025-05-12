@@ -65,7 +65,7 @@ export const Header = observer(() => {
       <div className={styles.titleContainer}>
         <hr className={styles.hr} />
         <Link to ="/" className={styles.logo}>
-          <h1 className={styles.title}>РентБук</h1>
+          <h1 className={styles.title}>ЛитЭра</h1>
         </Link>
         {!isBooksPage && !isSupportPage && !isAdminPage && (
           <div className={styles.searchContainer}>
