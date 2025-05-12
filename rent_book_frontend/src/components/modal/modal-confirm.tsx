@@ -42,7 +42,7 @@ export const ConfirmModal = ({ message, variant, onConfirm, onCancel }: ConfirmM
             <UserActionButton onClick={onConfirm} variant={variant}>
               Подтвердить
             </UserActionButton>
-            <UserActionButton onClick={onCancel} variant='cancel'>
+            <UserActionButton onClick={onCancel} variant='rejected'>
               Отменить
             </UserActionButton>
           </div>

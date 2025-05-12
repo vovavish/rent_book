@@ -23,7 +23,7 @@ export const HomePage = observer(() => {
 
   return (
     <div className={styles['home-page']}>
-      <h1>Доступно для аренды</h1>
+      <h1 className={styles['home-page-title']}>Доступно для аренды</h1>
 
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
 

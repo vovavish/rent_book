@@ -6,17 +6,17 @@ import { UserActionButton } from '../ui';
 export const AddressPicker = ({
   onSelect,
   apiKey,
-  defaultLocation
+  defaultLocation,
 }: {
   onSelect: (location: { address: string; lat: number; lon: number }) => void;
   apiKey: string;
-  defaultLocation?: { address: string; lat: number; lon: number };
+  defaultLocation?: { address?: string; lat?: number; lon?: number };
 }) => {
   const [address, setAddress] = useState(defaultLocation?.address || '');
   const [selectedLocation, setSelectedLocation] = useState<{
-    address: string;
-    lat: number;
-    lon: number;
+    address?: string;
+    lat?: number;
+    lon?: number;
   } | null>(defaultLocation || null);
 
   // Обработка поиска адреса

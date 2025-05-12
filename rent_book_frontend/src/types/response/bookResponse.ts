@@ -26,19 +26,21 @@ export const conditionTranslations: Record<Condition, string> = {
 };
 
 export enum Format {
-  SMALL_FORMAT = 'SmallFormat',
-  POCKET_EDITION = 'PocketEdition',
-  MINIATURE = 'Miniature',
-  TINY_BOOK = 'TinyBook',
-  FOLIO = 'Folio',
+  EXTRA_LARGE = 'ExtraLarge',
+  LARGE = 'Large',
+  MEDIUM_LARGE = 'MediumLarge',
+  STANDARD = 'Standard',
+  SMALL = 'Small',
+  EXTRA_SMALL = 'ExtraSmall',
 }
 
 export const formatTranslations: Record<Format, string> = {
-  [Format.SMALL_FORMAT]: 'Малоформатное издание',
-  [Format.POCKET_EDITION]: 'Карманное издание',
-  [Format.MINIATURE]: 'Миниатюрное издание',
-  [Format.TINY_BOOK]: 'Книжка-малютка',
-  [Format.FOLIO]: 'Фолиант',
+  [Format.EXTRA_LARGE]: 'Сверхкрупный',
+  [Format.LARGE]: 'Крупный',
+  [Format.MEDIUM_LARGE]: 'Увеличенный',
+  [Format.STANDARD]: 'Стандартный',
+  [Format.SMALL]: 'Малый',
+  [Format.EXTRA_SMALL]: 'Сверхмалый',
 };
 
 export enum BookStatus {

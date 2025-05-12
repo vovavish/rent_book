@@ -58,9 +58,9 @@
 
 .bookAuthorAndTitle {
   display: flex;
-  font-size: clamp(1.25rem, 1.118rem + 0.5634vw, 1.625rem);
+  font-size: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
   width: 100%;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   font-weight: bold;
   justify-content: space-between;
 }
@@ -75,20 +75,28 @@
 
   &Top {
     display: flex;
+    align-items: center;
     justify-content: space-between;
 
     &Type {
       font-weight: bold;
       text-transform: uppercase;
+      font-size: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
     }
 
     &Age {
-      font-weight: normal;
+      font-weight: bold;
+      font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
     }
 
     &Left {
       display: flex;
       gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
   }
 
@@ -96,6 +104,7 @@
     display: flex;
     gap: 10px;
     flex-direction: column;
+    font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
   }
 }
 
@@ -107,15 +116,22 @@
 
 .boldText {
   font-weight: bold;
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+}
+
+.price {
+  color: rgb(173, 193, 120);
+  font-size: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
 }
 
 .categoryName {
   font-weight: bold;
-  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
 }
 
 .normalText {
   font-weight: normal;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .aboutBook {
@@ -123,10 +139,12 @@
   flex-direction: column;
   gap: 5px;
   grid-area: bookInfo;
-  font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  
   &Title {
     font-weight: bold;
     font-size: inherit;
+    font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
   }
 
   &MainInfo {
@@ -138,17 +156,24 @@
     &Item {
       display: flex;
       gap: 5px;
-      font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+      font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
     }
   }
 
   &Info {
     display: flex;
     gap: 5px;
+    align-items: center;
   }
 }
 
-.rating,
+.rating {
+  align-items: center;
+  display: flex;
+  gap: 5px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+}
+
 .review-header {
   display: flex;
   gap: 5px;
@@ -177,18 +202,19 @@
   padding: 0;
   font-size: clamp(1.125rem, 1.037rem + 0.3756vw, 1.375rem);
   margin-top: 5px;
+  margin-left: 15px;
 }
 
 .review-item {
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   padding: 1rem;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .review-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
 }
@@ -196,19 +222,31 @@
 .review-author {
   font-weight: bold;
   text-align: end;
+  font-size: clamp(0.875rem, 0.831rem + 0.1878vw, 1rem);
 }
 
 .review-rating {
   display: flex;
   align-items: center;
   gap: 0.3rem;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .review-content {
   margin-top: 0.5rem;
-  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
-.complain {
-  width: fit-content;
+.complainButton {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+}
+
+.noReviews {
+  margin: 5px 0 0 15px;
 }

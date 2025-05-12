@@ -89,21 +89,18 @@
   }
 
   .title {
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-size: 27px;
     text-align: center;
     border-radius: 6px;
     border: 1px solid rgb(51, 51, 51);
-    padding: 0.5rem 1rem;
+    padding: 0.15rem 1rem;
     margin: 0 1rem;
     white-space: nowrap;
     color: rgb(51, 51, 51);
-
-    @media (max-width: 768px) {
-      font-size: 1.25rem;
-      padding: 0.25rem 0.5rem;
-      margin: 0 0.5rem;
-    }
+    height: 40px;
+    font-family: "Righteous", sans-serif;
+    font-weight: 600;
+    font-style: normal;
   }
 
   .navAdditionalList {
@@ -171,10 +168,24 @@
     gap: 0.5rem;
     width: 100%;
     max-width: 680px;
+    height: 40px;
 
     @media (max-width: 768px) {
       flex-direction: column;
+      height: auto;
     }
+  }
+
+  .searchInput {
+    height: 100%;
+  }
+
+  .searchDelimiter {
+    color: rgb(51, 51, 51);
+  }
+
+  .rentOutBookButton {
+    height: 100%;
   }
 
   .searchInputContainer {
@@ -184,6 +195,7 @@
     max-width: 400px;
     position: relative;
     gap: 0.5rem;
+    height: 100%;
 
     input {
       flex: 1;
@@ -219,11 +231,6 @@
       padding: 0 0.25rem;
     }
 
-    .title {
-      font-size: 1rem;
-      padding: 0.25rem;
-    }
-
     .searchInputContainer {
       input {
         padding: 0.3rem 0.6rem 0.3rem 1.8rem;
@@ -236,4 +243,8 @@
       }
     }
   }
+}
+
+.logo {
+  text-decoration: none;
 }

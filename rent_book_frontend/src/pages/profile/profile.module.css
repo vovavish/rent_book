@@ -31,6 +31,23 @@
   border-bottom: 1px solid var(--border-color);
 }
 
+.headerTitle {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.changePassword {
+  align-self: start;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.changePassword:hover {
+  color: rgb(173, 193, 120);
+}
+
 .avatar {
   width: 60px;
   height: 60px;

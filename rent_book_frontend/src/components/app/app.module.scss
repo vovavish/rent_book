@@ -6,4 +6,9 @@
 
 .mainContent {
   flex: 1;
+  position: relative;
+  display: flex;          /* Добавить это */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

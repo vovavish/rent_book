@@ -5,6 +5,7 @@ import {
 } from '../../types/response/supportRequestResponse';
 import styles from './support-request-list.module.scss';
 import dayjs from 'dayjs';
+import { EmptyText } from '../empty-text/empty-text';
 
 interface SupportRequestListProps {
   requests: SupportRequestResponse[];
@@ -39,7 +40,7 @@ export const SupportRequestList: FC<SupportRequestListProps> = ({
       {isLoading && <div className={styles.loading}>Загрузка...</div>}
       {error && <div className={styles.error}>{error}</div>}
 
-      {requests.length === 0 && !isLoading && <div className={styles.empty}>{emptyText}</div>}
+      {requests.length === 0 && !isLoading && <EmptyText>{emptyText}</EmptyText>}
 
       <div className={styles.requestsList}>
         {requests.map((request) => (
@@ -61,7 +62,7 @@ export const SupportRequestList: FC<SupportRequestListProps> = ({
             <h2 className={styles.requestTitle}>{request.title}</h2>
 
             <p className={styles.requestDate}>
-              {dayjs(request.createdAt).format('DD-MM-YYYY HH:mm')}
+              {dayjs(request.createdAt).format('DD.MM.YYYY HH:mm')}
             </p>
 
             <p className={styles.requestContent}>{request.content}</p>

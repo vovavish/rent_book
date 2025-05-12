@@ -93,4 +93,13 @@ export class SupportRequestService {
       include: { user: true },
     });
   }
+
+  async getComplains() {
+    return this.prisma.bookComplaint.findMany(
+      {
+        orderBy: { createdAt: 'desc' },
+        include: { book: true, user: true },
+      },
+    );
+  }
 }

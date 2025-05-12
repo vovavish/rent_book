@@ -5,6 +5,7 @@ import { BookCard } from './book-card';
 import { BookResponse } from '../../types/response/bookResponse';
 
 import styles from './book-list.module.scss';
+import { EmptyText } from '../empty-text/empty-text';
 
 interface BookListProps {
   books: BookResponse[];
@@ -18,7 +19,7 @@ export const BookList: FC<BookListProps> = ({
   setCurrentImageIndices,
 }) => {
   if (books.length === 0) {
-    return <p>Нет доступных книг</p>;
+    return <EmptyText>Нет доступных книг</EmptyText>;
   }
 
   return (

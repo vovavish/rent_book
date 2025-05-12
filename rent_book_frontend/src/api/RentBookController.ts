@@ -1,6 +1,7 @@
 import { api } from './index';
-import { BookResponse, BookReview, CreateBookDto, UpdateBookDto } from '../types/response/bookResponse';
+import { BookResponse, BookReview } from '../types/response/bookResponse';
 import { RentalResponse, CreateRentalDto } from '../types/response/rentalResonse';
+import { ComplainBookDto } from '../types/complain/complain';
 
 export default class ApiRentBookController {
   static async createBook(createBookDto: FormData): Promise<BookResponse> {
@@ -154,5 +155,10 @@ export default class ApiRentBookController {
   static async getReviewsByBookId(bookId: number): Promise<BookReview[]> {
     return api.get<BookReview[]>(`/rent_books/reviews/${bookId}`)
       .then(res => res.data);
+  }
+
+  static async bookComplain(bookId: number, complainDto: ComplainBookDto): Promise<void> {
+    return api.post(`/rent_books/book_complain/${bookId}`, complainDto)
+      .then(() => undefined);
   }
 }

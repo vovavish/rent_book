@@ -24,6 +24,7 @@ import { DashboardSupport } from '../../pages/dashboard-support/dashboard-suppor
 import { ArchiveTickets, MyTickets, NewTicket } from '../../pages/user-support';
 import { DashboardAdmin } from '../../pages/dashboard-admin/dashboard-admin';
 import { AdminRequestsClosed, AdminRequestsInProgress, AdminRequestsNew } from '../../pages/admin';
+import { AdminBookComplains } from '../../pages/admin/admin-book-complaints/admin-book-complains';
 
 export const App = () => {
   const { authStore, userProfileStore } = useStore();
@@ -51,7 +52,7 @@ export const App = () => {
 
           <Route path="/" element={<ProtectedRoute requiredRole="USER" />}>
             <Route path="/dashboard" element={<Dashboard />}>
-              <Route index element={<MyProfilePage />} />
+              <Route index element={<Navigate replace to="profile" />} />
               <Route path="profile" element={<MyProfilePage />} />
               <Route path="books" element={<MyRentBooksPage />} />
               <Route path="rent_in_out" element={<MyRentalsInOutPage />} />
@@ -72,7 +73,7 @@ export const App = () => {
             <Route path="dashboard" element={<DashboardAdmin />}>
               <Route index element={<Navigate replace to="requests/new" />} />
 
-              <Route path="complaints" element={<div>Жалобы</div>} />
+              <Route path="complaints" element={<AdminBookComplains />} />
 
               <Route path="requests">
                 <Route path="new" element={<AdminRequestsNew />} />

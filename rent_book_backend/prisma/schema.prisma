@@ -43,6 +43,7 @@ model User {
   ownerRating  Float    @default(0)
   readerRating Float    @default(0)
   reviews      Review[] @relation // Добавляем связь с отзывами
+  bookComplaints BookComplaint[]
 
   @@map("users")
 }
@@ -73,11 +74,12 @@ enum Condition {
 }
 
 enum Format {
-  SmallFormat    // Малоформатное издание - издание небольшого размера, компактное
-  PocketEdition  // Карманное издание - издание, удобное для ношения в кармане
-  Miniature      // Миниатюрное издание - очень маленькое издание, часто коллекционное
-  TinyBook       // Книжка-малютка - чрезвычайно маленькая книга, часто для декоративных целей
-  Folio          // Фолиант - крупноформатное издание, обычно с большими страницами
+  ExtraLarge
+  Large
+  MediumLarge
+  Standard
+  Small
+  ExtraSmall
 }
 
 enum Type {
@@ -170,6 +172,18 @@ enum Category {
   HumorSatire           // Юмор и сатира - произведения с комедийным или сатирическим подтекстом
 }
 
+enum BookComplain {
+  INCORRECT_INFORMATION  // Неверная информация
+  COPYRIGHT_VIOLATION  // Нарушение авторских прав
+  OFFENSIVE_CONTENT  // Оскорбительное содержание
+  FRAUD_OR_SUSPICIOUS_BEHAVIOR  // Мошенничество или подозрительное поведение
+  SPAM_OR_ADVERTISING  // Спам или реклама
+  DUPLICATE_LISTING  // Дублирующее объявление
+  PROHIBITED_ITEM  // Запрещённый товар
+  SEXUAL_OR_INAPPROPRIATE_CONTENT // Сексуальный или неприемлемый контент
+  ANOTHER // Другое
+}
+
 model Book {
   id     Int  @id @default(autoincrement()) // Уникальный идентификатор книги (PK)
   user   User @relation("Owner", fields: [userId], references: [id]) // Владелец книги
@@ -215,6 +229,8 @@ model Book {
   isCashPayment      Boolean @default(false)
 
   rentals Rental[] // Связь с арендой
+
+  complaints BookComplaint[]
 
   // История использования
   addedDate      DateTime  @default(now()) @map("added_date") // 5a Дата добавления
@@ -348,4 +364,17 @@ model Review {
   updatedAt DateTime @updatedAt
 
   @@map("reviews")
+}
+
+model BookComplaint {
+  id        Int           @id @default(autoincrement())
+  createdAt DateTime      @default(now())
+  reason    BookComplain  // enum, уже определён
+  message   String?       // Дополнительный текст от пользователя (необязательно)
+
+  bookId    Int
+  book      Book          @relation(fields: [bookId], references: [id])
+
+  userId    Int
+  user      User          @relation(fields: [userId], references: [id])
 }

@@ -4,6 +4,7 @@ import { RentInOutBookCard } from './rent-in-out-book-card';
 
 import styles from '../book-list.module.scss';
 import { RentalResponse } from '../../../types/response/rentalResonse';
+import { EmptyText } from '../../empty-text/empty-text';
 
 interface RentInOutBookListProps {
   rental: RentalResponse[];
@@ -17,9 +18,9 @@ export const RentInOutBookList: FC<RentInOutBookListProps> = ({
   setCurrentImageIndices,
 }) => {
   if (rental.length === 0) {
-    return <p>Вы пока ничего не сдаете в аренду</p>;
+    return <EmptyText>Вы пока ничего не сдаете в аренду</EmptyText>;
   }
-
+  console.log('rental', rental);
   return (
     <div className={styles['books-list']}>
       {rental.map((rental) => (

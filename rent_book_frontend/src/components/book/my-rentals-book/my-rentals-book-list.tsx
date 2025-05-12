@@ -4,6 +4,7 @@ import { RentalResponse } from '../../../types/response/rentalResonse';
 import { MyRentalsBookCard } from './my-rentals-book-card';
 
 import styles from '../book-list.module.scss';
+import { EmptyText } from '../../empty-text/empty-text';
 
 interface MyRentalsBookListProps {
   rental: RentalResponse[];
@@ -17,7 +18,7 @@ export const MyRentalsBookList: FC<MyRentalsBookListProps> = ({
   setCurrentImageIndices,
 }) => {
   if (rental.length === 0) {
-    return <p>Вы пока ничего арендуете</p>;
+    return <EmptyText>Вы пока ничего арендуете</EmptyText>;
   }
 
   return (

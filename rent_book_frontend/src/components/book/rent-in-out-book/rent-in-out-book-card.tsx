@@ -10,6 +10,7 @@ import { UserActionButton } from '../../ui';
 import { RatingByOwner } from '../rating';
 
 import styles from '../book-card.module.scss';
+import clsx from 'clsx';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -39,14 +40,8 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
           case 'rejectFromApproval':
             await rentBookStore.rejectRentalFromApproval(rentalId);
             break;
-          case 'confirm':
-            await rentBookStore.confirmPayment(rentalId);
-            break;
           case 'giveToReader':
             await rentBookStore.confirmGivingBook(rentalId);
-            break;
-          case 'confirmReceive':
-            await rentBookStore.confirmReceivingBook(rentalId);
             break;
           case 'confirmReturn':
             await rentBookStore.approveReturn(rentalId);
@@ -115,14 +110,14 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
               <p>руб</p>
             </div>
             <p>
-              {dayjs(rental.rentStartDate).format('DD-MM-YYYY')} -{' '}
-              {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
+              {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} -{' '}
+              {dayjs(rental.rentEndDate).format('DD.MM.YYYY')}
             </p>
-            <p>
+            <p className={styles.standardText}>
               Читатель -{' '}
               {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
             </p>
-            <p>Сообщение - {rental.message}</p>
+            {rental.message && <p className={clsx(styles.standardText, styles.croppedText)}>Сообщение - {rental.message}</p>}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (

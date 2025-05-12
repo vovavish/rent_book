@@ -1,3 +1,5 @@
+import { BookComplain } from "../complain/complain";
+import { BookResponse } from "./bookResponse";
 import { UserProfileResponse } from "./userResponse";
 
 export enum SupportRequestStatus {
@@ -33,4 +35,14 @@ export interface UpdateSupportRequestStatusDto {
 // DTO для закрытия обращения с ответом админа
 export interface CloseSupportRequestDto {
   adminResponse: string;
+}
+
+export interface ComplainBookDto {
+  id: number;
+  reason: BookComplain;
+  message?: string;
+  book: BookResponse;
+  user: UserProfileResponse;
+  createdAt: string;
+  updatedAt: string;
 }

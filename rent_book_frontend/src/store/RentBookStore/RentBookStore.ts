@@ -1,7 +1,7 @@
-import ApiRentBookController from "../../api/RentBookController";
-import { BookResponse, BookReview, UpdateBookDto } from "../../types/response/bookResponse";
-import { RentalResponse, CreateRentalDto, RentalStatus } from "../../types/response/rentalResonse";
-import { makeAutoObservable, runInAction } from "mobx";
+import ApiRentBookController from '../../api/RentBookController';
+import { BookResponse, BookReview, UpdateBookDto } from '../../types/response/bookResponse';
+import { RentalResponse, CreateRentalDto, RentalStatus } from '../../types/response/rentalResonse';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 export class RentBookStore {
   private _books: BookResponse[] = [];
@@ -64,9 +64,9 @@ export class RentBookStore {
   get error() {
     return this._error;
   }
-  
+
   isFavorite(bookId: number): boolean {
-    return this._favoriteBooks.some(book => book.id === bookId);
+    return this._favoriteBooks.some((book) => book.id === bookId);
   }
 
   async createBook(bookData: FormData) {
@@ -76,7 +76,7 @@ export class RentBookStore {
         this._books.push(response);
       });
       return response;
-    }, "Failed to create book");
+    }, 'Failed to create book');
   }
 
   async fetchBooks() {
@@ -84,8 +84,8 @@ export class RentBookStore {
       const response = await ApiRentBookController.getBooks();
       runInAction(() => {
         this._books = response;
-      })
-    }, "Failed to fetch books");
+      });
+    }, 'Failed to fetch books');
   }
 
   async fetchUserBooks() {
@@ -93,8 +93,8 @@ export class RentBookStore {
       const response = await ApiRentBookController.getUserBooks();
       runInAction(() => {
         this._books = response;
-      })
-    }, "Failed to fetch books");
+      });
+    }, 'Failed to fetch books');
   }
 
   async fetchBookById(bookId: number) {
@@ -102,8 +102,8 @@ export class RentBookStore {
       const response = await ApiRentBookController.getBookById(bookId);
       runInAction(() => {
         this._currentBook = response;
-      })
-    }, "Failed to fetch book");
+      });
+    }, 'Failed to fetch book');
   }
 
   async fetchBookReviewsById(bookId: number) {
@@ -111,71 +111,71 @@ export class RentBookStore {
       const response = await ApiRentBookController.getReviewsByBookId(bookId);
       runInAction(() => {
         this._currentBookReviews = response;
-      })
-    }, "Failed to fetch book");
+      });
+    }, 'Failed to fetch book');
   }
 
   async fetchToRentalBookById(bookId: number) {
     await this.handleRequest(async () => {
       this._currentBook = await ApiRentBookController.getToRentalBookById(bookId);
-    }, "Failed to fetch book");
+    }, 'Failed to fetch book');
   }
 
   async fetchRentalById(rentalId: number) {
     await this.handleRequest(async () => {
       this._currentRental = await ApiRentBookController.getRentalById(rentalId);
-    }, "Failed to fetch book");
+    }, 'Failed to fetch book');
   }
 
   async updateBook(bookId: number, bookData: FormData) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.updateBook(bookId, bookData);
       runInAction(() => {
-        this._books = this._books.map(book => (book.id === bookId ? response : book));
+        this._books = this._books.map((book) => (book.id === bookId ? response : book));
         if (this._currentBook?.id === bookId) {
           this._currentBook = response;
         }
       });
       return response;
-    }, "Failed to update book");
+    }, 'Failed to update book');
   }
 
   async deleteBook(bookId: number) {
     await this.handleRequest(async () => {
       await ApiRentBookController.deleteBook(bookId);
       runInAction(() => {
-        this._books = this._books.filter(book => book.id !== bookId);
+        this._books = this._books.filter((book) => book.id !== bookId);
         if (this._currentBook?.id === bookId) {
           this._currentBook = null;
         }
       });
-    }, "Failed to delete book");
+    }, 'Failed to delete book');
   }
 
   async hideUserBook(bookId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.hideUserBook(bookId);
       runInAction(() => {
-        this._books = this._books.map(book => (book.id === bookId ? response : book));
+        this._books = this._books.map((book) => (book.id === bookId ? response : book));
       });
       return response;
-    }, "Failed to hide book");
+    }, 'Failed to hide book');
   }
 
   async openUserBook(bookId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.openUserBook(bookId);
       runInAction(() => {
-        this._books = this._books.map(book => (book.id === bookId ? response : book));
+        this._books = this._books.map((book) => (book.id === bookId ? response : book));
       });
       return response;
-    }, "Failed to hide book");
+    }, 'Failed to hide book');
   }
 
   async requestRental(rentalData: CreateRentalDto) {
     await this.handleRequest(async () => {
       await ApiRentBookController.requestRental(rentalData);
-    }, "Failed to request rental");
+    }, 'Failed to request rental');
   }
 
   // Метод для принятия аренды
@@ -185,11 +185,13 @@ export class RentBookStore {
       runInAction(() => {
         // Здесь можно обновить статус аренды или другие данные
         this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
-          rental.id === rentalId ? { ...rental, status: 'APPROVED_BY_OWNER' as RentalStatus } : rental,
+          rental.id === rentalId
+            ? { ...rental, status: 'APPROVED_BY_OWNER' as RentalStatus }
+            : rental,
         );
       });
       return response;
-    }, "Failed to approve rental");
+    }, 'Failed to approve rental');
   }
 
   // Метод для отклонения аренды
@@ -202,40 +204,39 @@ export class RentBookStore {
         );
       });
       return response;
-    }, "Failed to reject rental");
+    }, 'Failed to reject rental');
   }
 
   async rejectRentalFromApproval(rentalId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.rejectRentalFromApproval(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "REJECTED" as RentalStatus; // Пример изменения статуса
-        }
+        this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'REJECTED' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to reject rental");
+    }, 'Failed to reject rental');
   }
 
   async rejectRentalFromPending(rentalId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.reject_rental_from_pending(rentalId);
       runInAction(() => {
-        this._rentals = this.rentals.filter(rental => rental.id !== rentalId);
+        this._rentals = this.rentals.filter((rental) => rental.id !== rentalId);
       });
       return response;
-    }, "Failed to reject rental");
+    }, 'Failed to reject rental');
   }
 
   async rejectRentalFromApprovedByOwner(rentalId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.reject_rental_from_approved_by_owner(rentalId);
       runInAction(() => {
-        this._rentals = this.rentals.filter(rental => rental.id !== rentalId);
+        this._rentals = this.rentals.filter((rental) => rental.id !== rentalId);
       });
       return response;
-    }, "Failed to reject rental");
+    }, 'Failed to reject rental');
   }
 
   // Метод для подтверждения оплаты аренды
@@ -243,13 +244,12 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.confirmPayment(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "CONFIRMED" as RentalStatus; // Пример изменения статуса
-        }
+        this._rentals = this._rentals.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'CONFIRMED' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to confirm payment");
+    }, 'Failed to confirm payment');
   }
 
   // Метод для подтверждения передачи книги
@@ -257,39 +257,36 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.confirmGivingBook(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "GIVEN_TO_READER" as RentalStatus;
-        }
+        this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'GIVEN_TO_READER' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to confirm giving book");
+    }, 'Failed to confirm giving book');
   }
 
   async cancelRecivingBook(rentalId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.cancelReceivingBook(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "CANCELED" as RentalStatus;
-        }
+        this._rentals = this._rentals.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'CANCELED' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to cancel receiving book");
+    }, 'Failed to cancel receiving book');
   }
 
   async cancelGivingBook(rentalId: number) {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.cancelGivingBook(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "CANCELED" as RentalStatus;
-        }
+        this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'CANCELED' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to cancel giving book");
+    }, 'Failed to cancel giving book');
   }
 
   // Метод для подтверждения получения книги
@@ -297,13 +294,12 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.confirmReceivingBook(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "ACTIVE" as RentalStatus; // Пример изменения статуса
-        }
+        this._rentals = this._rentals.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'ACTIVE' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to confirm receiving book");
+    }, 'Failed to confirm receiving book');
   }
 
   // Метод для подтверждения возврата книги
@@ -311,25 +307,24 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.approveReturn(rentalId);
       runInAction(() => {
-        const rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental.status = "COMPLETED" as RentalStatus; // Пример изменения статуса
-        }
+        this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'COMPLETED' as RentalStatus } : rental,
+        );
       });
       return response;
-    }, "Failed to approve return");
+    }, 'Failed to approve return');
   }
 
   async fetchUserRentals() {
     await this.handleRequest(async () => {
       this._rentals = await ApiRentBookController.getUserRentals();
-    }, "Failed to fetch rentals");
+    }, 'Failed to fetch rentals');
   }
 
   async fetchUserRentalsInOut() {
     await this.handleRequest(async () => {
       this._rentalsInOutBooks = await ApiRentBookController.getUserRentalsInOut();
-    }, "Failed to fetch rentals");
+    }, 'Failed to fetch rentals');
   }
 
   clearError() {
@@ -339,9 +334,9 @@ export class RentBookStore {
   async fetchUserFavorites() {
     await this.handleFavoritesRequest(async () => {
       this._favoriteBooks = await ApiRentBookController.getUserFavorites();
-    }, "Failed to fetch favorite books");
+    }, 'Failed to fetch favorite books');
   }
-  
+
   async addToFavorites(bookId: number) {
     try {
       this._error = null;
@@ -353,23 +348,23 @@ export class RentBookStore {
     } catch (e) {
       console.log(e);
       runInAction(() => {
-        this._error = "Failed to add book to favorites";
+        this._error = 'Failed to add book to favorites';
       });
       throw e;
     }
   }
-  
+
   async removeFromFavorites(bookId: number) {
     try {
       this._error = null;
       await ApiRentBookController.removeFromFavorites(bookId);
       runInAction(() => {
-        this._favoriteBooks = this._favoriteBooks.filter(book => book.id !== bookId);
+        this._favoriteBooks = this._favoriteBooks.filter((book) => book.id !== bookId);
       });
     } catch (e) {
       console.log(e);
       runInAction(() => {
-        this._error = "Failed to remove book from favorites";
+        this._error = 'Failed to remove book from favorites';
       });
       throw e;
     }
@@ -379,24 +374,32 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.rateRenter(rentalId, rating);
       runInAction(() => {
-        let rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental = response;
-        }
-      })
-    }, "Failed to rate renter");
+        this._rentalsInOutBooks = this._rentalsInOutBooks.map((rental) =>
+          rental.id === rentalId ? { ...rental, ...response } : rental,
+        );
+      });
+    }, 'Failed to rate renter');
   }
-  
-  async rateOwnerAndBook(rentalId: number, ownerRating: number, bookRating: number, reviewContent: string) {
+
+  async rateOwnerAndBook(
+    rentalId: number,
+    ownerRating: number,
+    bookRating: number,
+    reviewContent: string,
+  ) {
     await this.handleRequest(async () => {
-      const response = await ApiRentBookController.rateOwnerAndBook(rentalId, ownerRating, bookRating, reviewContent);
+      const response = await ApiRentBookController.rateOwnerAndBook(
+        rentalId,
+        ownerRating,
+        bookRating,
+        reviewContent,
+      );
       runInAction(() => {
-        let rental = this.rentals.find(rental => rental.id === rentalId);
-        if (rental) {
-          rental = response;
-        }
-      })
-    }, "Failed to rate owner and book");
+        this._rentals = this._rentals.map((rental) =>
+          rental.id === rentalId ? { ...rental, ...response } : rental,
+        );
+      });
+    }, 'Failed to rate owner and book');
   }
 
   private async handleRequest(requestFn: () => Promise<any>, errorMessage: string) {

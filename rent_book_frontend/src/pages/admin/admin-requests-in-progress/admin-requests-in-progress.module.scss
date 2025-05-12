@@ -4,10 +4,11 @@
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
   margin-bottom: 1rem;
   resize: vertical;
-
+  font-family: inherit;
+  
   &:focus {
     outline: none;
     border-color: #1976d2;
@@ -17,44 +18,4 @@
 .buttonGroup {
   display: flex;
   gap: 1rem;
-}
-
-.actionButton {
-  background: #1976d2;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #1565c0;
-  }
-
-  &:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
-}
-
-.submitButton {
-  background: #388e3c;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.2s;
-
-  &:hover {
-    background: #2e7d32;
-  }
-
-  &:disabled {
-    background: #cccccc;
-    cursor: not-allowed;
-  }
 }

@@ -66,8 +66,9 @@ $dark-primary: #563d7c;
   }
 
   &__step {
-    font-weight: normal;
+    font-weight: bold;
     color: rgb(51, 51, 51);
+    font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
   }
 }
 
@@ -283,6 +284,7 @@ $dark-primary: #563d7c;
   padding: 10px;
   border-radius: 4px;
   margin-top: 10px;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 
 .error {
@@ -326,8 +328,25 @@ $dark-primary: #563d7c;
 
 .cashPaymentOption {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
 
   input[type="checkbox"] {
-    accent-color: rgb(174, 125, 172);;
+    accent-color: rgb(174, 125, 172);
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    margin-bottom: 5px;
   }
+}
+
+.standardText {
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  color: rgb(51, 51, 51);
+}
+
+.boldText {
+  font-size: clamp(0.875rem, 0.831rem + 0.1878vw, 1rem);
+  color: rgb(51, 51, 51);
+  font-weight: bold;
 }

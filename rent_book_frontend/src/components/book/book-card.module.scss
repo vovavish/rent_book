@@ -26,7 +26,7 @@
 
     h3 {
       margin: 0;
-      font-size: 1.1rem;
+      font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
       font-weight: normal;
       text-transform: uppercase;
     }
@@ -46,16 +46,23 @@
 
     .book-author {
       font-weight: bold;
+      font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
     }
 
     .book-title {
       font-weight: bold;
+      font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
     }
 
     .book-price-wrapper {
       display: flex;
       gap: 5px;
       align-items: center;
+      font-size: clamp(1.25rem, 1.162rem + 0.3756vw, 1.5rem);
+
+      p {
+        font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+      }
     }
 
     .book-price {
@@ -69,6 +76,25 @@
 
     .rentLinkButton {
       width: 100%;
+    }
+
+    .book-rating {
+      font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+
+    .standardText {
+      font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+    }
+
+    .croppedText {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
   }
 }

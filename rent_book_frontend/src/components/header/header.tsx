@@ -64,7 +64,9 @@ export const Header = observer(() => {
       </nav>
       <div className={styles.titleContainer}>
         <hr className={styles.hr} />
-        <h1 className={styles.title}>Арендуйте книгу</h1>
+        <Link to ="/" className={styles.logo}>
+          <h1 className={styles.title}>РентБук</h1>
+        </Link>
         {!isBooksPage && !isSupportPage && !isAdminPage && (
           <div className={styles.searchContainer}>
             <UserActionButton variant="reader">
@@ -77,9 +79,9 @@ export const Header = observer(() => {
                 <input type="text" placeholder="Найти издание..." className={styles.searchInput} />
                 <Search />
               </div>
-              <div>или</div>
-              <div>
-                <UserActionButton variant="owner">
+              <div className={styles.searchDelimiter}>или</div>
+              <div className={styles.rentOutBookButton}>
+                <UserActionButton variant="owner"  className={styles.rentOutBookButton}>
                   <Link to="/dashboard/books" className={styles.rentOutBook}>
                     Разместить объявление
                   </Link>

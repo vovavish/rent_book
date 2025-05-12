@@ -4,6 +4,7 @@ import {
   CreateSupportRequestDto,
   UpdateSupportRequestStatusDto,
   CloseSupportRequestDto,
+  ComplainBookDto,
 } from '../../types/response/supportRequestResponse';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -15,6 +16,7 @@ export class SupportRequestStore {
   private _allInProgressRequests: SupportRequestResponse[] = [];
   private _allClosedRequests: SupportRequestResponse[] = [];
   private _currentRequest: SupportRequestResponse | null = null;
+  private _complains: ComplainBookDto[] = [];
 
   private _isLoading = false;
   private _error: string | null = null;
@@ -51,9 +53,14 @@ export class SupportRequestStore {
     return this._currentRequest;
   }
 
+  get complains() {
+    return this._complains;
+  }
+
   get isLoading() {
     return this._isLoading;
   }
+
 
   get error() {
     return this._error;
@@ -159,6 +166,15 @@ export class SupportRequestStore {
       });
       return response;
     }, 'Failed to close support request');
+  }
+
+  async fetchComplains() {
+    await this.handleRequest(async () => {
+      const response = await ApiSupportRequestController.getComplains();
+      runInAction(() => {
+        this._complains = response;
+      })
+    }, 'Failed to fetch complains');
   }
 
   private async handleRequest(requestFn: () => Promise<any>, errorMessage: string) {

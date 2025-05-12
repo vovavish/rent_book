@@ -47,6 +47,7 @@ export const MyRentBooksPage = observer(() => {
     minDaysToRent: 1,
     category: [],
     price: 0,
+    isCashPayment: false,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -128,10 +129,7 @@ export const MyRentBooksPage = observer(() => {
       alert('Пожалуйста, заполните обязательные поля (*)');
       return;
     }
-    if (
-      currentStep === 4 &&
-      (!newBook.minDaysToRent || !newBook.address)
-    ) {
+    if (currentStep === 4 && (!newBook.minDaysToRent || !newBook.address) || newBook.price === undefined) {
       alert('Пожалуйста, заполните обязательные поля (*)');
       return;
     }
@@ -146,13 +144,14 @@ export const MyRentBooksPage = observer(() => {
     setIsModalOpen(false);
     setCurrentStep(1);
     setNewBook({
-      condition: Condition.NEW_EDITION,
-      format: Format.SMALL_FORMAT,
+      condition: undefined,
+      format: undefined,
       availabilityStatus: BookStatus.ACTIVE,
       deposit: 0,
       minDaysToRent: 1,
-      type: Type.BOOK,
+      type: undefined,
       category: [],
+      isCashPayment: false,
     });
     setSelectedFiles([]);
     setSelectedCard('');
@@ -168,6 +167,9 @@ export const MyRentBooksPage = observer(() => {
     lat: number;
     lon: number;
   }) => {
+    console.log('address', address);
+    console.log('lat', lat);
+    console.log('lon', lon);
     setNewBook((prev) => ({ ...prev, address, lat, lon }));
   };
 
@@ -179,20 +181,24 @@ export const MyRentBooksPage = observer(() => {
         return (
           <div className={styles.stepContent}>
             <div className={styles.ownerInfo}>
-              <p>
-                <strong>Имя:</strong> {profile?.name || 'Не указано'}
+              <p className={styles.standardText}>
+                <span className={styles.boldText}>Имя:</span> {profile?.name || 'Не указано'}
               </p>
-              <p>
-                <strong>Фамилия:</strong> {profile?.lastname || 'Не указано'}
+              <p className={styles.standardText}>
+                <span className={styles.boldText}>Фамилия:</span>{' '}
+                {profile?.lastname || 'Не указано'}
               </p>
-              <p>
-                <strong>Отчество:</strong> {profile?.surname || 'Не указано'}
+              <p className={styles.standardText}>
+                <span className={styles.boldText}>Отчество:</span>{' '}
+                {profile?.surname || 'Не указано'}
               </p>
-              <p>
-                <strong>Email:</strong> {profile?.email || 'Не указано'}
+              <p className={styles.standardText}>
+                <span className={styles.boldText}>Email:</span> {profile?.email || 'Не указано'}
               </p>
-              <p>
-                <strong>Телефон{profile?.phoneNumbers?.length || 0 > 1 ? 'ы' : ''}:</strong>{' '}
+              <p className={styles.standardText}>
+                <span className={styles.boldText}>
+                  Телефон{profile?.phoneNumbers?.length || 0 > 1 ? 'ы' : ''}:
+                </span>{' '}
                 {profile?.phoneNumbers.length
                   ? profile.phoneNumbers.map((phone, index) => (
                       <span key={index}>
@@ -231,22 +237,25 @@ export const MyRentBooksPage = observer(() => {
                   </div>
                 ))
               ) : (
-                <p>У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.</p>
+                <p className={clsx(styles.standardText, styles.warning)}>
+                  У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.
+                </p>
               )}
             </div>
             <div className={styles.cashPaymentOption}>
-              <label>
+              <input
+                type="checkbox"
+                checked={newBook.isCashPayment}
+                id="isCashPayment"
+                onChange={(e) => {
+                  setNewBook({ ...newBook, isCashPayment: e.target.checked });
+                  if (e.target.checked) {
+                    setSelectedCard('');
+                  }
+                }}
+              />
+              <label htmlFor="isCashPayment" className={styles.standardText}>
                 Получить оплату наличными
-                <input
-                  type="checkbox"
-                  checked={newBook.isCashPayment}
-                  onChange={(e) => {
-                    setNewBook({ ...newBook, isCashPayment: e.target.checked });
-                    if (e.target.checked) {
-                      setSelectedCard('');
-                    }
-                  }}
-                />
               </label>
             </div>
           </div>
@@ -491,36 +500,34 @@ export const MyRentBooksPage = observer(() => {
                   />
                 </div>
                 {newBook.type === Type.BOOK && (
-                  <>
-                    <div className={styles.formGroup}>
-                      <label>ISBN:</label>
-                      <input
-                        type="text"
-                        value={newBook.isbn || ''}
-                        onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Индекс УДК:</label>
-                      <input
-                        type="text"
-                        value={newBook.indexUDK || ''}
-                        onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
-                        required
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Индекс ББК:</label>
-                      <input
-                        type="text"
-                        value={newBook.indexBBK || ''}
-                        onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
-                        required
-                      />
-                    </div>
-                  </>
+                  <div className={styles.formGroup}>
+                    <label>ISBN:</label>
+                    <input
+                      type="text"
+                      value={newBook.isbn || ''}
+                      onChange={(e) => setNewBook({ ...newBook, isbn: e.target.value })}
+                      required
+                    />
+                  </div>
                 )}
+                <div className={styles.formGroup}>
+                  <label>Индекс УДК:</label>
+                  <input
+                    type="text"
+                    value={newBook.indexUDK || ''}
+                    onChange={(e) => setNewBook({ ...newBook, indexUDK: e.target.value })}
+                    required
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label>Индекс ББК:</label>
+                  <input
+                    type="text"
+                    value={newBook.indexBBK || ''}
+                    onChange={(e) => setNewBook({ ...newBook, indexBBK: e.target.value })}
+                    required
+                  />
+                </div>
                 {newBook.type === Type.NOTEBOOK && (
                   <div className={styles.formGroup}>
                     <label>ISMN:</label>
@@ -594,13 +601,16 @@ export const MyRentBooksPage = observer(() => {
                 <label className={styles.accentLabel}>Цена аренды (руб/день)*</label>
                 <input
                   type="number"
-                  value={newBook.price || 0}
-                  onChange={(e) => setNewBook({ ...newBook, price: Number(e.target.value) })}
+                  value={newBook.price || ''}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setNewBook({ ...newBook, price: val === '' ? undefined : Number(val) });
+                  }}
                   required
                 />
               </div>
               <div className={styles.formGroup}>
-                <label className={styles.accentLabel}>Залог (руб)</label>
+                <label className={styles.accentLabel}>Депозит (руб)</label>
                 <input
                   type="number"
                   min="0"
@@ -611,6 +621,11 @@ export const MyRentBooksPage = observer(() => {
               <AddressPicker
                 onSelect={handleAddressSelect}
                 apiKey="cfef434a-5494-4440-a548-f7408e0226d2"
+                defaultLocation={{
+                  address: newBook.address || 'Россия, Москва',
+                  lat: newBook.lat || 37.617698,
+                  lon: newBook.lon || 55.755864,
+                }}
               />
             </div>
             <div className={styles.accentText}>* - обязательно к заполнению</div>
@@ -765,15 +780,11 @@ export const MyRentBooksPage = observer(() => {
 
       {rentBookStore.isLoading && !isModalOpen && <p>Загрузка...</p>}
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
-      {rentBookStore.books.length > 0 ? (
-        <MyRentBookList
-          books={rentBookStore.books}
-          currentImageIndices={currentImageIndices}
-          setCurrentImageIndices={setCurrentImageIndices}
-        />
-      ) : (
-        !rentBookStore.isLoading && <p>У вас пока нет книг</p>
-      )}
+      <MyRentBookList
+        books={rentBookStore.books}
+        currentImageIndices={currentImageIndices}
+        setCurrentImageIndices={setCurrentImageIndices}
+      />
     </div>
   );
 });

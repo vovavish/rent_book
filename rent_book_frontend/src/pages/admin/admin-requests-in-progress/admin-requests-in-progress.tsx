@@ -4,11 +4,15 @@ import { useStore } from '../../../hooks/useStore';
 import { DashboardTitle } from '../../../components/ui/dashboard-title';
 import styles from './admin-requests-in-progress.module.scss';
 import { AdminSupportRequestList } from '../../../components/admin-support-request-list';
+import { UserActionButton } from '../../../components/ui';
+import { ConfirmModal } from '../../../components/modal/modal-confirm';
 
 export const AdminRequestsInProgress = observer(() => {
   const { supportRequestStore } = useStore();
   const [responseText, setResponseText] = useState<{ [key: number]: string }>({});
   const [showResponseInput, setShowResponseInput] = useState<{ [key: number]: boolean }>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentRequest, setCurrentRequest] = useState<number | null>(null);
 
   useEffect(() => {
     supportRequestStore.fetchAllInProgressRequests();
@@ -31,12 +35,24 @@ export const AdminRequestsInProgress = observer(() => {
 
   return (
     <div>
+      {isModalOpen && (
+        <ConfirmModal
+          onConfirm={async () => {
+            await handleCloseRequest(currentRequest!);
+            setIsModalOpen(false);
+          }}
+          onCancel={() => setIsModalOpen(false)}
+          message="Вы уверены, что хотите закрыть обращение?"
+        />
+      )}
       <DashboardTitle>Обращения в работе</DashboardTitle>
       <AdminSupportRequestList
         requests={supportRequestStore.allInProgressRequests}
         isLoading={supportRequestStore.isLoading}
         error={supportRequestStore.error}
         emptyText="Обращений нет"
+        showUpdatedAt
+        updatedAtLabel='в работе с'
         renderActions={(request) => (
           <>
             {showResponseInput[request.id] && (
@@ -50,21 +66,23 @@ export const AdminRequestsInProgress = observer(() => {
               />
             )}
             <div className={styles.buttonGroup}>
-              <button
-                className={styles.actionButton}
+              <UserActionButton
                 onClick={() => toggleResponseInput(request.id)}
                 disabled={supportRequestStore.isLoading}
               >
                 {showResponseInput[request.id] ? 'Отменить' : 'Закрыть обращение'}
-              </button>
+              </UserActionButton>
               {showResponseInput[request.id] && (
-                <button
-                  className={styles.submitButton}
-                  onClick={() => handleCloseRequest(request.id)}
+                <UserActionButton
+                  onClick={() => {
+                    setIsModalOpen(true);
+                    setCurrentRequest(request.id);
+                  }}
                   disabled={supportRequestStore.isLoading || !responseText[request.id]?.trim()}
+                  variant="reader"
                 >
                   Подтвердить закрытие
-                </button>
+                </UserActionButton>
               )}
             </div>
           </>

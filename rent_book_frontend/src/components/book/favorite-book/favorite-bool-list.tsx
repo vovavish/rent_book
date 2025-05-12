@@ -5,6 +5,7 @@ import { BookResponse } from '../../../types/response/bookResponse';
 
 import styles from '../book-list.module.scss';
 import { Link } from 'react-router-dom';
+import { EmptyText } from '../../empty-text/empty-text';
 
 interface BookListProps {
   books: BookResponse[];
@@ -18,7 +19,7 @@ export const FavoriteBookList: FC<BookListProps> = ({
   setCurrentImageIndices,
 }) => {
   if (books.length === 0) {
-    return <p>Тут пусто... Добавьте книгу в избранное в <Link to="/">нашем каталоге</Link></p>;
+    return <EmptyText>Тут пусто... Добавьте книгу в избранное в <Link to="/">нашем каталоге</Link></EmptyText>;
   }
 
   return (

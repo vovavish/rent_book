@@ -26,26 +26,26 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
     return (
       <div className={styles.starsDisplay}>
         <div>
-          <p>Оценка владельца:</p>
+          <p className={styles.standardText}>Оценка владельца:</p>
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
-              size={24}
+              size={22}
               color={index < existingOwnerRating ? '#ffc107' : '#e4e5e9'}
             />
           ))}
         </div>
         <div>
-          <p>Оценка книги:</p>
+          <p className={styles.standardText}>Оценка книги:</p>
           {[...Array(5)].map((_, index) => (
             <Star
               key={index}
-              size={24}
+              size={22}
               color={index < existingBookRating ? '#ffc107' : '#e4e5e9'}
             />
           ))}
         </div>
-        {existingReviewContent && <p>Отзыв: {existingReviewContent}</p>}
+        {existingReviewContent && <p className={styles.standardText}>Отзыв: {existingReviewContent}</p>}
       </div>
     );
   }
@@ -53,7 +53,7 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
   return (
     <div className={styles.ratingInput}>
       <div>
-        <p>Оцените владельца:</p>
+        <p className={styles.standardText}>Оцените владельца:</p>
         {[...Array(5)].map((_, index) => {
           const starValue = index + 1;
           return (
@@ -66,7 +66,7 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
                 style={{ display: 'none' }}
               />
               <Star
-                size={30}
+                size={22}
                 color={starValue <= (ownerHover ?? ownerRating ?? 0) ? '#ffc107' : '#e4e5e9'}
                 style={{ cursor: 'pointer' }}
                 onMouseEnter={() => setOwnerHover(starValue)}
@@ -77,7 +77,7 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
         })}
       </div>
       <div>
-        <p>Оцените книгу:</p>
+        <p className={styles.standardText}>Оцените книгу:</p>
         {[...Array(5)].map((_, index) => {
           const starValue = index + 1;
           return (
@@ -90,7 +90,7 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
                 style={{ display: 'none' }}
               />
               <Star
-                size={30}
+                size={22}
                 color={starValue <= (bookHover ?? bookRating ?? 0) ? '#ffc107' : '#e4e5e9'}
                 style={{ cursor: 'pointer' }}
                 onMouseEnter={() => setBookHover(starValue)}
@@ -101,7 +101,7 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
         })}
       </div>
       <div>
-        <p>Отзыв о книге:</p>
+        <p className={styles.standardText}>Отзыв о книге:</p>
         <textarea
           value={reviewContent}
           onChange={(e) => setReviewContent(e.target.value)}
@@ -110,7 +110,9 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
         />
       </div>
       <UserActionButton
-        onClick={() => ownerRating && bookRating && onSubmit(ownerRating, bookRating, reviewContent)}
+        onClick={() => {
+          ownerRating && bookRating && onSubmit(ownerRating, bookRating, reviewContent)}
+        }
         disabled={!ownerRating || !bookRating}
         variant='reader'
       >

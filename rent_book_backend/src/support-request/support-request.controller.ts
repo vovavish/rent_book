@@ -111,4 +111,11 @@ export class SupportRequestController {
       closeSupportRequestDto,
     );
   }
+
+  @UseGuards(AtGuard)
+  @Roles(Role.Admin)
+  @Get('complains')
+  async getComplains() {
+    return this.supportRequestService.getComplains();
+  }
 }

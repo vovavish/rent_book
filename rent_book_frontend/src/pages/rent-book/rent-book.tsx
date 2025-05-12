@@ -3,7 +3,7 @@ import { useStore } from '../../hooks/useStore';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './rent-book.module.scss';
-import { Star } from 'lucide-react';
+import { AlertTriangle, Star } from 'lucide-react';
 import { BookImageSlider } from '../../components/book/book-home-slider';
 import {
   ageRatingTranslations,
@@ -14,11 +14,12 @@ import {
   periodicityTranslations,
   typeTranslations,
 } from '../../types/response/bookResponse';
-import { UserActionButton } from '../../components/ui';
+import { Preloader, UserActionButton } from '../../components/ui';
 import { FavoriteButton } from '../../components/book/favorite-button';
 import clsx from 'clsx';
 import { ModalWithChildren } from '../../components/modal/modal-with-children';
 import { StartRentBookPage } from '../../components/start-rent-book';
+import { BookComplain } from '../../components/book/book-complain/book-complain';
 
 export const RentBookPage = observer(() => {
   const { rentBookStore, authStore } = useStore();
@@ -36,6 +37,10 @@ export const RentBookPage = observer(() => {
 
   const book = rentBookStore.currentBook;
 
+  if (rentBookStore.isLoading || authStore.isUserLoading) {
+    return <Preloader />;
+  }
+
   return (
     <div className={styles['rent-book-page']}>
       {isModalOpen && (
@@ -51,11 +56,10 @@ export const RentBookPage = observer(() => {
           onCancel={() => setIsComplainModalOpen(false)}
           headerText="Пожаловаться"
         >
-          <div>Пожаловаться</div>
+          <BookComplain bookId={Number(bookId)} onComplain={() => setIsComplainModalOpen(false)}/>
         </ModalWithChildren>
       )}
 
-      {rentBookStore.isLoading && <p>Загрузка...</p>}
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
 
       {book ? (
@@ -81,39 +85,37 @@ export const RentBookPage = observer(() => {
                     </div>
                     <div className={styles.rating}>
                       <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
-                      <Star size={16} color="#FFD700" fill="#FFD700" />
+                      <Star size={22} color="#FFD700" fill="#FFD700" />
                     </div>
                   </div>
                   <div className={styles.bookInfoHeaderTopAge}>
                     {ageRatingTranslations[book.ageRestriction!]}
+                    {!authStore.isAuth || book.user.id !== authStore.user?.id && <button onClick={() => setIsComplainModalOpen(true)} title="Пожаловаться" className={styles.complainButton}>
+                      <AlertTriangle size={22} />
+                    </button>}
                   </div>
                 </div>
 
                 <div className={styles.bookInfoHeaderBottom}>
                   <div>
-                    <span className={styles.boldText}>{book.price}</span> руб/день
+                    <span className={clsx(styles.boldText, styles.price)}>{book.price}</span> руб/день
                   </div>
                   <div>депозит - <span className={styles.boldText}>{book.deposit}</span> руб</div>
                   {!authStore.isAuth || book.user.id !== authStore.user?.id ? (
-                    <>
-                      <div className={styles.actions}>
-                        <UserActionButton
-                          variant="reader"
-                          onClick={() => {
-                            setIsModalOpen(true);
-                          }}
-                        >
-                          Арендовать
-                        </UserActionButton>
-                        или
-                        <FavoriteButton bookId={book.id} />
-                      </div>
-                      <UserActionButton onClick={() => setIsComplainModalOpen(true)} variant="owner" className={styles.complain}>
-                        Пожаловаться
+                    <div className={styles.actions}>
+                      <UserActionButton
+                        variant="reader"
+                        onClick={() => {
+                          setIsModalOpen(true);
+                        }}
+                      >
+                        Арендовать
                       </UserActionButton>
-                    </>
+                      или
+                      <FavoriteButton bookId={book.id} />
+                    </div>
                   ) : (
-                    <p>Это ваша книга</p>
+                    <p className={styles.normalText}>Это ваша книга</p>
                   )}
                 </div>
               </div>
@@ -124,7 +126,7 @@ export const RentBookPage = observer(() => {
                 {book.user.ownerRating !== null && (
                   <div className={styles.rating}>
                     <span>{book.user.ownerRating.toFixed(1)}</span>
-                    <Star size={16} color="#FFD700" fill="#FFD700" />
+                    <Star size={22} color="#FFD700" fill="#FFD700" />
                   </div>
                 )}
               </div>
@@ -235,15 +237,15 @@ export const RentBookPage = observer(() => {
                   {rentBookStore.currentBookReviews.map((review) => (
                     <li key={review.id} className={styles['review-item']}>
                       <div className={styles['review-header']}>
-                        {review.rating !== null && (
-                          <div className={styles['review-rating']}>
-                            <Star size={16} color="#FFD700" fill="#FFD700" />
-                            <span>{review.rating.toFixed(1)}</span>
-                          </div>
-                        )}
                         <span className={styles['review-author']}>
                           {review.user.name} {review.user.lastname}
                         </span>
+                        {review.rating !== null && (
+                          <div className={styles['review-rating']}>
+                            <span>{review.rating.toFixed(1)}</span>
+                            <Star size={22} color="#FFD700" fill="#FFD700" />
+                          </div>
+                        )}
                       </div>
                       {review.content && (
                         <p className={styles['review-content']}>{review.content}</p>
@@ -252,13 +254,13 @@ export const RentBookPage = observer(() => {
                   ))}
                 </ul>
               ) : (
-                <p>Отзывов пока нет</p>
+                <p className={clsx(styles.normalText, styles.noReviews)}>Отзывов пока нет</p>
               )}
             </div>
           </div>
         </>
       ) : (
-        !rentBookStore.isLoading && <p>Книга не найдена</p>
+        !rentBookStore.isLoading && <p className={styles.normalText}>Книга не найдена</p>
       )}
     </div>
   );

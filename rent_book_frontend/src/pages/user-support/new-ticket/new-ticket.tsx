@@ -5,6 +5,7 @@ import { Modal } from '../../../components/modal/modal';
 
 import styles from './new-ticket.module.scss';
 import { DashboardTitle } from '../../../components/ui/dashboard-title';
+import { UserActionButton } from '../../../components/ui';
 
 export const NewTicket = observer(() => {
   const [title, setTitle] = useState('');
@@ -86,13 +87,13 @@ export const NewTicket = observer(() => {
         </div>
 
         <div className={styles.actions}>
-          <button
+          <UserActionButton
             type="submit"
-            className={styles.submitButton}
             disabled={isSubmitting || supportRequestStore.isLoading}
+            variant="reader"
           >
             {isSubmitting || supportRequestStore.isLoading ? 'Отправка...' : 'Отправить'}
-          </button>
+          </UserActionButton>
         </div>
       </form>
 

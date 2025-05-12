@@ -15,12 +15,12 @@ export const DashboardAdmin = observer(() => {
         <nav className={common['dashboard-nav']}>
           <NavLink 
             to="/admin/dashboard/complaints" 
-            className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink) : common.navLink}
+            className={({ isActive }) => isActive ? clsx(common.activeLink, common.navLink, common.accentLink) : clsx(common.navLink, common.accentLink)}
           >
             Жалобы
           </NavLink>
 
-          <div>
+          <div className={common['dashboard-nav-group']}>
             <div className={common['dashboard-nav-title']}>Обращения</div>
             <NavLink 
               to="/admin/dashboard/requests/new" 

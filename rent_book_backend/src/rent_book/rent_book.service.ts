@@ -10,6 +10,7 @@ import { UpdateBookDto } from './dto/update_book.dto';
 import { Book, Rental, RentalStatus } from '@prisma/client';
 import { CreateRentalDto } from './dto/create_rental.dto';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { ComplainBookDto } from './dto/complain_book.dto';
 
 @Injectable()
 export class RentBookService {
@@ -826,5 +827,24 @@ export class RentBookService {
     });
 
     return reviews;
+  }
+
+  async bookComplain(userId: number, bookId: number, complainDto: ComplainBookDto) {
+    const bookExists = await this.prisma.book.findUnique({
+      where: { id: bookId },
+    });
+
+    if (!bookExists) {
+      throw new NotFoundException(`Book with ID ${bookId} not found`);
+    }
+
+    return this.prisma.bookComplaint.create({
+      data: {
+        book: { connect: { id: bookId } },
+        user: { connect: { id: userId } },
+        reason: complainDto.complain,
+        message: complainDto.message,
+      },
+    });
   }
 }

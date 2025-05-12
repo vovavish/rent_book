@@ -1,3 +1,4 @@
+import { UserActionButton } from '../ui';
 import styles from './modal.module.scss';
 
 export const Modal = ({ message, onClose }: { message: string; onClose: () => void }) => {
@@ -31,9 +32,9 @@ export const Modal = ({ message, onClose }: { message: string; onClose: () => vo
           <p>{message}</p>
         </div>
         <div className={styles.modalFooter}>
-          <button onClick={onClose} className={styles.closeButton}>
+          <UserActionButton onClick={onClose} variant='reader'>
             Закрыть
-          </button>
+          </UserActionButton>
         </div>
       </div>
     </div>

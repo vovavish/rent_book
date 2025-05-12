@@ -4,6 +4,7 @@ import {
   CreateSupportRequestDto,
   UpdateSupportRequestStatusDto,
   CloseSupportRequestDto,
+  ComplainBookDto,
 } from '../types/response/supportRequestResponse';
 
 export default class ApiSupportRequestController {
@@ -58,5 +59,9 @@ export default class ApiSupportRequestController {
     return api
       .patch<SupportRequestResponse>(`/support-requests/${requestId}/close`, closeSupportRequestDto)
       .then((res) => res.data);
+  }
+
+  static async getComplains(): Promise<ComplainBookDto[]> {
+    return api.get<ComplainBookDto[]>('/support-requests/complains').then((res) => res.data);
   }
 }

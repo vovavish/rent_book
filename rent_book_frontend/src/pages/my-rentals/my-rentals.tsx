@@ -17,7 +17,7 @@ export const MyRentalsPage = observer(() => {
     }
   }, [authStore.isAuth]);
 
-  if (rentBookStore.isLoading && rentBookStore.rentals.length === 0) {
+  if (rentBookStore.isLoading) {
     <Preloader />;
   }
   console.log('rentBookStore.rentals', rentBookStore.rentals);
@@ -25,16 +25,13 @@ export const MyRentalsPage = observer(() => {
     <div className={styles.container}>
       <DashboardTitle>Мои аренды</DashboardTitle>
 
-      {rentBookStore.isLoading && <p className={styles.loading}>Загрузка...</p>}
       {rentBookStore.error && <p className={styles.error}>{rentBookStore.error}</p>}
 
-      {rentBookStore.rentals.length > 0 && (
-        <MyRentalsBookList
-          rental={rentBookStore.rentals}
-          currentImageIndices={currentImageIndexes}
-          setCurrentImageIndices={setCurrentImageIndexes}
-        />
-      )}
+      <MyRentalsBookList
+        rental={rentBookStore.rentals}
+        currentImageIndices={currentImageIndexes}
+        setCurrentImageIndices={setCurrentImageIndexes}
+      />
     </div>
   );
 });

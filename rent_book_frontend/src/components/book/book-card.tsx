@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { BookResponse } from '../../types/response/bookResponse';
+import { BookResponse, typeTranslations } from '../../types/response/bookResponse';
 import { Link } from 'react-router-dom';
 import { BookImageSlider } from './book-home-slider';
 import { FavoriteButton } from './favorite-button';
@@ -30,7 +30,7 @@ export const BookCard: FC<BookCardProps> = observer(
 
         <div className={styles['book-info']}>
           <div className={styles['book-header']}>
-            <h3>Книга</h3>
+            <h3>{typeTranslations[book.type]}</h3>
             {authStore.isAuth && <FavoriteButton bookId={book.id} />}
           </div>
           <p className={styles['book-author']}>{book.author}</p>
@@ -44,8 +44,8 @@ export const BookCard: FC<BookCardProps> = observer(
 
           {/* Красивая отрисовка рейтинга */}
           <div className={styles['book-rating']}>
-            <Star size={16} color="#FFD700" fill="#FFD700" />
             <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
+            <Star size={22} color="#FFD700" fill="#FFD700" />
           </div>
 
           <Link to={`/rent_book/${book.id}`} className={styles.rentLink}>

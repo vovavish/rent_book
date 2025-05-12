@@ -1,7 +1,7 @@
 .title {
   font-size: 24px;
   margin-bottom: 30px;
-  color: #333;
+  color: rgb(51, 51, 51);
 }
 
 .form {
@@ -18,8 +18,9 @@
 .label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 500;
-  color: #444;
+  font-weight: bold;
+  color: rgb(51, 51, 51);
+  font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
 }
 
 .input {
@@ -29,9 +30,12 @@
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.3s;
+  color: rgb(51, 51, 51);
+  font-family: inherit;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 
   &:focus {
-    border-color: #0066cc;
+    border-color: rgb(173, 193, 120);
     outline: none;
   }
 }
@@ -45,9 +49,12 @@
   resize: vertical;
   min-height: 150px;
   transition: border-color 0.3s;
+  color: rgb(51, 51, 51);
+  font-family: inherit;
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 
   &:focus {
-    border-color: #0066cc;
+    border-color: rgb(173, 193, 120);
     outline: none;
   }
 }

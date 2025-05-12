@@ -19,6 +19,7 @@ import { GetCurrentUserId, Public } from 'src/common/decorators';
 import { AtGuard } from 'src/common/guards';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { RateOwnerAndBookDto } from './dto/rate_owner_and_book_dto';
+import { ComplainBookDto } from './dto/complain_book.dto';
 
 @Controller('rent_books')
 export class RentBookController {
@@ -294,5 +295,15 @@ export class RentBookController {
   @Get('reviews/:bookId')
   async getBookReviews(@Param('bookId', ParseIntPipe) bookId: number) {
     return this.bookService.getBookReviews(bookId);
+  }
+
+  @UseGuards(AtGuard)
+  @Post('book_complain/:bookId')
+  async bookComplain(
+    @GetCurrentUserId() userId: number,
+    @Param('bookId', ParseIntPipe) bookId: number,
+    @Body() complainDto: ComplainBookDto,
+  ) {
+    return this.bookService.bookComplain(userId, bookId, complainDto);
   }
 }

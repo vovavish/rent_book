@@ -20,7 +20,7 @@ export const Dashboard = observer(() => {
             Профиль
           </NavLink>
 
-          <div>
+          <div className={common['dashboard-nav-group']}>
             <div className={common['dashboard-nav-title']}>Я - владелец</div>
             <NavLink 
               to="/dashboard/books" 
@@ -35,7 +35,7 @@ export const Dashboard = observer(() => {
               Сдаю
             </NavLink>
           </div>
-          <div>
+          <div className={common['dashboard-nav-group']}>
             <div className={common['dashboard-nav-title']}>Я - читатель</div>
             <NavLink 
               to="/dashboard/my_rents" 

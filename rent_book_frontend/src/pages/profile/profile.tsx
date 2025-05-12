@@ -109,7 +109,16 @@ export const MyProfilePage = observer(() => {
         </ModalWithChildren>
       )}
       <header className={styles.header}>
-        <DashboardTitle>Мой профиль</DashboardTitle>
+        <div className={styles.headerTitle}>
+          <DashboardTitle>Мой профиль</DashboardTitle>
+          <UserActionButton
+            onClick={() => setIsModalOpen(true)}
+            variant="rejected"
+            className={styles.changePassword}
+          >
+            Изменить пароль
+          </UserActionButton>
+        </div>
         <div className={styles.avatarContainer}>
           <div className={styles.avatar}>
             {name[0]}
@@ -231,7 +240,7 @@ export const MyProfilePage = observer(() => {
           {editMode !== 'phones' && (
             <UserActionButton
               onClick={() => setEditMode('phones')}
-              variant="standard"
+              variant="reader"
               className={styles.editWrapper}
             >
               {phoneNumbers.length > 0 ? (
@@ -245,10 +254,12 @@ export const MyProfilePage = observer(() => {
                 </div>
               ) : (
                 <div className={styles.editButton}>
-                  <svg className={styles.addIcon} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                  <svg className={styles.editIcon} viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                    />
                   </svg>
-                  Добавить номер
                 </div>
               )}
             </UserActionButton>
@@ -369,10 +380,12 @@ export const MyProfilePage = observer(() => {
                 </div>
               ) : (
                 <div className={styles.editButton}>
-                  <svg className={styles.addIcon} viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                  <svg className={styles.editIcon} viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"
+                    />
                   </svg>
-                  Добавить карту
                 </div>
               )}
             </UserActionButton>
@@ -473,9 +486,6 @@ export const MyProfilePage = observer(() => {
         )}
       </div>
       <div className={styles.profileFooter}>
-        <UserActionButton onClick={() => setIsModalOpen(true)} variant="reader">
-          Изменить пароль
-        </UserActionButton>
         <UserActionButton onClick={() => authStore.logout()}>Выход</UserActionButton>
       </div>
     </div>

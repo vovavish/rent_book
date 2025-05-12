@@ -19,7 +19,9 @@ export const AdminRequestsClosed = observer(() => {
         isLoading={supportRequestStore.isLoading}
         error={supportRequestStore.error}
         emptyText="Закрытых обращений нет"
-        renderActions={() => null} // Нет кнопок
+        renderActions={() => null}
+        showUpdatedAt
+        updatedAtLabel="закрыто"
       />
     </div>
   );

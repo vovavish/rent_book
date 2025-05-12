@@ -139,14 +139,14 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               <div className={styles['book-price']}>{rental.price}</div>
               <p>руб</p>
             </div>
-            <p>
+            <p className={styles.standardText}>
               {dayjs(rental.rentStartDate).format('DD-MM-YYYY')} -{' '}
               {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
             </p>
-            <p>
+            <p className={styles.standardText}>
               Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
             </p>
-            {rental.status !== 'PENDING' && <p>Адрес: {rental.address}</p>}
+            {rental.status !== 'PENDING' && <p className={styles.standardText}>Адрес: {rental.address}</p>}
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (
