@@ -224,7 +224,7 @@ export const categoryTranslations: Record<Category, string> = {
   [Category.RELIGION_SPIRITUALITY]: 'Религия и духовность',
   [Category.POPULAR_SCIENCE]: 'Научно-популярная литература',
   [Category.GUIDEBOOKS]: 'Путеводители',
-  [Category.COOKBOOKS]: 'Кулинарные книги',
+  [Category.COOKBOOKS]: 'Кулинария',
   [Category.ESSAYS]: 'Эссеистика',
   [Category.HUMOR_SATIRE]: 'Юмор и сатира',
 };

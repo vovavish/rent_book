@@ -18,7 +18,6 @@
 
 .formTitle {
   font-weight: bold;
-  color: rgb(51, 51, 51);
   font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
 }
 
@@ -40,7 +39,6 @@
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 
   label {
-    color: rgb(51, 51, 51);
     display: block;
   }
   input,
@@ -51,9 +49,9 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     font-family: inherit;
-    color: rgb(51, 51, 51);
+    color: var(--text-color);
     font-size: 13px;
-    background-color: #f9fafb;
+    background-color: var(--input-bg-sm-accent-color);
   }
   
   textarea {
@@ -84,16 +82,17 @@
 .uploadButtonWrapper {
   width: 100%;
   padding: 12px 0;
-  background-color: #f0f0f0;
+  background-color: var(--input-bg-color);
   border: 2px dashed #ccc;
   text-align: center;
   font-size: 24px;
   cursor: pointer;
   transition: background 0.2s;
+  color: var(--text-color);
 }
 
 .uploadButtonWrapper:hover {
-  background-color: #e0e0e0;
+  opacity: 0.8;
 }
 
 .hiddenInput {
@@ -138,7 +137,7 @@
 
 .standardText {
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
-  color: rgb(51, 51, 51);
+  color: var(--text-color);
 }
 
 .warning {

@@ -72,8 +72,10 @@ export const AddressPicker = ({
     }
   };
 
-  const mapState = selectedLocation
-    ? { center: [selectedLocation.lon, selectedLocation.lat], zoom: 10 }
+  const hasValidCoords = selectedLocation?.lat !== undefined && selectedLocation?.lon !== undefined;
+
+  const mapState = hasValidCoords
+    ? { center: [selectedLocation.lon as number, selectedLocation.lat as number], zoom: 10 }
     : { center: [55.75, 37.57], zoom: 9 };
 
   return (

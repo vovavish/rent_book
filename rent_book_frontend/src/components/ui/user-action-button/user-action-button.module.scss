@@ -46,7 +46,7 @@
 .rejectedButton {
   background: none;
   border: none;
-  color: #555;
+  color: var(--text-color);
   text-decoration: underline;
   cursor: pointer;
   padding: 0;

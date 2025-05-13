@@ -42,17 +42,17 @@ export default class ApiRentBookController {
       .then(res => res.data);
   }
 
-  static async deleteBook(bookId: number): Promise<any> {
+  static async deleteBook(bookId: number): Promise<unknown> {
     return api.delete(`/rent_books/delete/${bookId}`)
       .then(res => res.data);
   }
 
-  static async hideUserBook(bookId: number): Promise<any> {
+  static async hideUserBook(bookId: number): Promise<BookResponse> {
     return api.post(`/rent_books/hide/${bookId}`)
       .then(res => res.data);
   }
 
-  static async openUserBook(bookId: number): Promise<any> {
+  static async openUserBook(bookId: number): Promise<BookResponse> {
     return api.post(`/rent_books/open/${bookId}`)
       .then(res => res.data);
   }

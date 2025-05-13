@@ -13,6 +13,7 @@ import { UserActionButton } from '../ui';
 
 export const Header = observer(() => {
   const { authStore } = useStore();
+
   const location = useLocation();
   const isBooksPage = location.pathname.startsWith('/dashboard');
   const isSupportPage = location.pathname.startsWith('/support');

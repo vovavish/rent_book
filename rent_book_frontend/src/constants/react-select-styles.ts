@@ -1,15 +1,18 @@
-import { SingleValue } from "react-select/animated";
-
 export const customStyles = {
   control: (provided: any) => ({
     ...provided,
     border: '1px solid #ddd',
     borderRadius: '4px',
     boxShadow: 'none',
-    backgroundColor: '#f9fafb',
+    backgroundColor: 'var(--input-bg-sm-accent-color)',
+    color: 'var(--text-color)',
     '&:hover': {
       borderColor: '#ccc',
     },
+  }),
+  placeholder: (provided: any) => ({
+    ...provided,
+    color: 'var(--text-color)', // или любая другая переменная
   }),
   option: (provided: any, state: any) => ({
     ...provided,
@@ -24,6 +27,14 @@ export const customStyles = {
   }),
   singleValue: (provided: any) => ({
     ...provided,
-    color: 'rgb(128, 128, 128)',
+    color: 'var(--text-color)',
+  }),
+  multiValue: (provided: any) => ({
+    ...provided,
+    backgroundColor: 'var(--card-bg-color-accent)',
+  }),
+  multiValueLabel: (provided: any) => ({
+    ...provided,
+    color: 'var(--text-color)',
   }),
 };

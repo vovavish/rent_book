@@ -10,12 +10,49 @@ body,
   height: 100%;
 }
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: rgb(51, 51, 51);
+
+  --dashboard-bg-color: #f5f5f5;
+  --dashboard-text-color: rgb(51, 51, 51);
+
+  --card-bg-color: #ffffff;
+  --card-bg-color-accent: #e9ecef;
+
+  --ligh-text-color: #6c757d;
+
+  --input-bg-color: #ffffff;
+  --input-bg-sm-accent-color: #f9fafb;
+
+  --text-color-dark: rgb(51, 51, 51);
+}
+
+[data-theme='dark'] {
+  --bg-color: #1e1e2f;
+  --text-color: #ffffff;
+
+  --dashboard-bg-color: #565674;
+  --dashboard-text-color: #ffffff;
+
+  --card-bg-color: #565674;
+  --card-bg-color-accent: #777794;
+
+  --ligh-text-color: #a5aaaf;
+
+  --input-bg-color: #717194;
+  --input-bg-sm-accent-color: #717194;
+}
+
 body {
   margin: 0 auto;
   padding: 0;
   max-width: 1440px;
   min-width: 375px;
   font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h1,

@@ -50,8 +50,8 @@ export const MyRentBooksPage = observer(() => {
     price: 0,
     isCashPayment: false,
     address: 'Россия, Москва',
-    lat: 55.7558,
-    lon: 37.6173,
+    lat: 37.6173,
+    lon: 55.7558,
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

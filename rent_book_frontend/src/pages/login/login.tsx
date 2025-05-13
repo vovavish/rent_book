@@ -16,7 +16,7 @@ export const LoginPage = () => {
     setError(null);
     try {
       await authStore.signIn(email, password);
-    } catch (err) {
+    } catch {
       setError('Неверная почта или пароль');
     }
   };

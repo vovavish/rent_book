@@ -23,9 +23,9 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-family: inherit;
-  color: rgb(51, 51, 51);
+  color: var(--text-color);
   font-size: 13px;
-  background-color: #f9fafb;
+  background-color: var(--input-bg-color);
 }
 
 .button {

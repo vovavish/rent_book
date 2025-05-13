@@ -12,11 +12,11 @@ export default class ApiAuthController {
       .then(res => res.data);
   }
 
-  static async logout(): Promise<any> {
+  static async logout(): Promise<unknown> {
     return api.post('/auth/logout');
   }
 
-  static async changePassword(oldPassword: string, newPassword: string): Promise<any> {
+  static async changePassword(oldPassword: string, newPassword: string): Promise<unknown> {
     return api.post('/auth/local/changepassword', { oldPassword, newPassword });
   }
 }

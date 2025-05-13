@@ -1,6 +1,6 @@
 .dashboard_title {
   font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
   font-weight: 600;
-  color: rgb(51, 51, 51);
+  color: var(--text-color);
   margin-bottom: 20px;
 }

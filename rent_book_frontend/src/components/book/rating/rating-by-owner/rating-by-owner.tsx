@@ -52,7 +52,9 @@ export const RatingByOwner: FC<RenterRatingProps> = ({ rentalId, renterRating, o
       </div>
       <UserActionButton
         onClick={() => {
-          rating && onRateRenter(rentalId, rating);
+          if (rating) {
+            onRateRenter(rentalId, rating);
+          }
         }}
         disabled={!rating}
         variant="owner"

@@ -26,7 +26,7 @@ export const FavoriteButton: FC<FavoriteButtonProps> = observer(({ bookId }) => 
       className={`${styles['favorite-button']} ${isFav ? styles['favorite'] : ''}`}
       onClick={toggleFavorite}
     >
-      <Heart size={22} fill={isFav ? '#e74c3c' : 'none'} stroke={isFav ? '#e74c3c' : '#7f8c8d'} />
+      <Heart size={22} fill={isFav ? '#e74c3c' : 'none'} stroke="currentColor" />
     </button>
   );
 });

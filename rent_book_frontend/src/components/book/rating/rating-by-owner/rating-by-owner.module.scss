@@ -1,5 +1,5 @@
 .standardText {
-  color: rgb(51, 51, 51);
+  color: var(--text-color);
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 }
 

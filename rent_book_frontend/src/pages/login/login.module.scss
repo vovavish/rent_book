@@ -1,7 +1,6 @@
 .container {
   display: flex;
   height: 100vh;
-  color: rgb(51, 51, 51);
   width: 100%;
 }
 
@@ -23,7 +22,7 @@
   max-width: 28rem;
   padding: 2.5rem;
   border-radius: 1rem;
-  background: #ffffff;
+  background: var(--card-bg-color);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   animation: fadeIn 0.5s ease-in-out;
 
@@ -75,15 +74,18 @@
     padding: 0.75rem 1rem;
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;
-    background-color: #f9fafb;
+    background-color: var(--input-bg-color);
+    color: var(--text-color);
     font-size: 1rem;
     transition: all 0.3s ease;
 
     &:focus {
-      border-color: #3b82f6;
-      background-color: #fff;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+      border-color: rgb(173, 193, 120);
       outline: none;
+    }
+
+    &::placeholder {
+      color: var(--text-color);
     }
   }
 }

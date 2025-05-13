@@ -36,13 +36,11 @@ export const BookCard: FC<BookCardProps> = observer(
           <p className={styles['book-author']}>{book.author}</p>
           <p className={styles['book-title']}>"{book.title}"</p>
 
-          {/* Красивая цена */}
           <div className={styles['book-price-wrapper']}>
             <div className={styles['book-price']}>{book.price}</div>
             <p>руб/день</p>
           </div>
 
-          {/* Красивая отрисовка рейтинга */}
           <div className={styles['book-rating']}>
             <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
             <Star size={22} color="#FFD700" fill="#FFD700" />

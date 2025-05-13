@@ -1,8 +1,12 @@
-import { Mail } from 'lucide-react';
+import { Mail, SunMoon } from 'lucide-react';
 import styles from './footer.module.scss';
 import { Link } from 'react-router-dom';
+import { UserActionButton } from '../ui';
+import { useTheme } from '../../context/ThemeContext';
 
 export const Footer = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerContainer}>
@@ -12,6 +16,9 @@ export const Footer = () => {
             Доступ к тысячам книг, журналов и прочей литературе без необходимости покупки! Читайте
             любимые произведения и открывайте новые.
           </p>
+          <UserActionButton onClick={() => toggleTheme()} variant="rejected" className={styles.themeButton}>
+            <SunMoon size={22} />
+          </UserActionButton>
         </div>
 
         <div className={styles.footerSection}>

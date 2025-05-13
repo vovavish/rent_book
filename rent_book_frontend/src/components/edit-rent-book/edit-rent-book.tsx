@@ -36,7 +36,6 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
   const [newBook, setNewBook] = useState<Partial<BookResponse | null>>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [selectedCard, setSelectedCard] = useState<string>(newBook?.cardNumber || '');
 
   useEffect(() => {
     const fetchBook = async () => {

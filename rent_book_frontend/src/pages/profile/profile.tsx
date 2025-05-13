@@ -7,7 +7,6 @@ import { UserActionButton } from '../../components/ui';
 import { Star } from 'lucide-react';
 import { ModalWithChildren } from '../../components/modal/modal-with-children';
 import { ChangePassword } from '../../components/change-password/change-password';
-import { Link } from 'react-router-dom';
 
 export const MyProfilePage = observer(() => {
   const { userProfileStore, authStore } = useStore();
@@ -115,7 +114,7 @@ export const MyProfilePage = observer(() => {
           <UserActionButton
             onClick={() => setIsModalOpen(true)}
             variant="rejected"
-            className={styles.changePassword}
+            className={styles.headerButton}
           >
             Изменить пароль
           </UserActionButton>
@@ -127,14 +126,14 @@ export const MyProfilePage = observer(() => {
               {lastname[0]}
             </div>
             <div className={styles.ratings}>
-              <div>Мой рейтинг:</div>
+              <div className={styles.myRatingTitle}>Мой рейтинг:</div>
               <div className={styles.myRating}>
                 <div className={styles.ratingItem}>Владелец: {ownerRating.toFixed(1)}</div>
-                <Star size={16} color="#FFD700" />
+                <Star size={16} color="#FFD700" fill="#FFD700" />
               </div>
               <div className={styles.myRating}>
                 <div className={styles.ratingItem}>Читатель: {readerRating.toFixed(1)}</div>
-                <Star size={16} color="#FFD700" />
+                <Star size={16} color="#FFD700" fill="#FFD700" />
               </div>
             </div>
           </div>

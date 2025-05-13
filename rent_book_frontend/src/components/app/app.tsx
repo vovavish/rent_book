@@ -1,23 +1,17 @@
+import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
-import { HomePage } from '../../pages/home'; // Главная страница со списком книг
-import { RentBookPage } from '../../pages/rent-book'; // Страница конкретной книги
-import { Dashboard } from '../../pages/dashboard'; // Личный кабинет
-import { MyRentBooksPage } from '../../pages/my-rent-books'; // Мои книги (владельца)
-import { MyRentalsPage } from '../../pages/my-rentals'; // Мои аренды (арендатора)
+import { HomePage } from '../../pages/home';
+import { RentBookPage } from '../../pages/rent-book';
+import { Dashboard } from '../../pages/dashboard';
+import { MyRentBooksPage } from '../../pages/my-rent-books';
+import { MyRentalsPage } from '../../pages/my-rentals';
 import { MyRentalsInOutPage } from '../../pages/rent-in-out';
-import { LoginPage } from '../../pages/login'; // Страница входа
-import { RegisterPage } from '../../pages/register'; // Страница регистрации
-import { AboutPage } from '../../pages/about'; // О нас
+import { LoginPage } from '../../pages/login';
+import { RegisterPage } from '../../pages/register';
+import { AboutPage } from '../../pages/about';
 import { MyProfilePage } from '../../pages/profile';
-import { NotFoundPage } from '../../pages/not-found'; // 404
-
-import { Footer } from '../footer';
-import { Header } from '../header';
-import { useStore } from '../../hooks/useStore';
-import { useEffect } from 'react';
-import { ProtectedRoute } from '../protected-route';
-
+import { NotFoundPage } from '../../pages/not-found';
 import { MyFavoritesPage } from '../../pages/my-favorites';
 import { DashboardSupport } from '../../pages/dashboard-support/dashboard-support';
 import { ArchiveTickets, MyTickets, NewTicket } from '../../pages/user-support';
@@ -28,12 +22,18 @@ import { Privacy } from '../../pages/privacy/privacy';
 import { Terms } from '../../pages/terms/terms';
 import { PublicOffer } from '../../pages/public-offer/public-offer';
 
+import { Footer } from '../footer';
+import { Header } from '../header';
+import { useStore } from '../../hooks/useStore';
+import { ProtectedRoute } from '../protected-route';
+
 import styles from './app.module.scss';
 
 export const App = () => {
   const { authStore, userProfileStore } = useStore();
   const location = useLocation();
-  const isAuthPage = location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
+  const isAuthPage =
+    location.pathname.startsWith('/login') || location.pathname.startsWith('/register');
 
   useEffect(() => {
     const initUser = async () => {

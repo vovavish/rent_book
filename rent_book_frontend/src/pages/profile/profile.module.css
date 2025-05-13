@@ -1,5 +1,3 @@
-/* profile.module.css */
-
 :root {
   --primary-color: #4a6bff;
   --primary-hover: #3a5bef;
@@ -11,16 +9,11 @@
   --dark-color: #343a40;
   --border-color: #e0e0e0;
   --shadow-color: rgba(0, 0, 0, 0.1);
-  --text-color: rgb(51, 51, 51);
   --text-light: #6c757d;
   --bg-color: #f5f7fa;
   --card-bg: #ffffff;
   --radius: 12px;
   --transition: all 0.3s ease;
-}
-
-.container {
-  color: var(--text-color);
 }
 
 .header {
@@ -39,13 +32,14 @@
   flex-wrap: wrap;
 }
 
-.changePassword {
+.headerButton {
   align-self: start;
   margin-top: 8px;
   font-weight: bold;
+  color: var(--text-color);
 }
 
-.changePassword:hover {
+.headerButton:hover {
   color: rgb(173, 193, 120);
 }
 
@@ -53,7 +47,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background-color: var(--primary-color);
+  background-color: #bebdbd;
   color: white;
   display: flex;
   align-items: center;
@@ -79,9 +73,12 @@
   line-height: 1.2;
 }
 
-/* Card styles */
+.myRatingTitle {
+  font-weight: bold;
+}
+
 .card {
-  background-color: var(--card-bg);
+  background-color: var(--card-bg-color);
   border-radius: var(--radius);
   box-shadow: 0 4px 12px var(--shadow-color);
   margin-bottom: 1.5rem;
@@ -109,7 +106,6 @@
   font-size: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
   font-weight: 600;
   margin: 0;
-  color: var(--dark-color);
   padding-right: 20px;
 }
 
@@ -142,10 +138,9 @@
 }
 
 .editIcon {
-  color: rgb(51, 51, 51);
+  color: var(--text-color);
 }
 
-/* Icon styles */
 .editIcon, .addIcon, .removeIcon, .itemIcon, .emptyIcon {
   width: 20px;
   height: 20px;
@@ -156,7 +151,6 @@
   height: 20px;
 }
 
-/* Form styles */
 .editForm {
   padding: 1.5rem;
 }
@@ -176,7 +170,9 @@
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
+  background-color: var(--input-bg-color);
   border-radius: var(--radius);
+  color: var(--text-color);
   font-size: 1rem;
   transition: var(--transition);
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
@@ -197,7 +193,6 @@
   border-top: 1px solid var(--border-color);
 }
 
-/* Info display styles */
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -212,7 +207,7 @@
 
 .infoLabel {
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
-  color: var(--text-light);
+  color: var(--ligh-text-color);
   margin-bottom: 0.25rem;
 }
 
@@ -225,7 +220,6 @@
   padding: 1.5rem;
 }
 
-/* List styles */
 .listContainer {
   padding: 0 1.5rem;
 }
@@ -241,30 +235,30 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background-color: var(--light-color);
+  background-color: var(--card-bg-color-accent);
   border-radius: var(--radius);
+  color: var(--text-color);
   margin-bottom: 0.75rem;
   transition: var(--transition);
 }
 
 .listItem:hover {
-  background-color: #e9ecef;
+  opacity: 0.8;
 }
 
 .itemText {
   flex-grow: 1;
   margin: 0 1rem;
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+  color: var(--text-color);
 }
 
-/* Add item form */
 .addItemForm {
   display: flex;
   margin-top: 1rem;
   gap: 10px;
 }
 
-/* Empty state */
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -282,7 +276,6 @@
   color: var(--secondary-color);
 }
 
-/* Loading state */
 .loadingContainer {
   display: flex;
   flex-direction: column;
@@ -306,7 +299,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* Error states */
 .errorContainer {
   display: flex;
   flex-direction: column;
@@ -356,10 +348,12 @@
   justify-content: space-between;
   gap: 4px;
   white-space: nowrap;
+  align-items: center;
 }
 
 .editButton {
   display: flex;
+  color: var(--text-color);
 }
 
 .editWrapper {
@@ -369,7 +363,7 @@
   cursor: pointer;
   background-color: transparent;
   &:hover {
-    background-color: #e9ecef;
+    background-color: var(--card-bg-color-accent);
   }
 }
 
@@ -377,9 +371,4 @@
   margin-top: 10px;
   display: flex;
   justify-content: center;
-}
-
-.adminLink {
-  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
-  color: rgb(51, 51, 51);
 }

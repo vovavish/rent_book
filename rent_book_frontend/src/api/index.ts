@@ -37,7 +37,7 @@ api.interceptors.response.use(
         localStorage.setItem('refreshToken', response.data.refresh_token);
         return api.request(originalRequest);
       } catch (e) {
-        console.log('not authorized');
+        console.log(e);
       }
     }
     throw error;

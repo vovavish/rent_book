@@ -119,6 +119,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                 size={22}
                 className={styles.bookContract}
                 onClick={() => setIsModalOpen(true)}
+                stroke='currentColor'
               />
             )}
             <BookImageSliderRental

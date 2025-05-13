@@ -1,5 +1,5 @@
 import ApiRentBookController from '../../api/RentBookController';
-import { BookResponse, BookReview, UpdateBookDto } from '../../types/response/bookResponse';
+import { BookResponse, BookReview } from '../../types/response/bookResponse';
 import { RentalResponse, CreateRentalDto, RentalStatus } from '../../types/response/rentalResonse';
 import { makeAutoObservable, runInAction } from 'mobx';
 

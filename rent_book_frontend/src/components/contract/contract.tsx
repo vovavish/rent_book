@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './contact.module.scss';
 import {
   ageRatingTranslations,
@@ -45,6 +46,9 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
   return (
     <div className={styles.stepContent}>
       <div className={styles.bookFormGrid}>
+        <p className={styles.attentionText}>
+          Полный текст договора публичной оферты можно посмотреть <Link to="/public_offer">здесь.</Link>
+        </p>
         <h3 className={styles.formTitle}>Арендодатель (владелец издания):</h3>
         <div className={styles.formGroupPerson}>
           <div>
@@ -177,7 +181,8 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
           <div className={styles.rentConditions}>
             <div className={styles.formGroup}>
               <label className={styles.accentLabel}>
-                C {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} до {dayjs(rental.rentEndDate).format('DD.MM.YYYY')} (
+                C {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} до{' '}
+                {dayjs(rental.rentEndDate).format('DD.MM.YYYY')} (
                 {dayjs(rental.rentEndDate).diff(dayjs(rental.rentStartDate), 'days')} дней)
               </label>
             </div>
@@ -185,7 +190,9 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
               <label className={styles.accentLabel}></label>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.accentLabel}>Цена аренды: {rental.pricePerDay} руб/день</label>
+              <label className={styles.accentLabel}>
+                Цена аренды: {rental.pricePerDay} руб/день
+              </label>
             </div>
             <div className={styles.formGroup}>
               <label className={styles.accentLabel}>Депозит: {rental.deposit} руб</label>

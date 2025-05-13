@@ -1,5 +1,6 @@
 .book-item {
-  background: white;
+  background: var(--card-bg-color);
+  color: var(--text-color);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -128,6 +129,7 @@
   fill: #fff;
   background-color: #fff;
   padding: 4px;
+  color: var(--text-color-dark);
   border-radius: 4px;
   width: 32px;
   height: 32px;
