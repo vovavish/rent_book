@@ -12,6 +12,8 @@ import { ConfirmModal } from '../../modal/modal-confirm';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
 import { File } from 'lucide-react';
+import { StartRentBookPage } from '../../start-rent-book';
+import { EmptyText } from '../../empty-text/empty-text';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -31,6 +33,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
       message: string;
     } | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isRenweRentModalOpen, setIsRenweRentModalOpen] = useState(false);
 
     const handleRentalAction = async (rentalId: number, action: string) => {
       try {
@@ -109,6 +112,17 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
             }}
           >
             <Contract rentalId={rental.id} />
+          </ModalWithChildren>
+        )}
+
+        {isRenweRentModalOpen && (
+          <ModalWithChildren
+            headerText="Продление аренды"
+            onCancel={() => {
+              setIsRenweRentModalOpen(false);
+            }}
+          >
+            <EmptyText>Эта функция временно недоступна.</EmptyText>
           </ModalWithChildren>
         )}
 
@@ -224,7 +238,14 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                   Подтвердить возврат
                 </UserActionButton>
               )}
-
+              {rental.status === 'ACTIVE' && (
+                <UserActionButton
+                  onClick={() => setIsRenweRentModalOpen(true)}
+                  variant="reader"
+                >
+                  Продлить аренду
+                </UserActionButton>
+              )}
               {(rental.status === 'CANCELED' || rental.status === 'COMPLETED') &&
                 rental.renterId === authStore.user?.id && (
                   <div className={styles.ratingSection}>

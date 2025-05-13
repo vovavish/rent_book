@@ -39,16 +39,24 @@ export const Header = observer(() => {
             </a>
           </li>
           <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
+            <Link to="/about" className={styles.navLink}>
               О проекте
-            </a>
-          </li>
-          <li className={styles.navListItem}>
-            <Link to="/dashboard/favorites" className={styles.navLink}>
-              <Heart className={styles.icon} />
-              <p>Избранное</p>
             </Link>
           </li>
+          {!authStore.user?.roles.includes('ADMIN') ? (
+            <li className={styles.navListItem}>
+              <Link to="/dashboard/favorites" className={styles.navLink}>
+                <Heart className={styles.icon} />
+                <p>Избранное</p>
+              </Link>
+            </li>
+          ) : (
+            <li className={styles.navListItem}>
+              <Link to="/how_it_works" className={styles.navLink}>
+                Как это работает?
+              </Link>
+            </li>
+          )}
           <li className={styles.navListItem}>
             <Link to="/dashboard/profile" className={styles.navLink}>
               <User className={styles.icon} />
@@ -65,7 +73,7 @@ export const Header = observer(() => {
       </nav>
       <div className={styles.titleContainer}>
         <hr className={styles.hr} />
-        <Link to ="/" className={styles.logo}>
+        <Link to="/" className={styles.logo}>
           <h1 className={styles.title}>ЛитЭра</h1>
         </Link>
         {!isBooksPage && !isSupportPage && !isAdminPage && (
@@ -82,7 +90,7 @@ export const Header = observer(() => {
               </div>
               <div className={styles.searchDelimiter}>или</div>
               <div className={styles.rentOutBookButton}>
-                <UserActionButton variant="owner"  className={styles.rentOutBookButton}>
+                <UserActionButton variant="owner" className={styles.rentOutBookButton}>
                   <Link to="/dashboard/books" className={styles.rentOutBook}>
                     Разместить объявление
                   </Link>
@@ -95,16 +103,24 @@ export const Header = observer(() => {
       </div>
       <nav className={styles.navAdditional}>
         <ul className={styles.navAdditionalList}>
-          <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
-              Как это работает?
-            </a>
-          </li>
-          <li className={styles.navListItem}>
-            <Link to="/support/new" className={styles.navLink}>
-              Поддержка
+          {!authStore.user?.roles.includes('ADMIN') && (
+            <li className={styles.navListItem}>
+              <Link to="/how_it_works" className={styles.navLink}>
+                Как это работает?
+              </Link>
+            </li>
+          )}
+          {!authStore.user?.roles.includes('ADMIN') ? (
+            <li className={styles.navListItem}>
+              <Link to="/support/new" className={styles.navLink}>
+                Поддержка
+              </Link>
+            </li>
+          ) : (
+            <Link to="/admin/dashboard" className={styles.navLink}>
+              Панель техподдержки
             </Link>
-          </li>
+          )}
         </ul>
       </nav>
     </header>

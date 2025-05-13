@@ -353,7 +353,7 @@
 
 .editButton {
   display: flex;
-  color: var(--text-color);
+  color: white;
 }
 
 .editWrapper {

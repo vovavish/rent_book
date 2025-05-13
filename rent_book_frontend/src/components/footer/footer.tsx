@@ -3,9 +3,12 @@ import styles from './footer.module.scss';
 import { Link } from 'react-router-dom';
 import { UserActionButton } from '../ui';
 import { useTheme } from '../../context/ThemeContext';
+import { useStore } from '../../hooks/useStore';
+import { observer } from 'mobx-react-lite';
 
-export const Footer = () => {
+export const Footer = observer(() => {
   const { theme, toggleTheme } = useTheme();
+  const { authStore } = useStore();
 
   return (
     <footer className={styles.footer}>
@@ -40,25 +43,34 @@ export const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="#" className={styles.footerLink}>
+              <Link to="/how_it_works" className={styles.footerLink}>
                 Как это работает?
               </Link>
             </li>
             <li>
-              <Link to="#" className={styles.footerLink}>
+              <Link to="/about" className={styles.footerLink}>
                 О проекте
               </Link>
             </li>
-            <li>
+            {!authStore.user?.roles.includes('ADMIN') ? <li>
               <Link to="/support/new" className={styles.footerLink}>
                 Поддержка
               </Link>
-            </li>
+            </li> :  <li>
+              <Link to="/admin/dashboard" className={styles.footerLink}>
+                Панель техподдержки
+              </Link>
+            </li>}
           </ul>
         </div>
-        <div className={styles.footerSection}>
+        {!authStore.user?.roles.includes('ADMIN') && <div className={styles.footerSection}>
           <h3 className={styles.footerTitle}>Личный кабинет</h3>
           <ul className={styles.footerList}>
+            <li>
+              <Link to="/dashboard/profile" className={styles.footerLink}>
+                Профиль
+              </Link>
+            </li>
             <li>
               <Link to="/dashboard/books" className={styles.footerLink}>
                 Мои объявления
@@ -80,7 +92,7 @@ export const Footer = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </div>}
         <div className={styles.footerSection}>
           <h3 className={styles.footerTitle}>Контакты</h3>
           <ul className={styles.footerList}>
@@ -115,4 +127,4 @@ export const Footer = () => {
       </div>
     </footer>
   );
-};
+});

@@ -125,7 +125,7 @@ export const MyProfilePage = observer(() => {
               {name[0]}
               {lastname[0]}
             </div>
-            <div className={styles.ratings}>
+            {!authStore.user?.roles.includes('ADMIN') && <div className={styles.ratings}>
               <div className={styles.myRatingTitle}>Мой рейтинг:</div>
               <div className={styles.myRating}>
                 <div className={styles.ratingItem}>Владелец: {ownerRating.toFixed(1)}</div>
@@ -135,7 +135,7 @@ export const MyProfilePage = observer(() => {
                 <div className={styles.ratingItem}>Читатель: {readerRating.toFixed(1)}</div>
                 <Star size={16} color="#FFD700" fill="#FFD700" />
               </div>
-            </div>
+            </div>}
           </div>
         </div>
       </header>
@@ -362,7 +362,7 @@ export const MyProfilePage = observer(() => {
         )}
       </div>
 
-      <div className={styles.card}>
+      {!authStore.user?.roles.includes('ADMIN') && <div className={styles.card}>
         <div className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Банковские карты</h2>
           {editMode !== 'cards' && (
@@ -486,7 +486,7 @@ export const MyProfilePage = observer(() => {
             )}
           </div>
         )}
-      </div>
+      </div>}
       <div className={styles.profileFooter}>
         <UserActionButton onClick={() => authStore.logout()}>Выход</UserActionButton>
       </div>

@@ -28,8 +28,11 @@ import { useStore } from '../../hooks/useStore';
 import { ProtectedRoute } from '../protected-route';
 
 import styles from './app.module.scss';
+import { Preloader } from '../ui';
+import { observer } from 'mobx-react-lite';
+import { HowItWorks } from '../../pages/how-it-works/how-it-works';
 
-export const App = () => {
+export const App = observer(() => {
   const { authStore, userProfileStore } = useStore();
   const location = useLocation();
   const isAuthPage =
@@ -43,6 +46,10 @@ export const App = () => {
 
     initUser();
   }, []);
+  
+  if (!authStore.isAuthChecked) {
+    return <Preloader />;
+  }
 
   return (
     <div className={styles.layout}>
@@ -57,6 +64,7 @@ export const App = () => {
           <Route path="/privacy" element={<Privacy />}></Route>
           <Route path="/terms" element={<Terms />}></Route>
           <Route path="/public_offer" element={<PublicOffer />}></Route>
+          <Route path="/how_it_works" element={<HowItWorks />}></Route>
 
           <Route path="/" element={<ProtectedRoute requiredRole="USER" />}>
             <Route path="/dashboard" element={<Dashboard />}>
@@ -104,4 +112,4 @@ export const App = () => {
       {!isAuthPage && <Footer />}
     </div>
   );
-};
+});
