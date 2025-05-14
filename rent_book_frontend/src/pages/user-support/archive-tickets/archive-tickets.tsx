@@ -10,7 +10,7 @@ export const ArchiveTickets = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchClosedRequests();
-  }, []);
+  }, [supportRequestStore]);
 
   return (
     <div>

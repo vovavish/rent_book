@@ -10,7 +10,7 @@ export const MyTickets = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchActiveRequests();
-  }, []);
+  }, [supportRequestStore]);
 
   return (
     <div>

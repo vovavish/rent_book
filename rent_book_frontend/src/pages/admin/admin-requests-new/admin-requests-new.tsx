@@ -15,7 +15,7 @@ export const AdminRequestsNew = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchAllRegisteredRequests();
-  }, []);
+  }, [supportRequestStore]);
 
   const handleSetInProgress = async (requestId: number) => {
     setIsModalOpen(true);

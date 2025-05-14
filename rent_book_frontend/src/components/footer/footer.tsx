@@ -7,7 +7,7 @@ import { useStore } from '../../hooks/useStore';
 import { observer } from 'mobx-react-lite';
 
 export const Footer = observer(() => {
-  const { theme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   const { authStore } = useStore();
 
   return (

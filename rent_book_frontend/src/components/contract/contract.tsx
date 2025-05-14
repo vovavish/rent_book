@@ -33,7 +33,7 @@ export const Contract = observer(({ rentalId }: ContractProps) => {
     };
 
     fetchBook();
-  }, [rentalId]);
+  }, [rentalId, rentBookStore]);
 
   const rental = rentBookStore.currentRental!;
 

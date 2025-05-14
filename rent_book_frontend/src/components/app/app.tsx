@@ -45,7 +45,7 @@ export const App = observer(() => {
     };
 
     initUser();
-  }, []);
+  }, [authStore, userProfileStore]);
   
   if (!authStore.isAuthChecked) {
     return <Preloader />;

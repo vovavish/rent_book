@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../../hooks/useStore";
 import { Preloader } from "../../components/ui/preloader";
-import { BookList } from "../../components/book/book-list";
 import { observer } from "mobx-react-lite";
 
 import styles from './my-favorites.module.scss';
@@ -14,7 +13,7 @@ export const MyFavoritesPage = observer(() => {
 
   useEffect(() => {
     rentBookStore.fetchUserFavorites();
-  }, []);
+  }, [rentBookStore]);
 
   if (rentBookStore.isFavoritesLoading) {
     return <Preloader />;

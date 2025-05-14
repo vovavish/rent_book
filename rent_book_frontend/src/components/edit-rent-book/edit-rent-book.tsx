@@ -11,6 +11,7 @@ import {
 } from '../../types/response/bookResponse';
 import {
   ageRatingOptions,
+  CategoryOption,
   categoryOptions,
   conditionOptions,
   formatOptions,
@@ -18,7 +19,7 @@ import {
   periodicityOptions,
   typeOptions,
 } from '../../constants/translations';
-import Select from 'react-select';
+import Select, { MultiValue } from 'react-select';
 import { customStyles } from '../../constants/react-select-styles';
 import clsx from 'clsx';
 import { useStore } from '../../hooks/useStore';
@@ -49,7 +50,7 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
     };
 
     fetchBook();
-  }, []);
+  }, [bookId, rentBookStore, userProfileStore]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) setSelectedFiles(Array.from(e.target.files));
@@ -89,7 +90,10 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
     try {
       const formData = new FormData();
       selectedFiles.forEach((file) => formData.append('coverImages', file));
-      const { id, userId, user, ...newBookWithoutIdAndUser } = newBook!;
+
+      // eslint-disable-next-line no-unused-vars
+      const { id: _id, userId: _userId, user: _user, ...newBookWithoutIdAndUser } = newBook!;
+      
       formData.append(
         'data',
         JSON.stringify({
@@ -341,8 +345,8 @@ export const EditRentBook = ({ bookId, onSaveData }: EditRentBookProps) => {
               isMulti
               className={styles.select}
               options={categoryOptions}
-              onChange={(e: any) =>
-                setNewBook({ ...newBook, category: e.map((item: any) => item.value) })
+              onChange={(e: MultiValue<CategoryOption>) =>
+                setNewBook({ ...newBook, category: e.map((item) => item.value) })
               }
               value={categoryOptions.filter((option) => newBook.category?.includes(option.value))}
               placeholder="Выберите жанры..."

@@ -9,7 +9,7 @@ export const AdminRequestsClosed = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchAllClosedRequests();
-  }, []);
+  }, [supportRequestStore]);
 
   return (
     <div>

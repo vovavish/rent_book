@@ -265,7 +265,7 @@ export interface CreateBookDto {
   edition?: number;
 }
 
-export interface UpdateBookDto extends Partial<CreateBookDto> {}
+export type UpdateBookDto = Partial<CreateBookDto>;
 
 export interface BookResponse {
   id: number;

@@ -33,7 +33,7 @@ export const NewTicket = observer(() => {
         content,
       });
       setIsModalOpen(true); // Открываем модальное окно после успешной отправки
-    } catch (err) {
+    } catch {
       setError('Не удалось создать обращение. Пожалуйста, попробуйте позже.');
     } finally {
       setIsSubmitting(false);

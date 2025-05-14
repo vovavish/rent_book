@@ -45,6 +45,7 @@ export const AddressPicker = ({
     }
   };
 
+  // @ts-ignore no-explicit-any
   const handleMapClick = async (e: any) => {
     const coords = e.get('coords');
     if (!coords || coords.length !== 2) {

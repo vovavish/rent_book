@@ -416,7 +416,7 @@ export class RentBookStore {
     }, 'Failed to rate owner and book');
   }
 
-  private async handleRequest(requestFn: () => Promise<any>, errorMessage: string) {
+  private async handleRequest(requestFn: () => Promise<unknown>, errorMessage: string) {
     try {
       this._isLoading = true;
       this._error = null;
@@ -434,7 +434,7 @@ export class RentBookStore {
     }
   }
 
-  private async handleFavoritesRequest(requestFn: () => Promise<any>, errorMessage: string) {
+  private async handleFavoritesRequest(requestFn: () => Promise<unknown>, errorMessage: string) {
     try {
       this._isFavoritesLoading = true;
       this._error = null;

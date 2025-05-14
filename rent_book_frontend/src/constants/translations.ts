@@ -48,7 +48,12 @@ export const formatOptions = [
   })),
 ];
 
-export const categoryOptions = Object.values(Category).map((cat) => ({
+export type CategoryOption = {
+  value: Category;
+  label: string;
+};
+
+export const categoryOptions: CategoryOption[] = Object.values(Category).map((cat) => ({
   value: cat,
   label: categoryTranslations[cat],
 }));

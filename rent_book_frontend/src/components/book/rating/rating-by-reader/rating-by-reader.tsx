@@ -111,7 +111,9 @@ export const RatingByReader: FC<RatingByReaderProps> = ({
       </div>
       <UserActionButton
         onClick={() => {
-          ownerRating && bookRating && onSubmit(ownerRating, bookRating, reviewContent)}
+          if (ownerRating && bookRating) {
+            onSubmit(ownerRating, bookRating, reviewContent)}
+          }
         }
         disabled={!ownerRating || !bookRating}
         variant='reader'

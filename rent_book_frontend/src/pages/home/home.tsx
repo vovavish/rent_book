@@ -15,7 +15,7 @@ export const HomePage = observer(() => {
     if (authStore.isAuth) {
       rentBookStore.fetchUserFavorites();
     }
-  }, []);
+  }, [authStore.isAuth, rentBookStore]);
 
   if (rentBookStore.isLoading || rentBookStore.isFavoritesLoading) {
     return <Preloader />;

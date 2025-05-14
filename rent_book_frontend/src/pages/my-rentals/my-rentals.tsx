@@ -15,7 +15,7 @@ export const MyRentalsPage = observer(() => {
     if (authStore.isAuth) {
       rentBookStore.fetchUserRentals();
     }
-  }, [authStore.isAuth]);
+  }, [authStore.isAuth, rentBookStore]);
 
   if (rentBookStore.isLoading) {
     <Preloader />;

@@ -1,4 +1,5 @@
 export const customStyles = {
+  // @ts-ignore no-explicit-any
   control: (provided: any) => ({
     ...provided,
     border: '1px solid #ddd',
@@ -10,10 +11,12 @@ export const customStyles = {
       borderColor: '#ccc',
     },
   }),
+  // @ts-ignore no-explicit-any
   placeholder: (provided: any) => ({
     ...provided,
     color: 'var(--text-color)', // или любая другая переменная
   }),
+  // @ts-ignore no-explicit-any
   option: (provided: any, state: any) => ({
     ...provided,
     backgroundColor: state.isSelected
@@ -25,14 +28,17 @@ export const customStyles = {
     cursor: 'pointer',
     fontSize: 'clamp(0.75rem, 0.706rem + 0.1878vw, 0.875rem)',
   }),
+  // @ts-ignore no-explicit-any
   singleValue: (provided: any) => ({
     ...provided,
     color: 'var(--text-color)',
   }),
+  // @ts-ignore no-explicit-any
   multiValue: (provided: any) => ({
     ...provided,
     backgroundColor: 'var(--card-bg-color-accent)',
   }),
+  // @ts-ignore no-explicit-any
   multiValueLabel: (provided: any) => ({
     ...provided,
     color: 'var(--text-color)',

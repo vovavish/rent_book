@@ -476,8 +476,8 @@ export const MyRentBooksPage = observer(() => {
                     isMulti
                     className={styles.select}
                     options={categoryOptions}
-                    onChange={(e: any) =>
-                      setNewBook({ ...newBook, category: e.map((item: any) => item.value) })
+                    onChange={(e) =>
+                      setNewBook({ ...newBook, category: e.map((item) => item.value) })
                     }
                     value={categoryOptions.filter((option) =>
                       newBook.category?.includes(option.value),

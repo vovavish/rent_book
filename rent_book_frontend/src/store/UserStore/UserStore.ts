@@ -84,7 +84,7 @@ export class UserProfileStore {
     this._error = null;
   }
 
-  private async handleRequest(requestFn: () => Promise<any>, errorMessage: string) {
+  private async handleRequest(requestFn: () => Promise<unknown>, errorMessage: string) {
     try {
       this._isLoading = true;
       this._error = null;

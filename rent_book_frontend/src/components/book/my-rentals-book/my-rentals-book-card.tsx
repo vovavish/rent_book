@@ -12,7 +12,6 @@ import { ConfirmModal } from '../../modal/modal-confirm';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
 import { File } from 'lucide-react';
-import { StartRentBookPage } from '../../start-rent-book';
 import { EmptyText } from '../../empty-text/empty-text';
 
 interface RentInOutBookCardProps {

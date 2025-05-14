@@ -1,4 +1,4 @@
-import { SyntheticEvent, useState } from 'react';
+import { useState } from 'react';
 import { useStore } from '../../hooks/useStore';
 import { Link } from 'react-router-dom';
 import bookAndFlowers from '/cvetocnyi-press-s-knigami-vid-sverhu.jpg';
@@ -23,7 +23,7 @@ export const RegisterPage = () => {
     setError(null);
     try {
       await authStore.signUp(email, name, lastname, surname, password);
-    } catch (err) {
+    } catch {
       setError('Пользователь с данной почтой уже зарегистрирован');
     } finally {
       setIsModalOpen(false);

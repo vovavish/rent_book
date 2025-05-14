@@ -33,7 +33,7 @@ export const RentBookPage = observer(() => {
       rentBookStore.fetchToRentalBookById(Number(bookId));
       rentBookStore.fetchBookReviewsById(Number(bookId));
     }
-  }, [bookId]);
+  }, [bookId, rentBookStore]);
 
   const book = rentBookStore.currentBook;
 

@@ -15,7 +15,7 @@ export const AdminBookComplains = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchComplains();
-  }, []);
+  }, [supportRequestStore]);
 
   if (supportRequestStore.isLoading) {
     return <Preloader />;

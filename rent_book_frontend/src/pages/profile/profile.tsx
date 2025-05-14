@@ -25,7 +25,7 @@ export const MyProfilePage = observer(() => {
 
   useEffect(() => {
     userProfileStore.fetchProfile();
-  }, []);
+  }, [userProfileStore]);
 
   useEffect(() => {
     if (userProfileStore.profile) {

@@ -16,7 +16,7 @@ export const AdminRequestsInProgress = observer(() => {
 
   useEffect(() => {
     supportRequestStore.fetchAllInProgressRequests();
-  }, []);
+  }, [supportRequestStore]);
 
   const handleCloseRequest = async (requestId: number) => {
     if (!responseText[requestId]?.trim()) {
