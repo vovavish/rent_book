@@ -80,6 +80,7 @@ export interface RentalResponse {
     lastname: string;
     surname?: string;
     email: string;
+    readerRating: number;
   };
   owner: {
     id: number;
@@ -87,6 +88,7 @@ export interface RentalResponse {
     lastname: string;
     surname?: string;
     email: string;
+    ownerRating: number;
   };
 }
 

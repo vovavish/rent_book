@@ -29,27 +29,32 @@ export const BookCard: FC<BookCardProps> = observer(
         />
 
         <div className={styles['book-info']}>
-          <div className={styles['book-header']}>
-            <h3>{typeTranslations[book.type]}</h3>
-            {authStore.isAuth && <FavoriteButton bookId={book.id} />}
-          </div>
-          <p className={styles['book-author']}>{book.author}</p>
-          <p className={styles['book-title']}>"{book.title}"</p>
+          <div>
+            <div className={styles['book-header']}>
+              <h3>{typeTranslations[book.type]}</h3>
+              {authStore.isAuth && <FavoriteButton bookId={book.id} />}
+            </div>
+            <p className={styles['book-author']}>{book.author}</p>
+            <p className={styles['book-title']}>"{book.title}"</p>
 
-          <div className={styles['book-price-wrapper']}>
-            <div className={styles['book-price']}>{book.price}</div>
-            <p>руб/день</p>
-          </div>
+            <div className={styles['book-price-wrapper']}>
+              <div className={styles['book-price']}>{book.price}</div>
+              <p>руб/день</p>
+            </div>
 
-          <div className={styles['book-rating']}>
-            <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
-            <Star size={22} color="#FFD700" fill="#FFD700" />
+            <div className={styles['book-rating']}>
+              <span>{book.bookRating ? book.bookRating.toFixed(1) : 'Нет рейтинга'}</span>
+              <Star size={22} color="#FFD700" fill="#FFD700" />
+            </div>
           </div>
-
-          <Link to={`/rent_book/${book.id}`} className={styles.rentLink}>
-            {' '}
-            <UserActionButton variant="reader" className={styles.rentLinkButton}>Подробнее</UserActionButton>
-          </Link>
+          <div>
+            <Link to={`/rent_book/${book.id}`} className={styles.rentLink}>
+              {' '}
+              <UserActionButton variant="reader" className={styles.rentLinkButton}>
+                Подробнее
+              </UserActionButton>
+            </Link>
+          </div>
         </div>
       </div>
     );

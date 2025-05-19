@@ -325,8 +325,11 @@ export class RentBookService {
       data: { availabilityStatus: 'ACTIVE' },
     });
 
-    return this.prisma.rental.delete({
+    return this.prisma.rental.update({
       where: { id: rentalId },
+      data: {
+        status: RentalStatus.REJECTED,
+      }
     });
   }
 
@@ -472,6 +475,7 @@ export class RentBookService {
             name: true,
             lastname: true,
             surname: true,
+            ownerRating: true,
           },
         },
       },
@@ -500,6 +504,7 @@ export class RentBookService {
             name: true,
             lastname: true,
             surname: true,
+            readerRating: true,
           },
         },
         owner: {

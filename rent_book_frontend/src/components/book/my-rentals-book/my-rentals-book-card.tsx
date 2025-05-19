@@ -11,7 +11,7 @@ import { UserActionButton } from '../../ui';
 import { ConfirmModal } from '../../modal/modal-confirm';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
-import { File } from 'lucide-react';
+import { File, Star } from 'lucide-react';
 import { EmptyText } from '../../empty-text/empty-text';
 
 interface RentInOutBookCardProps {
@@ -144,6 +144,8 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
           </div>
 
           <div className={styles['book-info']}>
+            <div>
+
             <div className={styles['book-header']}>
               <h3>Книга</h3>
               <RentalBookStatus rentalStatus={rental.status} />
@@ -158,22 +160,33 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
               {dayjs(rental.rentStartDate).format('DD-MM-YYYY')} -{' '}
               {dayjs(rental.rentEndDate).format('DD-MM-YYYY')}
             </p>
-            <p className={styles.standardText}>
-              Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
-            </p>
+            <div>
+              <p className={styles.standardText}>
+                Владелец: {rental.ownerLastname + ' ' + rental.ownerName + ' ' + rental?.ownerSurname}
+              </p>
+              <div className={styles.renterRating}>
+                <p>Рейтинг владельца:</p>
+                <div className={styles.rating}>
+                  <span>{rental?.owner.ownerRating.toFixed(1)}</span>
+                  <Star size={22} color="#FFD700" fill="#FFD700" />
+                </div>
+              </div>
+            </div>
             {rental.status !== 'PENDING' && (
               <p className={styles.standardText}>Адрес: {rental.address}</p>
             )}
+            </div>
+            <div>
 
             <div className={styles.rentalActions}>
               {rental.status === 'PENDING' && rental.renterId === authStore.user?.id && (
                 <UserActionButton
-                  onClick={() =>
-                    openConfirmModal(rental.id, 'rejectFromPending', 'Отклонить заявку?')
-                  }
-                  variant="rejected"
+                onClick={() =>
+                  openConfirmModal(rental.id, 'rejectFromPending', 'Отменить заявку?')
+                }
+                variant="rejected"
                 >
-                  Отклонить заявку
+                  Отменить заявку
                 </UserActionButton>
               )}
               {rental.status === 'APPROVED_BY_OWNER' && rental.renterId === authStore.user?.id && (
@@ -182,13 +195,13 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                     <UserActionButton
                       onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
                       variant="reader"
-                    >
+                      >
                       Подтвердить оплату
                     </UserActionButton>
                   ) : (
                     <UserActionButton
-                      onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
-                      variant="reader"
+                    onClick={() => openConfirmModal(rental.id, 'confirm', 'Подтвердить оплату?')}
+                    variant="reader"
                     >
                       Оплатить
                     </UserActionButton>
@@ -198,12 +211,12 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                       openConfirmModal(
                         rental.id,
                         'rejectFromApprovedByOwner',
-                        'Отклонить бронирование?',
+                        'Отменить бронирование?',
                       )
                     }
                     variant="rejected"
-                  >
-                    Отклонить
+                    >
+                    Отменить
                   </UserActionButton>
                 </>
               )}
@@ -214,7 +227,7 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                       openConfirmModal(rental.id, 'confirmReceive', 'Подтвердить получение книги?')
                     }
                     variant="reader"
-                  >
+                    >
                     Подтвердить получение
                   </UserActionButton>
                   <UserActionButton
@@ -222,25 +235,25 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                       openConfirmModal(rental.id, 'cancelReceive', 'Отменить получение книги?')
                     }
                     variant="rejected"
-                  >
+                    >
                     Отменить
                   </UserActionButton>
                 </>
               )}
               {rental.status === 'RETURN_APPROVAL' && rental.ownerId === authStore.user?.id && (
                 <UserActionButton
-                  onClick={() =>
-                    openConfirmModal(rental.id, 'confirmReturn', 'Подтвердить возврат книги?')
-                  }
-                  variant="reader"
+                onClick={() =>
+                  openConfirmModal(rental.id, 'confirmReturn', 'Подтвердить возврат книги?')
+                }
+                variant="reader"
                 >
                   Подтвердить возврат
                 </UserActionButton>
               )}
               {rental.status === 'ACTIVE' && (
                 <UserActionButton
-                  onClick={() => setIsRenweRentModalOpen(true)}
-                  variant="reader"
+                onClick={() => setIsRenweRentModalOpen(true)}
+                variant="reader"
                 >
                   Продлить аренду
                 </UserActionButton>
@@ -255,9 +268,10 @@ export const MyRentalsBookCard: FC<RentInOutBookCardProps> = observer(
                       onSubmit={(ownerRating, bookRating, reviewContent) =>
                         handleRateOwnerAndBook(rental.id, ownerRating, bookRating, reviewContent)
                       }
-                    />
+                      />
                   </div>
                 )}
+                </div>
             </div>
           </div>
         </div>

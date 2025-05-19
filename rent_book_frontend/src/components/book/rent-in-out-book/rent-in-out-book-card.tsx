@@ -13,7 +13,7 @@ import styles from '../book-card.module.scss';
 import clsx from 'clsx';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
-import { File } from 'lucide-react';
+import { File, Star } from 'lucide-react';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -123,129 +123,141 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
           </div>
 
           <div className={styles['book-info']}>
-            <div className={styles['book-header']}>
-              <h3>Книга</h3>
-              <RentalBookStatus rentalStatus={rental.status} />
-            </div>
-            <p className={styles['book-author']}>{rental.bookAuthor}</p>
-            <p className={styles['book-title']}>"{rental.bookTitle}"</p>
-            <div className={styles['book-price-wrapper']}>
-              <div className={styles['book-price']}>{rental.price}</div>
-              <p>руб</p>
-            </div>
-            <p>
-              {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} -{' '}
-              {dayjs(rental.rentEndDate).format('DD.MM.YYYY')}
-            </p>
-            <p className={styles.standardText}>
-              Читатель -{' '}
-              {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
-            </p>
-            {rental.message && (
-              <p className={clsx(styles.standardText, styles.croppedText)}>
-                Сообщение - {rental.message}
+            <div>
+              <div className={styles['book-header']}>
+                <h3>Книга</h3>
+                <RentalBookStatus rentalStatus={rental.status} />
+              </div>
+              <p className={styles['book-author']}>{rental.bookAuthor}</p>
+              <p className={styles['book-title']}>"{rental.bookTitle}"</p>
+              <div className={styles['book-price-wrapper']}>
+                <div className={styles['book-price']}>{rental.price}</div>
+                <p>руб</p>
+              </div>
+              <p>
+                {dayjs(rental.rentStartDate).format('DD.MM.YYYY')} -{' '}
+                {dayjs(rental.rentEndDate).format('DD.MM.YYYY')}
               </p>
-            )}
-
-            <div className={styles.rentalActions}>
-              {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (
-                <div className={styles.cardActions}>
-                  <UserActionButton
-                    onClick={() =>
-                      openConfirmModal(
-                        rental.id,
-                        'approve',
-                        'Вы уверены, что хотите принять заявку?',
-                      )
-                    }
-                  >
-                    Принять
-                  </UserActionButton>
-                  <UserActionButton
-                    variant="rejected"
-                    onClick={() =>
-                      openConfirmModal(
-                        rental.id,
-                        'reject',
-                        'Вы уверены, что хотите отклонить заявку?',
-                      )
-                    }
-                  >
-                    Отклонить
-                  </UserActionButton>
+              <div className={styles.standardText}>
+                <p>
+                  Читатель -{' '}
+                  {rental.renterLastname + ' ' + rental.renterName + ' ' + rental?.renterSurname}
+                </p>
+                <div className={styles.renterRating}>
+                  <p>Рейтинг читателя:</p>
+                  <div className={styles.rating}>
+                    <span>{rental?.renter.readerRating.toFixed(1)}</span>
+                    <Star size={22} color="#FFD700" fill="#FFD700" />
+                  </div>
                 </div>
+              </div>
+              {rental.message && (
+                <p className={clsx(styles.standardText, styles.croppedText)}>
+                  Сообщение - {rental.message}
+                </p>
               )}
-              {rental.status === 'APPROVED_BY_OWNER' && rental.ownerId === authStore.user?.id && (
-                <UserActionButton
-                  variant="rejected"
-                  onClick={() =>
-                    openConfirmModal(rental.id, 'rejectFromApproval', 'Отклонить бронирование?')
-                  }
-                >
-                  Отклонить бронирование
-                </UserActionButton>
-              )}
-              {rental.status === 'CONFIRMED' && rental.ownerId === authStore.user?.id && (
-                <div className={styles.cardActions}>
-                  {rental.bookIsCashPayment ? (
+            </div>
+            <div>
+              <div className={styles.rentalActions}>
+                {rental.status === 'PENDING' && rental.ownerId === authStore.user?.id && (
+                  <div className={styles.cardActions}>
                     <UserActionButton
                       onClick={() =>
                         openConfirmModal(
                           rental.id,
-                          'giveToReader',
-                          'Подтвердить получение оплаты и передачу книги читателю?',
+                          'approve',
+                          'Вы уверены, что хотите принять заявку?',
                         )
                       }
                     >
-                      Подтвердить получение оплаты и передачу
+                      Принять
                     </UserActionButton>
-                  ) : (
                     <UserActionButton
+                      variant="rejected"
                       onClick={() =>
                         openConfirmModal(
                           rental.id,
-                          'giveToReader',
-                          'Подтвердить передачу книги читателю?',
+                          'reject',
+                          'Вы уверены, что хотите отклонить заявку?',
                         )
                       }
                     >
-                      Подтвердить передачу
+                      Отклонить
                     </UserActionButton>
-                  )}
-                  <UserActionButton
-                    variant="rejected"
-                    onClick={() =>
-                      openConfirmModal(
-                        rental.id,
-                        'cancelGivingBook',
-                        'Вы уверены, что хотите отклонить передачу книги?',
-                      )
-                    }
-                  >
-                    Отклонить
-                  </UserActionButton>
-                </div>
-              )}
-              {rental.status === 'RETURN_APPROVAL' && rental.ownerId === authStore.user?.id && (
-                <UserActionButton
-                  onClick={() =>
-                    openConfirmModal(rental.id, 'confirmReturn', 'Подтвердить возврат книги?')
-                  }
-                >
-                  Подтвердить возврат
-                </UserActionButton>
-              )}
-
-              {(rental.status === 'CANCELED' || rental.status === 'COMPLETED') &&
-                rental.ownerId === authStore.user?.id && (
-                  <div className={styles.ratingSection}>
-                    <RatingByOwner
-                      rentalId={rental.id}
-                      renterRating={rental.renterRating}
-                      onRateRenter={handleRateRenter}
-                    />
                   </div>
                 )}
+                {rental.status === 'APPROVED_BY_OWNER' && rental.ownerId === authStore.user?.id && (
+                  <UserActionButton
+                    variant="rejected"
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'rejectFromApproval', 'Отклонить бронирование?')
+                    }
+                  >
+                    Отклонить бронирование
+                  </UserActionButton>
+                )}
+                {rental.status === 'CONFIRMED' && rental.ownerId === authStore.user?.id && (
+                  <div className={styles.cardActions}>
+                    {rental.bookIsCashPayment ? (
+                      <UserActionButton
+                        onClick={() =>
+                          openConfirmModal(
+                            rental.id,
+                            'giveToReader',
+                            'Подтвердить получение оплаты и передачу книги читателю?',
+                          )
+                        }
+                      >
+                        Подтвердить получение оплаты и передачу
+                      </UserActionButton>
+                    ) : (
+                      <UserActionButton
+                        onClick={() =>
+                          openConfirmModal(
+                            rental.id,
+                            'giveToReader',
+                            'Подтвердить передачу книги читателю?',
+                          )
+                        }
+                      >
+                        Подтвердить передачу
+                      </UserActionButton>
+                    )}
+                    <UserActionButton
+                      variant="rejected"
+                      onClick={() =>
+                        openConfirmModal(
+                          rental.id,
+                          'cancelGivingBook',
+                          'Вы уверены, что хотите отклонить передачу книги?',
+                        )
+                      }
+                    >
+                      Отклонить
+                    </UserActionButton>
+                  </div>
+                )}
+                {rental.status === 'RETURN_APPROVAL' && rental.ownerId === authStore.user?.id && (
+                  <UserActionButton
+                    onClick={() =>
+                      openConfirmModal(rental.id, 'confirmReturn', 'Подтвердить возврат книги?')
+                    }
+                  >
+                    Подтвердить возврат
+                  </UserActionButton>
+                )}
+
+                {(rental.status === 'CANCELED' || rental.status === 'COMPLETED') &&
+                  rental.ownerId === authStore.user?.id && (
+                    <div className={styles.ratingSection}>
+                      <RatingByOwner
+                        rentalId={rental.id}
+                        renterRating={rental.renterRating}
+                        onRateRenter={handleRateRenter}
+                      />
+                    </div>
+                  )}
+              </div>
             </div>
           </div>
         </div>

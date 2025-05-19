@@ -247,7 +247,9 @@ export class RentBookStore {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.reject_rental_from_approved_by_owner(rentalId);
       runInAction(() => {
-        this._rentals = this.rentals.filter((rental) => rental.id !== rentalId);
+        this._rentals = this._rentals.map((rental) =>
+          rental.id === rentalId ? { ...rental, status: 'REJECTED' as RentalStatus } : rental,
+        );
       });
       return response;
     }, 'Failed to reject rental');
