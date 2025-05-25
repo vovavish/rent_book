@@ -41,6 +41,12 @@
   font-family: inherit;
   border-radius: 4px;
   padding: 10px;
+  color: var(--text-color);
+  background-color: var(--input-bg-sm-accent-color);
+
+  &::placeholder {
+    color: var(--text-color);
+  }
 }
 
 .buttonWrapper {

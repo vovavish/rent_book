@@ -33,12 +33,12 @@ export const Footer = observer(() => {
               </Link>
             </li>
             <li>
-              <Link to="#" className={styles.footerLink}>
+              <Link to="/news" className={styles.footerLink}>
                 Новинки
               </Link>
             </li>
             <li>
-              <Link to="#" className={styles.footerLink}>
+              <Link to="/recommended" className={styles.footerLink}>
                 Рекомендации
               </Link>
             </li>

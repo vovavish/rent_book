@@ -401,7 +401,7 @@ export const MyProfilePage = observer(() => {
                 <ul className={styles.itemsList}>
                   {cardNumbers.map((card) => (
                     <li key={card} className={styles.listItem}>
-                      <span className={styles.itemText}>{card}</span>
+                      <span className={styles.itemText}>**** **** **** {card.slice(-4)}</span>
                       <UserActionButton
                         onClick={() => removeCard(card)}
                         aria-label="Удалить карту"
@@ -469,7 +469,7 @@ export const MyProfilePage = observer(() => {
                         d="M20,4H4A2,2 0 0,0 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6A2,2 0 0,0 20,4M20,11H4V8H20V11Z"
                       />
                     </svg>
-                    <span className={styles.itemText}>{card}</span>
+                    <span className={styles.itemText}>**** **** **** {card.slice(-4)}</span>
                   </li>
                 ))}
               </ul>

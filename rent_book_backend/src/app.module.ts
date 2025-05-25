@@ -8,6 +8,7 @@ import { RentBookModule } from './rent_book/rent_book.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './user/user.module';
 import { SupportRequestModule } from './support-request/support-request.module';
+import { BookSearchModule } from './book_search/book_search.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { SupportRequestModule } from './support-request/support-request.module';
     UserModule,
     ScheduleModule.forRoot(),
     SupportRequestModule,
+    BookSearchModule,
   ],
   controllers: [],
   providers: [

@@ -503,7 +503,7 @@ export const MyRentBooksPage = observer(() => {
                     required
                   />
                 </div>
-                {newBook.type === Type.BOOK && (
+                {newBook.type !== Type.NOTEBOOK && (
                   <div className={styles.formGroup}>
                     <label>ISBN:</label>
                     <input

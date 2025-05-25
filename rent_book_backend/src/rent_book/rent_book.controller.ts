@@ -52,6 +52,18 @@ export class RentBookController {
     return this.bookService.getBooks();
   }
 
+  @Public()
+  @Get('books/news')
+  async getBooksNews() {
+    return this.bookService.getBooksNews();
+  }
+
+  @Public()
+  @Get('books/recommended')
+  async getBooksRecommended() {
+    return this.bookService.getBooksRecommended();
+  }
+
   // Получение книги по ID
   @UseGuards(AtGuard)
   @Get('get/:bookId')

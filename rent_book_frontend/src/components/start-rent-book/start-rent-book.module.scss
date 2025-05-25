@@ -2,7 +2,6 @@
   max-width: 1440px;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: rgb(51, 51, 51);
   font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
 
   h1 {
@@ -78,7 +77,10 @@
       border: 1px solid #ddd;
       border-radius: 4px;
       transition: border-color 0.3s ease;
-      background-color: #f9fafb;
+      font-family: inherit;
+      color: var(--text-color);
+      font-size: 13px;
+      background-color: var(--input-bg-sm-accent-color);
 
       &:focus {
         outline: none;
@@ -87,7 +89,8 @@
     }
   }
 
-  .ownerMessage, .unavailableMessage {
+  .ownerMessage,
+  .unavailableMessage {
     text-align: center;
     padding: 1rem;
     background-color: #f8f9fa;
@@ -103,18 +106,17 @@
 }
 
 .price-calculation {
-  background-color: #f8f9fa;
   border-radius: 8px;
-  
+
   h3 {
     margin-top: 0;
     margin-bottom: 1rem;
   }
-  
+
   p {
     margin: 0.5rem 0;
   }
-  
+
   .totalPrice {
     font-weight: bold;
     margin-top: 1rem;
@@ -134,9 +136,9 @@
   textarea {
     width: 100%;
     font-family: inherit;
-    color: rgb(51, 51, 51);
     font-size: 13px;
-    background-color: #f9fafb;
+    background-color: var(--input-bg-sm-accent-color);
+    color: var(--text-color);
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 8px;

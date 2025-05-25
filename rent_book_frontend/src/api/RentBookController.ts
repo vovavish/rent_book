@@ -19,6 +19,16 @@ export default class ApiRentBookController {
       .then(res => res.data);
   }
 
+  static async getBooksNews(): Promise<BookResponse[]> {
+    return api.get<BookResponse[]>('/rent_books/books/news')
+      .then(res => res.data);
+  }
+
+  static async getBooksRecommended(): Promise<BookResponse[]> {
+    return api.get<BookResponse[]>('/rent_books/books/recommended')
+      .then(res => res.data);
+  }
+
   static async getBookById(bookId: number): Promise<BookResponse> {
     return api.get<BookResponse>(`/rent_books/get/${bookId}`)
       .then(res => res.data);

@@ -31,6 +31,9 @@ import styles from './app.module.scss';
 import { Preloader } from '../ui';
 import { observer } from 'mobx-react-lite';
 import { HowItWorks } from '../../pages/how-it-works/how-it-works';
+import { BookSearch } from '../../pages/book-search';
+import { BooksNews } from '../../pages/books-news';
+import { BooksRecommended } from '../../pages/books-recommended';
 
 export const App = observer(() => {
   const { authStore, userProfileStore } = useStore();
@@ -58,6 +61,9 @@ export const App = observer(() => {
       <main className={styles.mainContent}>
         <Routes>
           <Route index element={<HomePage />} />
+          <Route path="/search" element={<BookSearch />} />
+          <Route path="/news" element={<BooksNews />} />
+          <Route path="/recommended" element={<BooksRecommended />} />
 
           <Route path="/rent_book/:bookId" element={<RentBookPage />} />
 

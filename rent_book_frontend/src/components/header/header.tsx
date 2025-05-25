@@ -8,8 +8,9 @@ import styles from './header.module.scss';
 
 import { useStore } from '../../hooks/useStore';
 import { observer } from 'mobx-react-lite';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { UserActionButton } from '../ui';
+import { useState } from 'react';
 
 export const Header = observer(() => {
   const { authStore } = useStore();
@@ -18,6 +19,17 @@ export const Header = observer(() => {
   const isBooksPage = location.pathname.startsWith('/dashboard');
   const isSupportPage = location.pathname.startsWith('/support');
   const isAdminPage = location.pathname.startsWith('/admin');
+
+  const [searchValue, setSearchValue] = useState<string>('');
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchValue.trim() === '') {
+      return;
+    }
+    
+    navigate(`/search?query=${searchValue}`);
+  };
 
   return (
     <header className={styles.header}>
@@ -29,14 +41,14 @@ export const Header = observer(() => {
             </Link>
           </li>
           <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
+            <Link to="/news" className={styles.navLink}>
               Новинки
-            </a>
+            </Link>
           </li>
           <li className={styles.navListItem}>
-            <a href="/" className={styles.navLink}>
+            <Link to="/recommended" className={styles.navLink}>
               Рекомендации
-            </a>
+            </Link>
           </li>
           <li className={styles.navListItem}>
             <Link to="/about" className={styles.navLink}>
@@ -79,14 +91,14 @@ export const Header = observer(() => {
         {!isBooksPage && !isSupportPage && !isAdminPage && (
           <div className={styles.searchContainer}>
             <UserActionButton variant="reader">
-              <a href="/" className={styles.searchLinkJanres}>
+              <Link to="/search" className={styles.searchLinkJanres}>
                 <AllJanresIcon className={styles.searchLinkJanresImage} /> <div>Все жанры</div>
-              </a>
+              </Link>
             </UserActionButton>
             <div className={styles.search}>
               <div className={styles.searchInputContainer}>
-                <input type="text" placeholder="Найти издание..." className={styles.searchInput} />
-                <Search />
+                <input type="text" placeholder="Найти издание..." className={styles.searchInput} value={searchValue} onChange={(e) => setSearchValue(e.target.value)}/>
+                <Search onClick={handleSearch} className={styles.searchIcon}/>
               </div>
               <div className={styles.searchDelimiter}>или</div>
               <div className={styles.rentOutBookButton}>

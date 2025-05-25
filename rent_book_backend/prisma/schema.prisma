@@ -246,6 +246,7 @@ model Book {
   bookRating Float    @default(0)
   // Автоматические поля Prisma
   reviews    Review[] @relation // Добавляем связь с отзывами
+  createdAt     DateTime     @default(now())
   updatedAt  DateTime @updatedAt // Дата последнего обновления
 }
 

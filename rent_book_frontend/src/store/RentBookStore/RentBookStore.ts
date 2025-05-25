@@ -1,5 +1,7 @@
+import ApiBookSearchController from '../../api/ApiBookSearchController';
 import ApiRentBookController from '../../api/RentBookController';
 import { BookResponse, BookReview } from '../../types/response/bookResponse';
+import { BookSearchDto } from '../../types/response/bookSearch';
 import { RentalResponse, CreateRentalDto, RentalStatus } from '../../types/response/rentalResonse';
 import { makeAutoObservable, runInAction } from 'mobx';
 
@@ -82,6 +84,33 @@ export class RentBookStore {
   async fetchBooks() {
     await this.handleRequest(async () => {
       const response = await ApiRentBookController.getBooks();
+      runInAction(() => {
+        this._books = response;
+      });
+    }, 'Failed to fetch books');
+  }
+
+  async fetchBooksNews() {
+    await this.handleRequest(async () => {
+      const response = await ApiRentBookController.getBooksNews();
+      runInAction(() => {
+        this._books = response;
+      });
+    }, 'Failed to fetch books');
+  }
+  
+  async fetchBooksRecommended() {
+    await this.handleRequest(async () => {
+      const response = await ApiRentBookController.getBooksRecommended();
+      runInAction(() => {
+        this._books = response;
+      });
+    }, 'Failed to fetch books');
+  }
+  
+  async searchBooks(params: BookSearchDto) {
+    await this.handleRequest(async () => {
+      const response = await ApiBookSearchController.searchBooks(params);
       runInAction(() => {
         this._books = response;
       });
@@ -349,7 +378,10 @@ export class RentBookStore {
 
   async fetchUserFavorites() {
     await this.handleFavoritesRequest(async () => {
-      this._favoriteBooks = await ApiRentBookController.getUserFavorites();
+      const response = await ApiRentBookController.getUserFavorites();
+      runInAction(() => {
+        this._favoriteBooks = response;
+      })
     }, 'Failed to fetch favorite books');
   }
 

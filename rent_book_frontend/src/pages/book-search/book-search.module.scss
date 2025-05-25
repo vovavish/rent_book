@@ -1,0 +1,89 @@
+$primary-color: #6f42c1;
+
+.container {
+  width: 100%;
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+}
+
+.searchContainer {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 15px;
+
+  @media screen and (max-width: 768px) {
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+  }
+}
+
+.searchForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 300px;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.formGroup {
+  font-size: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+
+  label {
+    color: var(--text-color);
+    display: block;
+  }
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    color: var(--text-color);
+    font-size: 13px;
+    background-color: var(--input-bg-sm-accent-color);
+  }
+
+  select {
+    option::selection {
+      background-color: $primary-color;
+      color: white;
+    }
+  }
+  
+  textarea {
+    min-height: 100px;
+  }
+}
+
+.bookListWrapper {
+  width: 100%;
+}
+
+.cashPaymentOption {
+  display: flex;
+  align-items: center;
+
+  input[type="checkbox"] {
+    accent-color: rgb(174, 125, 172);
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+}
+
+.select {
+  width: 100%;
+  font-size: 13px;
+}

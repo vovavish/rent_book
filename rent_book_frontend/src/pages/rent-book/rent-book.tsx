@@ -33,6 +33,10 @@ export const RentBookPage = observer(() => {
       rentBookStore.fetchToRentalBookById(Number(bookId));
       rentBookStore.fetchBookReviewsById(Number(bookId));
     }
+
+    if (authStore.user) {
+      rentBookStore.fetchUserFavorites();
+    }
   }, [bookId, rentBookStore]);
 
   const book = rentBookStore.currentBook;
@@ -111,8 +115,8 @@ export const RentBookPage = observer(() => {
                       >
                         Арендовать
                       </UserActionButton>
-                      или
-                      <FavoriteButton bookId={book.id} />
+                      {authStore.isAuth && book.user.id !== authStore.user?.id && 'или'}
+                      {authStore.isAuth && book.user.id !== authStore.user?.id && <FavoriteButton bookId={book.id} />}
                     </div>
                   ) : (
                     <p className={styles.normalText}>Это ваша книга</p>
@@ -198,12 +202,12 @@ export const RentBookPage = observer(() => {
                 <div className={styles.categoryName}>Состояние:</div>
                 <div className={styles.normalText}>{conditionTranslations[book.condition!]}</div>
               </div>
-              <div className={styles.aboutBookInfo}>
+              {book.category.length > 0 && <div className={styles.aboutBookInfo}>
                 <div className={styles.categoryName}>Жанры:</div>
                 <div className={styles.normalText}>
                   {book.category.map((c) => categoryTranslations[c]).join(', ')}
                 </div>
-              </div>
+              </div>}
               {(book.periodicity || book.materialConstruction || book.format) && (
                 <h3 className={styles.aboutBookTitle}>Прочее:</h3>
               )}
@@ -226,6 +230,48 @@ export const RentBookPage = observer(() => {
                 <div className={styles.aboutBookMainInfo}>
                   <div className={clsx(styles.aboutBookMainInfoItem)}>
                     Формат: {formatTranslations[book.format]}
+                  </div>
+                </div>
+              )}
+              {book.weight && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    Вес (г): {book.weight}
+                  </div>
+                </div>
+              )}
+              {book.language && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    Язык: {book.language}
+                  </div>
+                </div>
+              )}
+              {book.isbn && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    ISBN: {book.isbn}
+                  </div>
+                </div>
+              )}
+              {book.isnm && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    ISMN: {book.isnm}
+                  </div>
+                </div>
+              )}
+              {book.indexUDK && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    Индекс УДК: {book.indexUDK}
+                  </div>
+                </div>
+              )}
+              {book.indexBBK && (
+                <div className={styles.aboutBookMainInfo}>
+                  <div className={clsx(styles.aboutBookMainInfoItem)}>
+                    Индекс ББК: {book.indexBBK}
                   </div>
                 </div>
               )}

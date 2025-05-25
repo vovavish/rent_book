@@ -329,7 +329,7 @@ export class RentBookService {
       where: { id: rentalId },
       data: {
         status: RentalStatus.REJECTED,
-      }
+      },
     });
   }
 
@@ -542,6 +542,55 @@ export class RentBookService {
       },
       orderBy: {
         updatedAt: 'desc',
+      },
+    });
+  }
+  async getBooksNews() {
+    return this.prisma.book.findMany({
+      where: {
+        availabilityStatus: 'ACTIVE',
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            surname: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+            roles: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }
+
+  async getBooksRecommended() {
+    return this.prisma.book.findMany({
+      where: {
+        availabilityStatus: 'ACTIVE',
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            surname: true,
+            email: true,
+            createdAt: true,
+            updatedAt: true,
+            roles: true,
+          },
+        },
+      },
+      orderBy: {
+        bookRating: 'desc',
       },
     });
   }
@@ -835,7 +884,11 @@ export class RentBookService {
     return reviews;
   }
 
-  async bookComplain(userId: number, bookId: number, complainDto: ComplainBookDto) {
+  async bookComplain(
+    userId: number,
+    bookId: number,
+    complainDto: ComplainBookDto,
+  ) {
     const bookExists = await this.prisma.book.findUnique({
       where: { id: bookId },
     });
