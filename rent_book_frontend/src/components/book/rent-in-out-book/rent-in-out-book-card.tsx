@@ -13,7 +13,7 @@ import styles from '../book-card.module.scss';
 import clsx from 'clsx';
 import { ModalWithChildren } from '../../modal/modal-with-children';
 import { Contract } from '../../contract/contract';
-import { File, Star } from 'lucide-react';
+import { CircleAlert, File, Star } from 'lucide-react';
 
 interface RentInOutBookCardProps {
   rental: RentalResponse;
@@ -113,6 +113,11 @@ export const RentInOutBookCard: FC<RentInOutBookCardProps> = observer(
                 className={styles.bookContract}
                 onClick={() => setIsModalOpen(true)}
               />
+            )}
+            {rental.status === RentalStatus.RETURN_APPROVAL && (
+              <button className={styles.bookDispute} title="Оспорить">
+                <CircleAlert size={22} />
+              </button>
             )}
             <BookImageSliderRental
               rental={rental}

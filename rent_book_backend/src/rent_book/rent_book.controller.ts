@@ -25,7 +25,6 @@ import { ComplainBookDto } from './dto/complain_book.dto';
 export class RentBookController {
   constructor(private readonly bookService: RentBookService) {}
 
-  // Создание объявления о сдаче книги
   @UseGuards(AtGuard)
   @Post('create')
   @UseInterceptors(FilesInterceptor('coverImages', 10))
@@ -39,7 +38,6 @@ export class RentBookController {
     return this.bookService.createBook(userId, createBookDto, files);
   }
 
-  // Получение всех книг пользователя
   @UseGuards(AtGuard)
   @Get('my_books')
   async getUserBooks(@GetCurrentUserId() userId: number) {
@@ -64,7 +62,6 @@ export class RentBookController {
     return this.bookService.getBooksRecommended();
   }
 
-  // Получение книги по ID
   @UseGuards(AtGuard)
   @Get('get/:bookId')
   async getBookById(
@@ -86,7 +83,6 @@ export class RentBookController {
     return this.bookService.getRentalById(rentalId);
   }
 
-  // Обновление объявления
   @UseGuards(AtGuard)
   @Patch('update/:bookId')
   @UseInterceptors(FilesInterceptor('coverImages', 10))
@@ -102,7 +98,6 @@ export class RentBookController {
     return this.bookService.updateBook(userId, bookId, updateBookDto, files);
   }
 
-  // Удаление объявления
   @UseGuards(AtGuard)
   @Delete('delete/:bookId')
   async deleteBook(
@@ -112,7 +107,6 @@ export class RentBookController {
     return this.bookService.deleteBook(userId, bookId);
   }
 
-  // Скрываем объявление
   @UseGuards(AtGuard)
   @Post('hide/:bookId')
   async hideUserBook(
@@ -122,7 +116,6 @@ export class RentBookController {
     return this.bookService.hideUserBook(userId, bookId);
   }
 
-  // Скрываем объявление
   @UseGuards(AtGuard)
   @Post('open/:bookId')
   async openUserBook(
@@ -132,7 +125,6 @@ export class RentBookController {
     return this.bookService.openUserBook(userId, bookId);
   }
 
-  // Запрос аренды книги
   @UseGuards(AtGuard)
   @Post('request_rental')
   async requestRental(

@@ -136,6 +136,25 @@
   height: 32px;
 }
 
+.bookDispute {
+  position: absolute;
+  cursor: pointer;
+  right: 40px;
+  top: 10px;
+  z-index: 1;
+  fill: #fff;
+  background-color: #fff;
+  padding: 4px;
+  color: var(--text-color-dark);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  
+  margin: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
 .rating {
   align-items: center;
   display: flex;
