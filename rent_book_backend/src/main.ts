@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads/',
+    prefix: 'api/uploads/',
   });
   
   const cors = {
@@ -20,7 +20,7 @@ async function bootstrap() {
   app.enableCors(cors);
 
   app.setGlobalPrefix('api');
-  
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
