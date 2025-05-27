@@ -22,6 +22,17 @@ export class AuthDto {
   password: string;
 }
 
+export class SignInDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+}
+
+
 export class changePasswordDto {
   @IsNotEmpty()
   @IsString()
