@@ -133,8 +133,15 @@ export const MyRentBooksPage = observer(() => {
       alert('Пожалуйста, заполните обязательные поля (*)');
       return;
     }
-    if (currentStep === 4 && (!newBook.minDaysToRent || !newBook.address) || newBook.price === undefined) {
+    if (
+      (currentStep === 4 && (!newBook.minDaysToRent || !newBook.address)) ||
+      newBook.price === undefined
+    ) {
       alert('Пожалуйста, заполните обязательные поля (*)');
+      return;
+    }
+    if (currentStep === 4 && (newBook.price < 0 || newBook.deposit! < 0 || newBook.minDaysToRent! < 0)) {
+      alert('Минимальный срок, цена и депозит не могут быть отрицательными!');
       return;
     }
     setCurrentStep((prev) => prev + 1);
@@ -594,7 +601,7 @@ export const MyRentBooksPage = observer(() => {
                 <input
                   type="number"
                   min="1"
-                  value={newBook.minDaysToRent || 1}
+                  value={newBook.minDaysToRent || ''}
                   onChange={(e) =>
                     setNewBook({ ...newBook, minDaysToRent: Number(e.target.value) })
                   }
@@ -618,7 +625,7 @@ export const MyRentBooksPage = observer(() => {
                 <input
                   type="number"
                   min="0"
-                  value={newBook.deposit || 0}
+                  value={newBook.deposit || ''}
                   onChange={(e) => setNewBook({ ...newBook, deposit: Number(e.target.value) })}
                 />
               </div>
@@ -720,7 +727,11 @@ export const MyRentBooksPage = observer(() => {
               </div>
             </div>
             <div>
-              <p className={clsx(styles.standardText, styles.marginTop)}>При размещении объявления вы соглашаетесь с <Link to="terms">условиями использования</Link> и <Link to="privacy">политикой конфиденциальности</Link></p>
+              <p className={clsx(styles.standardText, styles.marginTop)}>
+                При размещении объявления вы соглашаетесь с{' '}
+                <Link to="terms">условиями использования</Link> и{' '}
+                <Link to="privacy">политикой конфиденциальности</Link>
+              </p>
             </div>
           </div>
         );
