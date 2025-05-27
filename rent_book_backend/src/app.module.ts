@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UserModule } from './user/user.module';
 import { SupportRequestModule } from './support-request/support-request.module';
 import { BookSearchModule } from './book_search/book_search.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -19,6 +20,10 @@ import { BookSearchModule } from './book_search/book_search.module';
     ScheduleModule.forRoot(),
     SupportRequestModule,
     BookSearchModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
   controllers: [],
   providers: [
