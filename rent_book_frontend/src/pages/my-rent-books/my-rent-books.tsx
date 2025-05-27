@@ -248,7 +248,7 @@ export const MyRentBooksPage = observer(() => {
                   </div>
                 ))
               ) : (
-                <p className={clsx(styles.standardText, styles.warning)}>
+                <p className={clsx(styles.warning)}>
                   У вас нет сохраненных карт. Пожалуйста, добавьте карту в профиле.
                 </p>
               )}
