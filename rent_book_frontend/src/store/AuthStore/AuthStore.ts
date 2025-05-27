@@ -3,6 +3,7 @@ import { IUser } from "../../types/user";
 import { makeAutoObservable, runInAction } from "mobx";
 import axios from "axios";
 import { AuthResponse } from "../../types/response/authResponse";
+import { API_URL } from "../../api";
 
 export class AuthStore {
   private _isAuth = false;
@@ -92,7 +93,7 @@ export class AuthStore {
   async checkAuth() {
     try {
       this._isUserLoading = true;
-      const response = await axios.post<AuthResponse>(`http://localhost:3000/auth/refresh`, null, {
+      const response = await axios.post<AuthResponse>(`${API_URL}/auth/refresh`, null, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('refreshToken')}`
         }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AuthResponse } from '../types/response/authResponse';
 
-export const API_URL = 'http://localhost:3000';
+export const API_URL = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -25,7 +25,7 @@ api.interceptors.response.use(
     if (error.response.status === 401) {
       try {
         const response = await axios.post<AuthResponse>(
-          `http://localhost:3000/auth/refresh`,
+          `${API_URL}/auth/refresh`,
           null,
           {
             headers: {
