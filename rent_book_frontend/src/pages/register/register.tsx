@@ -22,6 +22,16 @@ export const RegisterPage = () => {
 
     setError(null);
     try {
+      if (password.length < 8) {
+        setError('Пароль должен содержать не менее 8 символов');
+        return;
+      }
+
+      if (!/[a-zA-Zа-яА-Я]/.test(password)) {
+        setError('Пароль должен содержать хотя бы одну букву (русскую или английскую)');
+        return;
+      }
+
       await authStore.signUp(email, name, lastname, surname, password);
     } catch {
       setError('Пользователь с данной почтой уже зарегистрирован');
